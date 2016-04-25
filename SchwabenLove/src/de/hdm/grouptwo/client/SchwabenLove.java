@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
+ * Main class
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SchwabenLove implements EntryPoint {
