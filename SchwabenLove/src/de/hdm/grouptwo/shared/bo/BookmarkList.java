@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 /**
- * A bookmarklist is used to store all bookmars of a user
+ * A bookmarklist is used to store all bookmarks of a user
  * 
  * @author joshuahill
  *
