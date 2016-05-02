@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Selection extends Property {
 
 	/**
-	 * 
+	 * Selection reaches for previously defined selectionItems
+	 * @author DenisThierry 
 	 */
 	private static final long serialVersionUID = 1L;
 
