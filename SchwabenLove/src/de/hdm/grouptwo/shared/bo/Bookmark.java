@@ -10,22 +10,22 @@ public class Bookmark extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 
-	private BookmarkList bookmarkList;
-	private Profile profile;
-
-	public BookmarkList getBookmarkList() {
-		return bookmarkList;
+	private int bookmarkList_Id;
+	private int profile_Id;
+	
+	
+	public int getBookmarkList_Id() {
+		return bookmarkList_Id;
+	}
+	public void setBookmarkList_Id(int bookmarkList_Id) {
+		this.bookmarkList_Id = bookmarkList_Id;
+	}
+	public int getProfile_Id() {
+		return profile_Id;
+	}
+	public void setProfile_Id(int profile_Id) {
+		this.profile_Id = profile_Id;
 	}
 
-	public void setBookmarkList(BookmarkList bookmarkList) {
-		this.bookmarkList = bookmarkList;
-	}
 
-	public Profile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
 }
