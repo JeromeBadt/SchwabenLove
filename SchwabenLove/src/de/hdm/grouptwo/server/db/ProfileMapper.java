@@ -4,7 +4,12 @@ import java.sql.*;
 
 import de.hdm.grouptwo.shared.bo.*;
 
-
+/**
+ * Mapper class to persist Profile objects in database
+ * 
+ * @author DucNguyen
+ *
+ */
 public class ProfileMapper extends DBConnection{
 	
 	private static ProfileMapper profileMapper = null;
@@ -33,7 +38,7 @@ public class ProfileMapper extends DBConnection{
 			stmt.executeUpdate("INSERT INTO Profile (profile_id, email, first_name, last_name, gender,"
 					+ " birthdate, location, height, physique, hair_color, smoker, education, religion) " 
 					+ "VALUES (" + p.getId()+ ", "+ p.getEmail()+","+ p.getFirstName()+","+ p.getLastName()+","
-					+ p.getGender()+","+ p.getBirthday()+","+ p.getLocation()+","+ p.getHeight()+","+ p.getHairColor()+"," 
+					+ p.getGender()+","+ p.getBirthdate()+","+ p.getLocation()+","+ p.getHeight()+","+ p.getHairColor()+"," 
 					+ p.getSmoker()+","+ p.getEducation()+"," +p.getReligion()+"')");				
 		}
 	}
@@ -49,7 +54,7 @@ public class ProfileMapper extends DBConnection{
 		try{
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("UPDATE Profile " + "SET email =\"" + p.getEmail()+"\", first_name =\"" + p.getFirstName()+"\""
-					+ ", last_name=\"" + p.getLastName()+"\", gender=\""+ p.getGender()+"\", birthdate=\"" + p.getBirthday()+"\""
+					+ ", last_name=\"" + p.getLastName()+"\", gender=\""+ p.getGender()+"\", birthdate=\"" + p.getBirthdate()+"\""
 					+ ", location=\"" + p.getLocation()+"\", height=\""+ p.getHeight()+"\" ,physique=\"" + p.getPysique()+"\""
 					+ ", hair_color=\"" +p.getHairColor()+"\", smoker=\"" + p.getSmoker()+"\" , education=\"" +p.getEducation()+"\""
 					+ ", religion=\"" + p.getReligion()+"\"" + " WHERE profile_id = \""+ p.getId()); 

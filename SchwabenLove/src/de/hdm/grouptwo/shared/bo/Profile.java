@@ -13,7 +13,7 @@ import java.util.Date;
 		private String firstName;
 		private String lastName;
 		private String gender;
-		private Date birthday;
+		private Date birthdate;
 		private String location;
 		private String hairColor;
 		private String pysique;
@@ -47,12 +47,12 @@ import java.util.Date;
 			this.gender=gender;
 		}
 
-		public Date getBirthday() {
-			return birthday;
+		public Date getBirthdate() {
+			return birthdate;
 		}
 
-		public void setBirthday(Date birthday) {
-			this.birthday = birthday;
+		public void setBirthdate(Date birthdate) {
+			this.birthdate = birthdate;
 		}
 
 		public String getLocation() {
