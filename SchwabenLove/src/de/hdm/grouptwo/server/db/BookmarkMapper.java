@@ -11,6 +11,7 @@ import de.hdm.grouptwo.shared.bo.BookmarkList;
 
 /**
  * Mapper class to persist bookmark objects in the database
+ * TODO Info: keine update methode, da nicht benötigt!?
  * 
  * @author joshuahill, thies
  *
@@ -61,32 +62,6 @@ public class BookmarkMapper {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return b;
-	}
-	
-	/**
-	 * Edit an existing Bookmark of a bookmarklist
-	 * 
-	 * @param b Bookmark Object
-	 * @return b Bookmark Object
-	 */
-	public Bookmark update(Bookmark b) {
-		// Establish database connection
-		Connection con = DBConnection.connection();
-		
-		try {
-			// New SQL statement 
-			Statement stmt = con.createStatement();
-			// Execute SQL query 
-			stmt.executeUpdate("UPDATE Bookmark SET fk_profile = '" + b.getProfile_Id() + "', fk_bookmark_list = '" +
-					b.getBookmarkList_Id() + "' WHERE fk_bookmark_list = '" + b.getBookmarkList_Id() + "' AND fk_profile = '" +
-					b.getProfile_Id() + "'");
-		}
-		// Error handling
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return b;
 	}
 	
