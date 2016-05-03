@@ -1,31 +1,33 @@
 package de.hdm.grouptwo.shared.bo;
 
 /**
+ * A Block object represents the state between two profiles which are restricted
+ * from seeing each other.
  * 
- * @author manuelruss
- *
+ * @author ManuelRuss, JeromeBadt
  */
 
 public class Block extends BusinessObject {
 
-	
 	private static final long serialVersionUID = 1L;
-	
-	private Profile owner;
-	private Profile profile;
-	
-	
-	public Profile getOwner() {
-		return owner;
+
+	private int blockerProfileId;
+	private int blockedProfileId;
+
+	public int getBlockerId() {
+		return blockerProfileId;
 	}
-	public void setOwner(Profile owner) {
-		this.owner = owner;
+
+	public void setBlockerId(int blockerId) {
+		this.blockerProfileId = blockerId;
 	}
-	public Profile getProfile() {
-		return profile;
+
+	public int getBlockedId() {
+		return blockedProfileId;
 	}
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+
+	public void setBlockedId(int blockedId) {
+		this.blockedProfileId = blockedId;
 	}
 
 }
