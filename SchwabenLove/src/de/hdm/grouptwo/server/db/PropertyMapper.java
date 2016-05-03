@@ -2,10 +2,14 @@ package de.hdm.grouptwo.server.db;
 
 import java.sql.*;
 import java.util.ArrayList;
-
 import de.hdm.grouptwo.shared.bo.*;
 
 
+/**
+ * Mapper class to persist property objects in database 
+ * 
+ * @author DenisThierry
+ */
 public class PropertyMapper {
 
 	private static PropertyMapper propertyMapper = null;
@@ -65,7 +69,7 @@ public class PropertyMapper {
 
 
 		        stmt.executeUpdate("INSERT INTO property (property_id, explanation) "
-		            + "VALUES (" + p.getId() + ",'" + p.getExplanation() + "')");
+		            + "VALUES ('" + p.getId() + "','" + p.getExplanation() + "')");
 		       
 		      }
 		    }
@@ -106,4 +110,3 @@ public class PropertyMapper {
 		    }
 		  }
 }
-
