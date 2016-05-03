@@ -19,29 +19,29 @@ CREATE DATABASE `schwabenlove` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE lat
 USE schwabenlove;
 
 --
--- Table structure for table `Bookmark`
+-- Table structure for table `bookmark`
 --
 
-DROP TABLE IF EXISTS `Bookmark`;
+DROP TABLE IF EXISTS `bookmark`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Bookmark` (
+CREATE TABLE `bookmark` (
   `fk_profile` int(11) NOT NULL,
   `fk_bookmark_list` int(11) DEFAULT NULL,
-  KEY `Bookmark_profile_profile_id_fk` (`fk_profile`),
-  KEY `Bookmark_bookmark_list_fk` (`fk_bookmark_list`),
-  CONSTRAINT `Bookmark_bookmark_list_fk` FOREIGN KEY (`fk_bookmark_list`) REFERENCES `bookmark_list` (`bookmark_id`),
-  CONSTRAINT `Bookmark_profile_profile_id_fk` FOREIGN KEY (`fk_profile`) REFERENCES `profile` (`profile_id`)
+  KEY `bookmark_profile_profile_id_fk` (`fk_profile`),
+  KEY `bookmark_bookmark_list_fk` (`fk_bookmark_list`),
+  CONSTRAINT `bookmark_bookmark_list_fk` FOREIGN KEY (`fk_bookmark_list`) REFERENCES `bookmark_list` (`bookmark_id`),
+  CONSTRAINT `bookmark_profile_profile_id_fk` FOREIGN KEY (`fk_profile`) REFERENCES `profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Bookmark`
+-- Dumping data for table `bookmark`
 --
 
-LOCK TABLES `Bookmark` WRITE;
-/*!40000 ALTER TABLE `Bookmark` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Bookmark` ENABLE KEYS */;
+LOCK TABLES `bookmark` WRITE;
+/*!40000 ALTER TABLE `bookmark` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bookmark` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
