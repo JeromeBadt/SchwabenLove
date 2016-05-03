@@ -25,7 +25,7 @@ public class ProfileMapper extends DBConnection{
 		
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("Select MAX(id) AS maxid " + "FROM Profile ");
+			ResultSet rs = stmt.executeQuery("Select MAX(profile_id) AS maxid " + "FROM Profile ");
 			
 			if (rs.next()) {
 			p.setId(rs.getInt("") +1);
@@ -51,7 +51,7 @@ public class ProfileMapper extends DBConnection{
 		
 		try{
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE profile " + "SET email =\"" + p.getEmail()+"\", first_name =\"" + p.getFirstName()+"\""
+			stmt.executeUpdate("UPDATE Profile " + "SET email =\"" + p.getEmail()+"\", first_name =\"" + p.getFirstName()+"\""
 					+ ", last_name=\"" + p.getLastName()+"\", gender=\""+ p.getGender()+"\", birthdate=\"" + p.getBirthday()+"\""
 					+ ", location=\"" + p.getLocation()+"\", height=\""+ p.getHeight()+"\" ,physique=\"" + p.getPysique()+"\""
 					+ ", hair_color=\"" +p.getHairColor()+"\", smoker=\"" + p.getSmoker()+"\" , education=\"" +p.getEducation()+"\""
@@ -86,7 +86,7 @@ public class ProfileMapper extends DBConnection{
 		try{
 			Statement stmt = con.createStatement();
 			
-			stmt.executeUpdate("SELECT * profile");
+			stmt.executeUpdate("SELECT * "+" FROM Profile");
 		}
 		catch (SQLException e){
 			e.printStackTrace();
@@ -100,7 +100,7 @@ public class ProfileMapper extends DBConnection{
 		try{
 			Statement stmt = con.createStatement();
 			
-			stmt.executeUpdate("Select * " + "FROM Profile "+" WHERE email=" + p.getEmail());
+			stmt.executeUpdate("Select * " + " FROM Profile "+" WHERE email=" + p.getEmail());
 		}
 		catch (SQLException e){
 			e.printStackTrace();
