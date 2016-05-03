@@ -58,7 +58,7 @@ public class PropertyMapper {
 		      Statement stmt = con.createStatement();
 
 		      ResultSet rs = stmt.executeQuery("SELECT MAX(property_id) AS maxid "
-          + "FROM property ");
+          + "FROM Property ");
 
 
 		      if (rs.next()) {
@@ -68,7 +68,7 @@ public class PropertyMapper {
 		        stmt = con.createStatement();
 
 
-		        stmt.executeUpdate("INSERT INTO property (property_id, explanation) "
+		        stmt.executeUpdate("INSERT INTO Property (property_id, explanation) "
 		            + "VALUES ('" + p.getId() + "','" + p.getExplanation() + "')");
 		       
 		      }
@@ -85,8 +85,8 @@ public class PropertyMapper {
 		    try {
 		      Statement stmt = con.createStatement();
 
-		      stmt.executeUpdate("UPDATE property " + "SET explanation=\""
-		              + p.getExplanation()
+		      stmt.executeUpdate("UPDATE Property " + "SET property_id=\""
+		              + p.getId() + "\" ,explanation=\"" + p.getExplanation() 
 		          + "WHERE property_id=" + p.getId());
 
 		    }
@@ -103,7 +103,7 @@ public class PropertyMapper {
 		    try {
 		      Statement stmt = con.createStatement();
 
-		      stmt.executeUpdate("DELETE FROM property " + "WHERE property_id=" + p.getId());
+		      stmt.executeUpdate("DELETE FROM Property " + "WHERE property_id=" + p.getId());
 		    }
 		    catch (SQLException e) {
 		      e.printStackTrace();
