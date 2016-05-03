@@ -9,11 +9,10 @@ public class Information extends BusinessObject {
 	
 	private static final long serialVersionUID = 1L;
 	private String inputText;
-	private Profile owner;
-	private Property property;
+	private int profileId;
+	private int propertyId;
+	private int searchProfileId;
 	
-	
-
 	public String getInputText() {
 		return inputText;
 	}
@@ -22,20 +21,28 @@ public class Information extends BusinessObject {
 		this.inputText = inputText;
 	}
 
-	public Profile getOwner() {
-		return owner;
+	public int getProfileId() {
+		return profileId;
 	}
 
-	public void setOwner(Profile owner) {
-		this.owner = owner;
+	public void setProfileId(int profileId) {
+		this.profileId = profileId;
 	}
 
-	public Property getProperty() {
-		return property;
+	public int getPropertyId() {
+		return propertyId;
 	}
 
-	public void setProperty(Property property) {
-		this.property = property;
+	public void setPropertyId(int profileId) {
+		this.profileId = profileId;
+	}
+
+	public int getSearchProfileId() {
+		return searchProfileId;
+	}
+
+	public void setSearchProfileId(int searchProfileId) {
+		this.searchProfileId = searchProfileId;
 	}
 
 }
