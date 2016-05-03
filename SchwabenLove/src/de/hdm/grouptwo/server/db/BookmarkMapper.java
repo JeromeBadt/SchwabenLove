@@ -10,7 +10,7 @@ import de.hdm.grouptwo.shared.bo.Bookmark;
 import de.hdm.grouptwo.shared.bo.BookmarkList;
 
 /**
- * Mapper class to persist bookmark objects on the database
+ * Mapper class to persist bookmark objects in the database
  * 
  * @author joshuahill, thies
  *
