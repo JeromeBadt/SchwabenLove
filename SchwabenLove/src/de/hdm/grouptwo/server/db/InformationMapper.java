@@ -26,7 +26,7 @@ public class InformationMapper {
 	}
 
 	/**
-	 * InformationMapper should be instatiated by this method to ensure that
+	 * InformationMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
 	 * <p>
 	 * 
@@ -196,7 +196,7 @@ public class InformationMapper {
 			ResultSet rs = stmt
 					.executeQuery("SELECT information_id, input_text, "
 							+ "fk_profile_id, fk_property_id, fk_search_profile_id "
-							+ "FROM information" + "WHERE " + key + "=" + value);
+							+ "FROM information WHERE " + key + "=" + value);
 
 			while (rs.next()) {
 				Information s = new Information();
