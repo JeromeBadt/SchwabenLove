@@ -11,7 +11,6 @@ public class ProfileMapper extends DBConnection{
 	protected ProfileMapper(){}	
 	
 		
-	
 	public static ProfileMapper profileMapper() {
 	    if (profileMapper == null) {
 	      profileMapper = new ProfileMapper();
@@ -19,7 +18,6 @@ public class ProfileMapper extends DBConnection{
 	    return profileMapper;
 	  }
 
-	
 	public Profile insert (Profile p){
 		Connection con = DBConnection.connection();
 		
@@ -39,7 +37,6 @@ public class ProfileMapper extends DBConnection{
 					+ p.getSmoker()+","+ p.getEducation()+"," +p.getReligion()+"')");				
 		}
 	}
-		
 			catch (SQLException e){
 				e.printStackTrace();
 			}
@@ -57,8 +54,7 @@ public class ProfileMapper extends DBConnection{
 					+ ", hair_color=\"" +p.getHairColor()+"\", smoker=\"" + p.getSmoker()+"\" , education=\"" +p.getEducation()+"\""
 					+ ", religion=\"" + p.getReligion()+"\"" + " WHERE profile_id = \""+ p.getId()); 
 		}
-		           
-        catch (SQLException e){
+		catch (SQLException e){
         	e.printStackTrace();
         }
 		return p;
@@ -108,6 +104,5 @@ public class ProfileMapper extends DBConnection{
 			
 		return p;
 	}
-	
 		
 }
