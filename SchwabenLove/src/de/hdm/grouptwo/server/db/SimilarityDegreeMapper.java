@@ -55,7 +55,7 @@ public class SimilarityDegreeMapper {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(similarity_degree_id) AS maxid FROM accounts");
+					.executeQuery("SELECT MAX(similarity_degree_id) AS maxid FROM similarity_degree");
 
 			if (rs.next()) {
 				// Set id to max + 1
@@ -63,7 +63,7 @@ public class SimilarityDegreeMapper {
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO similarity_degree "
-						+ "(id, score, fk_profile_reference, fk_profile_comparison) VALUES ("
+						+ "(similarity_degree_id, score, fk_profile_reference, fk_profile_comparison) VALUES ("
 						+ s.getId() + "," + s.getScore() + ","
 						+ s.getReferenceProfileId() + ","
 						+ s.getComparisonProfileId() + ")");
@@ -133,7 +133,7 @@ public class SimilarityDegreeMapper {
 
 			while (rs.next()) {
 				SimilarityDegree s = new SimilarityDegree();
-				s.setId(rs.getInt("id"));
+				s.setId(rs.getInt("similarity_degree_id"));
 				s.setScore(rs.getInt("score"));
 				s.setReferenceProfileId(rs.getInt("fk_profile_reference"));
 				s.setComparisonProfileId(rs.getInt("fk_profile_comparison"));
@@ -170,7 +170,7 @@ public class SimilarityDegreeMapper {
 
 			while (rs.next()) {
 				SimilarityDegree s = new SimilarityDegree();
-				s.setId(rs.getInt("id"));
+				s.setId(rs.getInt("similarity_degree_id"));
 				s.setScore(rs.getInt("score"));
 				s.setReferenceProfileId(rs.getInt("fk_profile_reference"));
 				s.setComparisonProfileId(rs.getInt("fk_profile_comparison"));
