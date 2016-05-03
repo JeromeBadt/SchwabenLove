@@ -3,18 +3,16 @@ package de.hdm.grouptwo.shared.bo;
 /**
  * The SimilarityDegree shows the grade of similarity between two profiles
  * 
- * @author joshuahill
- *
+ * @author JoshuaHill, JeromeBadt
  */
 public class SimilarityDegree extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
-	
-	private int score;
-	private Profile profile;
-	private Profile owner;
 
-	
+	private int score;
+	private int referenceProfileId;
+	private int comparisonProfileId;
+
 	public int getScore() {
 		return score;
 	}
@@ -23,22 +21,20 @@ public class SimilarityDegree extends BusinessObject {
 		this.score = score;
 	}
 
-	public Profile getProfile() {
-		return profile;
+	public int getReferenceProfileId() {
+		return referenceProfileId;
 	}
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+	public void setReferenceProfileId(int referenceProfileId) {
+		this.referenceProfileId = referenceProfileId;
 	}
 
-	public Profile getOwner() {
-		return owner;
+	public int getComparisonProfileId() {
+		return comparisonProfileId;
 	}
 
-	public void setOwner(Profile owner) {
-		this.owner = owner;
+	public void setComparisonProfileId(int comparisonProfileId) {
+		this.comparisonProfileId = comparisonProfileId;
 	}
-	
-	
 
 }
