@@ -14,7 +14,7 @@ public class BookmarkList extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 
 	private ArrayList<Bookmark> bookmarks;
-	private Profile owner;
+	private int profileId;
 
 	public ArrayList<Bookmark> getBookmarks() {
 		return bookmarks;
@@ -24,11 +24,11 @@ public class BookmarkList extends BusinessObject {
 		this.bookmarks = bookmarks;
 	}
 
-	public Profile getOwner() {
-		return owner;
+	public int getProfileId() {
+		return profileId;
 	}
 
-	public void setOwner(Profile owner) {
-		this.owner = owner;
+	public void setProfileId(int profileId) {
+		this.profileId = profileId;
 	}
 }
