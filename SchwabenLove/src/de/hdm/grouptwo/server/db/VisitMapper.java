@@ -180,4 +180,35 @@ public class VisitMapper implements DataMapper<Visit> {
 
 		return null;
 	}
+	
+	/**
+	 * Find all <code>Visit</code> objects in the DB
+	 * 
+	 * @return result ArrayList of found <code>Visit</code> objects
+	 */
+	public ArrayList<Visit> findByVisitorProfileId(int visitorProfileId) {
+		Connection con = DBConnection.connection();
+
+		ArrayList<Visit> result = new ArrayList<Visit>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_profile_visitor, fk_profile_visited FROM visit "
+					+ "WHERE fk_profile_visitor = " + visitorProfileId);
+
+			while (rs.next()) {
+				Visit v = new Visit();
+				v.setId(rs.getInt("visit_id"));
+				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
+				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+
+				result.add(v);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 }
