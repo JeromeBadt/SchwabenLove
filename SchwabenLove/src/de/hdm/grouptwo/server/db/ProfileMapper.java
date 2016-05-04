@@ -112,7 +112,7 @@ public class ProfileMapper extends DBConnection {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE Profile SET email=" + p.getEmail()
+			stmt.executeUpdate("UPDATE profile SET email=" + p.getEmail()
 					+ ",first_name='" + p.getFirstName() + "',last_name='"
 					+ p.getLastName() + "',gender=" + p.getGender()
 					+ ",birthdate=" + p.getBirthdate() + ",location='"
@@ -140,7 +140,7 @@ public class ProfileMapper extends DBConnection {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM Profile " + "WHERE profile_id="
+			stmt.executeUpdate("DELETE FROM profile " + "WHERE profile_id="
 					+ p.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -202,7 +202,7 @@ public class ProfileMapper extends DBConnection {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("Select * FROM Profile WHERE email=" + email);
+					.executeQuery("Select * FROM profile WHERE email=" + email);
 
 			if (rs.next()) {
 				Profile p = new Profile();
