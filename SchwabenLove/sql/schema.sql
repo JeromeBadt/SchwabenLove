@@ -129,10 +129,10 @@ DROP TABLE IF EXISTS `information`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `information` (
   `information_id` int(11) NOT NULL,
-  `input_text` varchar(250) NOT NULL,
+  `input_text` varchar(250) NULL,
   `fk_profile_id` int(11) NOT NULL,
   `fk_property_id` int(11) NOT NULL,
-  `fk_search_profile_id` int(11) NOT NULL,
+  `fk_search_profile_id` int(11) NULL,
   PRIMARY KEY (`information_id`),
   KEY `information_profile_profile_id_fk` (`fk_profile_id`),
   KEY `information_prop_fk` (`fk_property_id`),
@@ -219,17 +219,17 @@ DROP TABLE IF EXISTS `search_profile`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_profile` (
   `search_profile_id` int(11) NOT NULL,
-  `gender` enum('w','m') NOT NULL,
-  `min_age` int(11) NOT NULL,
-  `max_age` int(11) NOT NULL,
-  `hair_color` varchar(45) NOT NULL,
-  `physique` varchar(45) NOT NULL,
-  `min_height` int(11) NOT NULL,
-  `max_height` int(11) NOT NULL,
-  `smoker` enum('TRUE','FALSE') NOT NULL,
-  `education` varchar(45) NOT NULL,
-  `profession` varchar(45) NOT NULL,
-  `religion` varchar(45) NOT NULL,
+  `gender` enum('w','m') NULL,
+  `min_age` int(11) NULL,
+  `max_age` int(11) NULL,
+  `hair_color` varchar(45) NULL,
+  `physique` varchar(45) NULL,
+  `min_height` int(11) NULL,
+  `max_height` int(11) NULL,
+  `smoker` enum('TRUE','FALSE') NULL,
+  `education` varchar(45) NULL,
+  `profession` varchar(45) NULL,
+  `religion` varchar(45) NULL,
   PRIMARY KEY (`search_profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
