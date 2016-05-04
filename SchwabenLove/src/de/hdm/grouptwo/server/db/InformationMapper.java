@@ -14,6 +14,8 @@ import de.hdm.grouptwo.shared.bo.Information;
  * objects and a database while keeping them independent of each other.
  * <p>
  * 
+ * TODO: DeleteInformationOf
+ * 
  * @author JeromeBadt, Thies
  */
 public class InformationMapper {
@@ -109,8 +111,8 @@ public class InformationMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM information "
-					+ "WHERE information_id=" + i.getId());
+			stmt.executeUpdate("DELETE FROM information WHERE information_id="
+					+ i.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -130,18 +132,18 @@ public class InformationMapper {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT information_id, input_text, "
-							+ "fk_profile_id, fk_property_id, fk_search_profile_id "
-							+ "FROM information");
+							+ "fk_profile_id, fk_property_id, " +
+							"fk_search_profile_id FROM information");
 
 			while (rs.next()) {
-				Information s = new Information();
-				s.setId(rs.getInt("information_id"));
-				s.setInputText(rs.getString("input_text"));
-				s.setProfileId(rs.getInt("fk_profile_id"));
-				s.setPropertyId(rs.getInt("fk_property_id"));
-				s.setSearchProfileId(rs.getInt("fk_search_profile_id"));
+				Information i = new Information();
+				i.setId(rs.getInt("information_id"));
+				i.setInputText(rs.getString("input_text"));
+				i.setProfileId(rs.getInt("fk_profile_id"));
+				i.setPropertyId(rs.getInt("fk_property_id"));
+				i.setSearchProfileId(rs.getInt("fk_search_profile_id"));
 
-				result.add(s);
+				result.add(i);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -199,14 +201,14 @@ public class InformationMapper {
 							+ "FROM information WHERE " + key + "=" + value);
 
 			while (rs.next()) {
-				Information s = new Information();
-				s.setId(rs.getInt("information_id"));
-				s.setInputText(rs.getString("input_text"));
-				s.setProfileId(rs.getInt("fk_profile_id"));
-				s.setPropertyId(rs.getInt("fk_property_id"));
-				s.setSearchProfileId(rs.getInt("fk_search_profile_id"));
+				Information i = new Information();
+				i.setId(rs.getInt("information_id"));
+				i.setInputText(rs.getString("input_text"));
+				i.setProfileId(rs.getInt("fk_profile_id"));
+				i.setPropertyId(rs.getInt("fk_property_id"));
+				i.setSearchProfileId(rs.getInt("fk_search_profile_id"));
 
-				result.add(s);
+				result.add(i);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
