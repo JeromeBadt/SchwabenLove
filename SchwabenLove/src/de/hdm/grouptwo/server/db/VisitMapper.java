@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import de.hdm.grouptwo.shared.bo.Information;
 import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
@@ -19,7 +20,7 @@ import de.hdm.grouptwo.shared.bo.Visit;
  * @author Thies, ManuelRuss, JeromeBadt
  */
 
-public class VisitMapper {
+public class VisitMapper implements DataMapper<Visit> {
 	private static VisitMapper visitMapper = null;
 
 	/**
@@ -52,7 +53,7 @@ public class VisitMapper {
 	 * @param i
 	 *            The <code>Visit</code> object to be inserted
 	 */
-	public Visit insert(Visit v) {
+	public void insert(Visit v) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -75,8 +76,33 @@ public class VisitMapper {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
 
-		return v;
+	public void update(Visit t) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Update a <code>Information</code> object in the DB
+	 * 
+	 * @param i
+	 *            The <code>Information</code> object to be updated
+	 */
+	public void update(Information i) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE information SET input_text='"
+					+ i.getInputText() + "',fk_profile_id=" + i.getProfileId()
+					+ ",fk_property_id=" + i.getPropertyId()
+					+ ",fk_search_profile_id=" + i.getSearchProfileId()
+					+ " WHERE information_id=" + i.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -97,7 +123,6 @@ public class VisitMapper {
 		}
 	}
 
-	
 	/**
 	 * Find all <code>Visit</code> objects in the DB
 	 * 
@@ -126,5 +151,33 @@ public class VisitMapper {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Find <code>Visit</code> objects with a specific ID in the DB.
+	 * 
+	 * @return result <code>Visit</code> objects with specified ID or null if not found
+	 */
+	public Visit findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+
+			if (rs.next()) {
+				Visit v = new Visit();
+				v.setId(rs.getInt("visit_id"));
+				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
+				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+
+				return v;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 }
