@@ -14,19 +14,19 @@ public class Block extends BusinessObject {
 	private int blockerProfileId;
 	private int blockedProfileId;
 
-	public int getBlockerId() {
+	public int getBlockerProfileId() {
 		return blockerProfileId;
 	}
 
-	public void setBlockerId(int blockerId) {
+	public void setBlockerProfileId(int blockerId) {
 		this.blockerProfileId = blockerId;
 	}
 
-	public int getBlockedId() {
+	public int getBlockedProfileId() {
 		return blockedProfileId;
 	}
 
-	public void setBlockedId(int blockedId) {
+	public void setBlockedProfileId(int blockedId) {
 		this.blockedProfileId = blockedId;
 	}
 

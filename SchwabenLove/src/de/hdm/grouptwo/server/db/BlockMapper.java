@@ -27,11 +27,11 @@ public class BlockMapper {
 	}
 
 	/**
-	 * InformationMapper should be instantiated by this method to ensure that
-	 * only a single instance exists.
+	 * BlockMapper should be instantiated by this method to ensure that only a
+	 * single instance exists.
 	 * <p>
 	 * 
-	 * @return The <code>InformationMapper</code> instance.
+	 * @return The <code>BlockMapper</code> instance.
 	 */
 	public static BlockMapper blockMapper() {
 		if (blockMapper == null) {
@@ -55,7 +55,6 @@ public class BlockMapper {
 
 		try {
 			Statement stmt = con.createStatement();
-
 			// Query DB for current max id
 			ResultSet rs = stmt.executeQuery("SELECT MAX(block_id) AS maxid"
 					+ "FROM block ");
@@ -67,8 +66,8 @@ public class BlockMapper {
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO block (block_id, "
 						+ "fk_profile_blocker, fk_profile_blocked) VALUES ("
-						+ b.getId() + "," + b.getBlockerId() + ","
-						+ b.getBlockedId() + ")");
+						+ b.getId() + "," + b.getBlockerProfileId() + ","
+						+ b.getBlockedProfileId() + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,8 +110,8 @@ public class BlockMapper {
 			while (rs.next()) {
 				Block b = new Block();
 				b.setId(rs.getInt("block_id"));
-				b.setBlockerId(rs.getInt("fk_profile_blocker"));
-				b.setBlockedId(rs.getInt("fk_profile_blocked"));
+				b.setBlockerProfileId(rs.getInt("fk_profile_blocker"));
+				b.setBlockedProfileId(rs.getInt("fk_profile_blocked"));
 
 				result.add(b);
 			}
@@ -143,8 +142,8 @@ public class BlockMapper {
 			while (rs.next()) {
 				Block b = new Block();
 				b.setId(rs.getInt("block_id"));
-				b.setBlockerId(rs.getInt("fk_profile_blocker"));
-				b.setBlockedId(rs.getInt("fk_profile_blocked"));
+				b.setBlockerProfileId(rs.getInt("fk_profile_blocker"));
+				b.setBlockedProfileId(rs.getInt("fk_profile_blocked"));
 
 				result.add(b);
 			}
