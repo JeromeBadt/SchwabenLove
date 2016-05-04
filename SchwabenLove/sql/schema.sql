@@ -172,6 +172,7 @@ CREATE TABLE `profile` (
   `hair_color` varchar(45) COLLATE latin1_german1_ci NOT NULL,
   `smoker` enum('TRUE','FALSE') CHARACTER SET latin1 NOT NULL,
   `education` varchar(45) COLLATE latin1_german1_ci NOT NULL,
+  `profession` varchar(45) COLLATE latin1_german1_ci NOT NULL,
   `religion` varchar(45) COLLATE latin1_german1_ci NOT NULL,
   PRIMARY KEY (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
@@ -221,13 +222,14 @@ CREATE TABLE `search_profile` (
   `gender` enum('w','m') NOT NULL,
   `min_age` int(11) NOT NULL,
   `max_age` int(11) NOT NULL,
-  `hair_color` varchar(50) NOT NULL,
-  `physique` varchar(50) NOT NULL,
+  `hair_color` varchar(45) NOT NULL,
+  `physique` varchar(45) NOT NULL,
   `min_height` int(11) NOT NULL,
   `max_height` int(11) NOT NULL,
   `smoker` enum('TRUE','FALSE') NOT NULL,
-  `education` varchar(50) NOT NULL,
-  `religion` varchar(50) NOT NULL,
+  `education` varchar(45) NOT NULL,
+  `profession` varchar(45) NOT NULL,
+  `religion` varchar(45) NOT NULL,
   PRIMARY KEY (`search_profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
