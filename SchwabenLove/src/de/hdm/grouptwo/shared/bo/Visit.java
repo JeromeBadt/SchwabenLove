@@ -1,31 +1,33 @@
 package de.hdm.grouptwo.shared.bo;
 
 /**
+ * A Visit object is created when one profile (the visitor) visits another
+ * profile (the visited).
  * 
- * @author manuelruss
- *
+ * @author ManuelRuss, JeromeBadt
  */
 
 public class Visit extends BusinessObject {
 
-	
 	private static final long serialVersionUID = 1L;
-	
-	private Profile owner;
-	private Profile profile;
-	
-	
-	public Profile getOwner() {
-		return owner;
+
+	private int visitorProfileId;
+	private int visitedProfileId;
+
+	public int getVisitorProfileId() {
+		return visitorProfileId;
 	}
-	public void setOwner(Profile owner) {
-		this.owner = owner;
+
+	public void setVisitorProfileId(int visitorProfileId) {
+		this.visitorProfileId = visitorProfileId;
 	}
-	public Profile getProfile() {
-		return profile;
+
+	public int getVisitedProfileId() {
+		return visitedProfileId;
 	}
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+
+	public void setVisitedProfileId(int visitedProfileId) {
+		this.visitedProfileId = visitedProfileId;
 	}
 
 }
