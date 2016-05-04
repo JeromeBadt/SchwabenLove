@@ -31,7 +31,7 @@ public class SelectionItemMapper {
 				SelectionItem si = new SelectionItem();
 				si.setId(rs.getInt("selection_item_id"));
 				si.setName(rs.getString("name"));
-				si.setProperty_id(rs.getInt("property_id"));
+				si.setFk_selection(rs.getInt("fk_selection"));
 				
 			result.add(si);
 			}
@@ -54,7 +54,7 @@ public class SelectionItemMapper {
 		    	  SelectionItem si = new SelectionItem();
 		    	  si.setId(rs.getInt("selection_item_id"));
 		    	  si.setName(rs.getString("name"));
-		    	  si.setProperty_id(rs.getInt("fk_selection"));
+		    	  si.setFk_selection(rs.getInt("fk_selection"));
 		      result.add(si);
 		      }
 		}
@@ -75,7 +75,7 @@ public class SelectionItemMapper {
 				si.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO SelectionItem (selection_item_id, name, fk_selection) "
-			            + "VALUES ('" + si.getId() + "','" + si.getName() + "','" + si.getProperty_id() + "')");
+			            + "VALUES ('" + si.getId() + "','" + si.getName() + "','" + si.getFk_selection() + "')");
 			}
 		}
 		catch (SQLException e) {
@@ -89,7 +89,7 @@ public class SelectionItemMapper {
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeQuery("UPDATE SelectionItem " + "SET selection_item_id=\"" + si.getId() + "\", name=\"" + si.getName() + "\", fk_property=\""
-		               + si.getProperty_id() + 
+		               + si.getFk_selection() + 
 		           "WHERE selection_item_id=" + si.getId());
 		  }
 	    catch (SQLException e) {

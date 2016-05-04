@@ -10,8 +10,9 @@ public class SelectionItem extends BusinessObject {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private int selection_item_id;
 	private String name;
-	private int property_id;
+	private int fk_selection;
 
 	public String getName() {
 		return name;
@@ -21,11 +22,19 @@ public class SelectionItem extends BusinessObject {
 		this.name = name;
 	}
 
-	public int getProperty_id() {
-		return property_id;
+	public int getSelection_item_id() {
+		return selection_item_id;
 	}
 
-	public void setProperty_id(int property_id) {
-		this.property_id = property_id;
+	public void setSelection_item_id(int selection_item_id) {
+		this.selection_item_id = selection_item_id;
+	}
+
+	public int getFk_selection() {
+		return fk_selection;
+	}
+
+	public void setFk_selection(int fk_selection) {
+		this.fk_selection = fk_selection;
 	}
 }
