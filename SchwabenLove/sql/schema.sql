@@ -328,13 +328,13 @@ DROP TABLE IF EXISTS `visit`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `visit` (
   `visit_id` int(11) NOT NULL,
-  `fk_profile_visitors` int(11) NOT NULL,
+  `fk_profile_visitor` int(11) NOT NULL,
   `fk_profile_visited` int(11) NOT NULL,
   PRIMARY KEY (`visit_id`),
-  KEY `visit_visitors_fk` (`fk_profile_visitors`),
+  KEY `visit_visitor_fk` (`fk_profile_visitor`),
   KEY `visit_visited_fk` (`fk_profile_visited`),
   CONSTRAINT `visit_visited_fk` FOREIGN KEY (`fk_profile_visited`) REFERENCES `profile` (`profile_id`),
-  CONSTRAINT `visit_visitors_fk` FOREIGN KEY (`fk_profile_visitors`) REFERENCES `profile` (`profile_id`)
+  CONSTRAINT `visit_visitor_fk` FOREIGN KEY (`fk_profile_visitor`) REFERENCES `profile` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
