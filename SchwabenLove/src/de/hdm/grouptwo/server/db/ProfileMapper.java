@@ -69,12 +69,30 @@ public class ProfileMapper extends DBConnection {
 						+ "first_name, last_name, gender, birthdate, "
 						+ "location, height, physique, hair_color, smoker, "
 						+ "education, profession, religion) VALUES ("
-						+ p.getId() + "," + p.getEmail() + ",'"
-						+ p.getFirstName() + "','" + p.getLastName() + "',"
-						+ p.getGender() + "," + p.getBirthdate() + ",'"
-						+ p.getLocation() + "'," + p.getHeight() + ",'"
-						+ p.getPysique() + "','" + p.getHairColor() + "','"
-						+ p.getSmoker() + "','" + p.getEducation() + "','"
+						+ p.getId()
+						+ ","
+						+ p.getEmail()
+						+ ",'"
+						+ p.getFirstName()
+						+ "','"
+						+ p.getLastName()
+						+ "',"
+						+ p.getGender()
+						+ ","
+						+ p.getBirthdate()
+						+ ",'"
+						+ p.getLocation()
+						+ "',"
+						+ p.getHeight()
+						+ ",'"
+						+ p.getPysique()
+						+ "','"
+						+ p.getHairColor()
+						+ "','"
+						+ p.getSmoker()
+						+ "','"
+						+ p.getEducation()
+						+ "','"
 						+ p.getProfession() + "','" + p.getReligion() + "')");
 			}
 		} catch (SQLException e) {
@@ -176,7 +194,7 @@ public class ProfileMapper extends DBConnection {
 	/**
 	 * Find all <code>Profile</code> objects with a specific email in the DB
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return result ArrayList of found <code>Profile</code> objects
 	 */
 	public Profile findByEmail(String email) {
 		Connection con = DBConnection.connection();
@@ -213,12 +231,11 @@ public class ProfileMapper extends DBConnection {
 	}
 
 	/**
-	 * Find all unvisited <code>Profile</code> objects of a specific profile in
-	 * the DB
+	 * Find <code>Profile</code> objects by a specific visitId in the DB
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return result ArrayList of found <code>Profile</code> objects
 	 */
-	public ArrayList<Profile> findUnvisitedById(int id) {
+	public ArrayList<Profile> findByVisitId(int visitId) {
 		Connection con = DBConnection.connection();
 		ArrayList<Profile> result = new ArrayList<Profile>();
 
@@ -228,11 +245,9 @@ public class ProfileMapper extends DBConnection {
 					.executeQuery("SELECT profile_id, email, first_name, "
 							+ "last_name, gender, birthdate, location, "
 							+ "height, physique, hair_color, smoker, "
-							+ "education, profession, religion FROM profile, "
-							+ "visit WHERE profile.id NOT IN (SELECT "
-							+ "fk_profile_visited FROM visit WHERE "
-							+ "fk_profile_visitor=" + id + ") GROUP BY "
-							+ "profile_id");
+							+ "education, profession, religion FROM profile "
+							+ "JOIN visit ON fk_profile_visitor=profile_id "
+							+ "WHERE visit_id=" + visitId);
 
 			while (rs.next()) {
 				Profile p = new Profile();
