@@ -14,6 +14,8 @@ import de.hdm.grouptwo.shared.bo.Block;
  * objects and a database while keeping them independent of each other.
  * <p>
  * 
+ * TODO: DeleteBlocksOf
+ * 
  * @author Thies, ManuelRuss, JeromeBadt
  */
 

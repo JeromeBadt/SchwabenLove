@@ -14,6 +14,8 @@ import de.hdm.grouptwo.shared.bo.Visit;
  * objects and a database while keeping them independent of each other.
  * <p>
  * 
+ * TODO: DeleteVisitsOf
+ * 
  * @author Thies, ManuelRuss, JeromeBadt
  */
 
@@ -112,12 +114,12 @@ public class VisitMapper {
 					+ "fk_profile_visitor, fk_profile_visited FROM visit");
 
 			while (rs.next()) {
-				Visit b = new Visit();
-				b.setId(rs.getInt("visit_id"));
-				b.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
-				b.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+				Visit v = new Visit();
+				v.setId(rs.getInt("visit_id"));
+				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
+				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
 
-				result.add(b);
+				result.add(v);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

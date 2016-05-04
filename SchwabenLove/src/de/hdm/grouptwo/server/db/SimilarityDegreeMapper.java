@@ -14,6 +14,8 @@ import de.hdm.grouptwo.shared.bo.SimilarityDegree;
  * objects and a database while keeping them independent of each other.
  * <p>
  * 
+ * TODO: DeleteSimilarityDegreesOf
+ * 
  * @author JeromeBadt, Thies
  */
 public class SimilarityDegreeMapper {
