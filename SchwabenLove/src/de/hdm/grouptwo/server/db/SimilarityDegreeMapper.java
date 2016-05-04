@@ -26,7 +26,7 @@ public class SimilarityDegreeMapper {
 	}
 
 	/**
-	 * SimilarityDegreeMapper should be instatiated by this method to ensure
+	 * SimilarityDegreeMapper should be instantiated by this method to ensure
 	 * that only a single instance exists.
 	 * <p>
 	 * 

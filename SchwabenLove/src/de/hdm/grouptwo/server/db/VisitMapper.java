@@ -4,162 +4,125 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
- * Mapper class to persist visit objects into database
+ * Implementation of a mapper class for Visit. <br>
+ * In the spirit of the MVC pattern mapper classes are used to move data between
+ * objects and a database while keeping them independent of each other.
+ * <p>
  * 
- * @author manuelruss
- *
+ * @author Thies, ManuelRuss, JeromeBadt
  */
 
 public class VisitMapper {
-
 	private static VisitMapper visitMapper = null;
-	
+
+	/**
+	 * Private constructor to prevent initialization with <code>new</code>
+	 */
 	protected VisitMapper() {
-		
 	}
 
-	  public static VisitMapper visitMapper() {
-		    if (visitMapper == null) {
-		      visitMapper = new VisitMapper();
-		    }
-
-		    return visitMapper;
-		  }
-	  
-	  
-	  public Visit insert(Visit c) {
-			// Establish database connection
-		    Connection con = DBConnection.connection();
-
-		    try {
-				// New SQL statement
-		      Statement stmt = con.createStatement();
-
-				// Execute SQL query
-		      ResultSet rs = stmt.executeQuery("SELECT MAX(visit_id) AS maxid"
-		          + "FROM visit ");
-
-		      if (rs.next()) {
-				// Increase id by +1
-		        c.setId(rs.getInt("maxid") + 1);
-		        // New SQL statement
-		        stmt = con.createStatement();
-		        // Insert into DB
-		        stmt.executeUpdate("INSERT INTO visit (visit_id) "
-		            + "VALUES (" + c.getId() + "')");
-		      }
-		    }
-		    // Error handling
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-
-		    return c;
-		  }
-	  
-	  
-	  public Visit update(Visit v) {
-		  // Establish DB Connection
-		    Connection con = DBConnection.connection();
-
-		    try {
-		    	// New SQL Statement
-		      Statement stmt = con.createStatement();
-		      // Execute SQL Statement
-		      stmt.executeUpdate("UPDATE visit " + v.getId()
-		          + "\" " + "WHERE id=" + v.getId());
-
-		    }
-		    // Error handling
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
-		    }
-
-		    return v;
-		  }
-
-	  
-	  
-	  public void delete(Visit c) {
-			// Establish DB Connection
-		    Connection con = DBConnection.connection();
-
-		    try {
-				// New SQL statement
-		      Statement stmt = con.createStatement();
-				// Execute SQL query
-		      stmt.executeUpdate("DELETE FROM visit " + "WHERE visit_id=" + c.getId());
-		    }
-			// Error handling
-		    catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		  }
-	  
-	  
-	  public Vector<Visit> findAll() {
-			// Establish database connection
-		    Connection con = DBConnection.connection();
-
-		    Vector<Visit> result = new Vector<Visit>();
-
-		    try {
-				// New SQL statement
-		      Statement stmt = con.createStatement();
-				// Execute SQL query
-		      ResultSet rs = stmt
-		          .executeQuery("SELECT visit_id FROM visit ");
-
-		      while (rs.next()) {
-					// New visit Object
-		        Visit v = new Visit();
-				// Set properties of visit
-		        v.setId(rs.getInt("visit_id"));		       
-
-		        result.addElement(v);
-		      }
-		    }
-			// Error handling
-		    catch (SQLException e2) {
-		      e2.printStackTrace();
-		    }
-			// Return null if nothing found
-		    return result;
-		  }
-	  
-	  
-		public Visit findByProfile(int profileId) {
-			// Establish database connection
-			Connection con = DBConnection.connection();
-			
-			try {
-				// New SQL statement
-				Statement stmt = con.createStatement();
-				// Execute SQL query
-				ResultSet rs = stmt.executeQuery("SELECT *" +
-						"FROM block WHERE profile_id = '" + profileId + "'");
-						while(rs.next()) {
-							// Create new visit Object
-							Visit vi = new Visit();
-							// Set properties of block
-							vi.setId(rs.getInt("block_id"));
-							return vi;
-						}
-					}
-					// Error handling
-					catch (SQLException e) {
-						e.printStackTrace();
-					}
-					// Return null if nothing found
-					return null;
+	/**
+	 * VisitMapper should be instantiated by this method to ensure that only a
+	 * single instance exists.
+	 * <p>
+	 * 
+	 * @return The <code>VisitMapper</code> instance.
+	 */
+	public static VisitMapper visitMapper() {
+		if (visitMapper == null) {
+			visitMapper = new VisitMapper();
 		}
-	  
-}
+
+		return visitMapper;
+	}
+
+	/**
+	 * Insert a <code>Visit</code> object into the DB
+	 * 
+	 * <p>
+	 * TODO: else block for inserting first object into DB?
+	 * 
+	 * @param i
+	 *            The <code>Visit</code> object to be inserted
+	 */
+	public Visit insert(Visit v) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			// Query DB for current max id
+			ResultSet rs = stmt.executeQuery("SELECT MAX(visit_id) AS maxid"
+					+ "FROM visit ");
+
+			if (rs.next()) {
+				// Set id to max + 1
+				v.setId(rs.getInt("maxid") + 1);
+
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO visit (visit_id, "
+						+ "fk_profile_visitor, fk_profile_visited) "
+						+ "VALUES (" + v.getId() + ","
+						+ v.getVisitorProfileId() + ","
+						+ v.getVisitedProfileId() + "')");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return v;
+	}
+
+	/**
+	 * Delete a <code>Visit</code> object from the DB
+	 * 
+	 * @param i
+	 *            The <code>Visit</code> object to be deleted
+	 */
+	public void delete(Visit v) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM visit " + "WHERE visit_id="
+					+ v.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	
+	/**
+	 * Find all <code>Visit</code> objects in the DB
+	 * 
+	 * @return result ArrayList of all <code>Visit</code> objects
+	 */
+	public ArrayList<Visit> findAll() {
+		Connection con = DBConnection.connection();
 
+		ArrayList<Visit> result = new ArrayList<Visit>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+
+			while (rs.next()) {
+				Visit b = new Visit();
+				b.setId(rs.getInt("visit_id"));
+				b.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
+				b.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+
+				result.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+}
