@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import de.hdm.grouptwo.shared.bo.*;
 
+/**
+ * Mapper class to persist description Objects in database
+ * @author DenisThierry
+ */
+
 public class DescriptionMapper {
 	
 	private static DescriptionMapper descriptionMapper = null;
@@ -44,8 +49,8 @@ public class DescriptionMapper {
 		ArrayList<Description> result = new ArrayList<Description>();
 		try {
 		      Statement stmt = con.createStatement();
-		      ResultSet rs = stmt.executeQuery("SELECT property_id "
-		    	+	"WHERE property_id= '" + explanation + "'");
+		      ResultSet rs = stmt.executeQuery("SELECT property_id FROM Property"
+		    	+	"WHERE explanation= '" + explanation + "'");
 		      
 		      while (rs.next()) {
 		    	  Description d = new Description();

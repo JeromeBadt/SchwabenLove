@@ -8,6 +8,11 @@ import java.util.ArrayList;
 
 import de.hdm.grouptwo.shared.bo.*;
 
+/**
+ * Mapper class to persist selection Objects in database
+ * @author DenisThierry
+ */
+
 public class SelectionMapper {
 
 	private static SelectionMapper selectionMapper = null;

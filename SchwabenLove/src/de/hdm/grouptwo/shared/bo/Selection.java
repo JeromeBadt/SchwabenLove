@@ -1,6 +1,9 @@
 package de.hdm.grouptwo.shared.bo;
 
-import java.util.ArrayList;
+/**
+ * Business object class of selection
+ * @author DenisThierry
+ */
 
 public class Selection extends Property {
 
@@ -17,15 +20,5 @@ public class Selection extends Property {
 
 	public void setProperty_id(int property_id) {
 		this.property_id = property_id;
-	}
-
-	private ArrayList<SelectionItem> selectionItems;
-
-	public ArrayList<SelectionItem> getSelectionItems() {
-		return selectionItems;
-	}
-
-	public void setSelectionItems(ArrayList<SelectionItem> selectionItems) {
-		this.selectionItems = selectionItems;
 	}
 }
