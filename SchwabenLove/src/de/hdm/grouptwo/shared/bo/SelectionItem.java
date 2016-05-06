@@ -1,18 +1,20 @@
 package de.hdm.grouptwo.shared.bo;
 
+/**
+ * <code>SelectionItem</code> represents an item of a selection and is
+ * predefined by the system.
+ * 
+ * @author DenisThierry, JeromeBadt
+ */
+
 public class SelectionItem extends BusinessObject {
 
-	/**
-	 * Name is the text of a selectionItem, 
-	 * SelectionItem is a Item which is predefined by the system
-	 * 
-	 * @author DenisThierry 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	private int selection_item_id;
+	// The text of a selection item
 	private String name;
-	private int fk_selection;
+	// The selection which this item belongs to
+	private int selectionId;
 
 	public String getName() {
 		return name;
@@ -22,19 +24,11 @@ public class SelectionItem extends BusinessObject {
 		this.name = name;
 	}
 
-	public int getSelection_item_id() {
-		return selection_item_id;
+	public int getSelectionId() {
+		return selectionId;
 	}
 
-	public void setSelection_item_id(int selection_item_id) {
-		this.selection_item_id = selection_item_id;
-	}
-
-	public int getFk_selection() {
-		return fk_selection;
-	}
-
-	public void setFk_selection(int fk_selection) {
-		this.fk_selection = fk_selection;
+	public void setSelectionId(int selectionId) {
+		this.selectionId = selectionId;
 	}
 }

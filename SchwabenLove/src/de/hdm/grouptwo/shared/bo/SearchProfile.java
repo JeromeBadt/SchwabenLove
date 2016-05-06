@@ -1,5 +1,15 @@
 package de.hdm.grouptwo.shared.bo;
 
+/**
+ * A <code>SearchProfile</code> object represents a certain set of search
+ * criteria attributes used to filter matches. It can also refer to
+ * <code>Information</code> objects to further influence the search results. <br>
+ * All non-inherited attributes of SearchProfile can be <code>null</code> to
+ * indicate no search preference.
+ * 
+ * @author DenisThierry, JeromeBadt
+ */
+
 public class SearchProfile extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
@@ -15,7 +25,6 @@ public class SearchProfile extends BusinessObject {
 	private String education;
 	private String profession;
 	private String religion;
-	private int informationId;
 
 	public String getGender() {
 		return gender;
@@ -104,13 +113,4 @@ public class SearchProfile extends BusinessObject {
 	public void setReligion(String religion) {
 		this.religion = religion;
 	}
-
-	public int getInformationId() {
-		return informationId;
-	}
-
-	public void setInformationId(int informationId) {
-		this.informationId = informationId;
-	}
-
 }

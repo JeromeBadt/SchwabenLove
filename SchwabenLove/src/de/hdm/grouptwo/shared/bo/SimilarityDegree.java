@@ -1,10 +1,12 @@
 package de.hdm.grouptwo.shared.bo;
 
 /**
- * The SimilarityDegree shows the grade of similarity between two profiles
+ * The <code>SimilarityDegree</code> shows the grade of similarity between two
+ * profiles.
  * 
  * @author JoshuaHill, JeromeBadt
  */
+
 public class SimilarityDegree extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
