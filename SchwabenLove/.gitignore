@@ -46,7 +46,7 @@ war/WEB-INF/deploy/
 war/WEB-INF/classes/
 .factorypath
 .svn/
-.settings
+.settings/
 .gwt
 
 ################################################################################
