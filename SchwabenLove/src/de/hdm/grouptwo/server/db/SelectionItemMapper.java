@@ -47,7 +47,7 @@ public class SelectionItemMapper {
 		ArrayList<SelectionItem> result = new ArrayList<SelectionItem>();
 		try {
 		      Statement stmt = con.createStatement();
-		      ResultSet rs = stmt.executeQuery("SELECT property_id, name, fk_selection FROM SelectionItem "
+		      ResultSet rs = stmt.executeQuery("SELECT property_id, name, fk_selection, selection_item_id FROM SelectionItem, Selection "
 		    	+	"WHERE fk_selection= '" + property_id + "'");
 		      
 		      while (rs.next()) {
