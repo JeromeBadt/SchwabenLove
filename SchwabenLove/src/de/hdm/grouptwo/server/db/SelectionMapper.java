@@ -22,7 +22,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	/**
 	 * Private constructor to prevent initialization with <code>new</code>
 	 */
-	protected SelectionMapper() {
+	private SelectionMapper() {
 	}
 
 	/**

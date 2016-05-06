@@ -39,7 +39,6 @@ public class DBConnection {
             }
         }
 
-        // Zurückgegeben der Verbindung
         return con;
     }
 

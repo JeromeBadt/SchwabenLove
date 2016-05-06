@@ -248,7 +248,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * 
 	 * @param informationId
 	 *            The information id by which to find the object
-	 * @return ArrayList of found <code>SearchProfile</code> objects
+	 * @return The found <code>SearchProfile</code> object
 	 */
 	public SearchProfile findByInformationId(int informationId) {
 		Connection con = DBConnection.connection();
