@@ -147,11 +147,11 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Find <code>Visit</code> objects with a specific ID in the DB.
+	 * Find <code>Visit</code> object with a specific ID in the DB.
 	 * 
 	 * @param id
 	 *            The id by which to find the object
-	 * @return <code>Visit</code> objects with specified ID or null if not found
+	 * @return <code>Visit</code> object with specified ID or null if not found
 	 */
 	public Visit findById(int id) {
 		Connection con = DBConnection.connection();

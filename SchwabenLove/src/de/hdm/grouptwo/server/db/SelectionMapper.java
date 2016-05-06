@@ -56,14 +56,14 @@ public class SelectionMapper implements DataMapper<Selection> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(property_id) AS maxid "
+					.executeQuery("SELECT MAX(fk_property_id) AS maxid "
 							+ "FROM selection ");
 			
 			if (rs.next()) {
 				// Set id to max + 1
 				s.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO selection (property_id) "
+				stmt.executeUpdate("INSERT INTO selection (fk_property_id) "
 						+ "VALUES (" + s.getId() + ")");
 			}
 		} catch (SQLException e) {
@@ -82,8 +82,8 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE selection SET property_id=" + s.getId()
-					+ " WHERE property_id=" + s.getId());
+			stmt.executeQuery("UPDATE selection SET fk_property_id=" + s.getId()
+					+ " WHERE fk_property_id=" + s.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +100,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM selection WHERE property_id="
+			stmt.executeUpdate("DELETE FROM selection WHERE fk_property_id="
 					+ s.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,12 +119,12 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT property_id "
+			ResultSet rs = stmt.executeQuery("SELECT fk_property_id "
 					+ "FROM selection");
 
 			while (rs.next()) {
 				Selection s = new Selection();
-				s.setId(rs.getInt("property_id"));
+				s.setId(rs.getInt("fk_property_id"));
 
 				result.add(s);
 			}
@@ -135,11 +135,11 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Find <code>Selection</code> objects with a specific ID in the DB.
+	 * Find <code>Selection</code> object with a specific ID in the DB.
 	 * 
 	 * @param id
 	 *            The id by which to find the object
-	 * @return <code>Selection</code> objects with specified ID or null if not
+	 * @return <code>Selection</code> object with specified ID or null if not
 	 *         found
 	 */
 	public Selection findById(int id) {
@@ -147,12 +147,12 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT property_id "
-					+ "FROM selection WHERE property_id=" + id);
+			ResultSet rs = stmt.executeQuery("SELECT fk_property_id "
+					+ "FROM selection WHERE fk_property_id=" + id);
 
 			if (rs.next()) {
 				Selection s = new Selection();
-				s.setId(rs.getInt("property_id"));
+				s.setId(rs.getInt("fk_property_id"));
 
 				return s;
 			}

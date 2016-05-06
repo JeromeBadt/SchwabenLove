@@ -153,9 +153,9 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	}
 
 	/**
-	 * Find <code>SimilarityDegree</code> objects with a specific ID in the DB.
+	 * Find <code>SimilarityDegree</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>SimilarityDegree</code> objects with specified ID or
+	 * @return result <code>SimilarityDegree</code> object with specified ID or
 	 *         null if not found
 	 */
 	public SimilarityDegree findById(int id) {
