@@ -25,13 +25,12 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Private constructor to prevent initialization with <code>new</code>
 	 */
-	protected ProfileMapper() {
+	private ProfileMapper() {
 	}
 
 	/**
 	 * ProfileMapper should be instantiated by this method to ensure that only a
 	 * single instance exists.
-	 * <p>
 	 * 
 	 * @return The <code>ProfileMapper</code> instance.
 	 */
@@ -48,7 +47,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
 	 * 
-	 * @param i
+	 * @param p
 	 *            The <code>Profile</code> object to be inserted
 	 */
 	public void insert(Profile p) {
@@ -58,7 +57,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt.executeQuery("Select MAX(profile_id) AS maxid "
-					+ "FROM Profile ");
+					+ "FROM profile ");
 
 			if (rs.next()) {
 				// Set id to max + 1
@@ -84,11 +83,11 @@ public class ProfileMapper implements DataMapper<Profile> {
 						+ p.getLocation()
 						+ "',"
 						+ p.getHeight()
-						+ ",'"
+						+ ","
 						+ p.getPysique()
-						+ "','"
+						+ ","
 						+ p.getHairColor()
-						+ "','"
+						+ ",'"
 						+ p.getSmoker()
 						+ "','"
 						+ p.getEducation()
@@ -103,7 +102,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Update a <code>Profile</code> object in the DB
 	 * 
-	 * @param i
+	 * @param p
 	 *            The <code>Profile</code> object to be updated
 	 */
 	public void update(Profile p) {
@@ -116,8 +115,8 @@ public class ProfileMapper implements DataMapper<Profile> {
 					+ p.getLastName() + "',gender=" + p.getGender()
 					+ ",birthdate=" + p.getBirthdate() + ",location='"
 					+ p.getLocation() + "', height=" + p.getHeight()
-					+ ",physique='" + p.getPysique() + "',hair_color='"
-					+ p.getHairColor() + "',smoker='" + p.getSmoker()
+					+ ",physique=" + p.getPysique() + ",hair_color="
+					+ p.getHairColor() + ",smoker='" + p.getSmoker()
 					+ "',education='" + p.getEducation() + "',profession='"
 					+ p.getProfession() + "',religion='" + p.getReligion()
 					+ "' WHERE profile_id=" + p.getId());
@@ -129,7 +128,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Delete a <code>Profile</code> object from the DB
 	 * 
-	 * @param i
+	 * @param p
 	 *            The <code>Profile</code> object to be deleted
 	 */
 	public void delete(Profile p) {
@@ -190,9 +189,9 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Find <code>Profile</code> objects with a specific ID in the DB.
+	 * Find <code>Profile</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>Profile</code> objects with specified ID or null if
+	 * @return result <code>Profile</code> object with specified ID or null if
 	 *         not found
 	 */
 	public Profile findById(int id) {
@@ -200,47 +199,11 @@ public class ProfileMapper implements DataMapper<Profile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
-					+ "fk_profile_visitor, fk_profile_visited FROM visit");
-
-			if (rs.next()) {
-				Profile p = new Profile();
-				p.setId(rs.getInt("profile_id"));
-				p.setEmail(rs.getString("email"));
-				p.setFirstName(rs.getString("first_name"));
-				p.setLastName(rs.getString("last_name"));
-				p.setGender(rs.getString("gender"));
-				p.setBirthdate(rs.getDate("birthdate"));
-				p.setLocation(rs.getString("location"));
-				p.setHeight(rs.getInt("height"));
-				p.setPysique(rs.getString("physique"));
-				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getString("smoker"));
-				p.setEducation(rs.getString("education"));
-				p.setProfession(rs.getString("profession"));
-				p.setReligion(rs.getString("religion"));
-
-				return p;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	/**
-	 * Find all <code>Profile</code> objects with a specific email in the DB
-	 * 
-	 * @return result ArrayList of found <code>Profile</code> objects
-	 */
-	public Profile findByEmail(String email) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("Select * FROM profile WHERE email=" + email);
+					.executeQuery("SELECT profile_id, email, first_name, "
+							+ "last_name, gender, birthdate, location, "
+							+ "height, physique, hair_color, smoker, "
+							+ "education, profession, religion FROM profile");
 
 			if (rs.next()) {
 				Profile p = new Profile();
@@ -269,13 +232,12 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Find <code>Profile</code> objects by a specific visitId in the DB
+	 * Find a <code>Profile</code> object by a specific visitId in the DB
 	 * 
-	 * @return result ArrayList of found <code>Profile</code> objects
+	 * @return result The <code>Profile</code> object
 	 */
-	public ArrayList<Profile> findByVisitId(int visitId) {
+	public Profile findByVisitId(int visitId) {
 		Connection con = DBConnection.connection();
-		ArrayList<Profile> result = new ArrayList<Profile>();
 
 		try {
 			Statement stmt = con.createStatement();
@@ -304,12 +266,12 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
 
-				result.add(p);
+				return p;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return result;
+		return null;
 	}
 }

@@ -28,7 +28,6 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	/**
 	 * BookmarkMapper should be instantiated by this method to ensure that only
 	 * a single instance exists.
-	 * <p>
 	 * 
 	 * @return The <code>BookmarkMapper</code> instance.
 	 */
@@ -80,7 +79,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 			stmt.executeUpdate("UPDATE bookmark SET bookmark_id=" + b.getId()
 					+ ",fk_profile_id=" + b.getProfileId()
 					+ ",fk_bookmark_list_id=" + b.getBookmarkListId()
-					+ " WHERE visit_id=" + b.getId());
+					+ " WHERE bookmark_id=" + b.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +88,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	/**
 	 * Delete a <code>Bookmark</code> object from the DB
 	 * 
-	 * @param v
+	 * @param b
 	 *            The <code>Bookmark</code> object to be deleted
 	 */
 	public void delete(Bookmark b) {
@@ -116,7 +115,8 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT *" + " FROM bookmark;");
+			ResultSet rs = stmt.executeQuery("SELECT bookmark_id, "
+					+ "fk_profile_id, fk_bookmark_list_id FROM bookmark;");
 
 			while (rs.next()) {
 				Bookmark b = new Bookmark();
@@ -134,11 +134,11 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
-	 * Find <code>Bookmark</code> objects with a specific ID in the DB.
+	 * Find <code>Bookmark</code> object with a specific ID in the DB.
 	 * 
 	 * @param id
 	 *            The id by which to find the object
-	 * @return <code>Bookmark</code> objects with specified ID or null if not
+	 * @return <code>Bookmark</code> object with specified ID or null if not
 	 *         found
 	 */
 	public Bookmark findById(int id) {
@@ -180,9 +180,9 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT *"
-					+ " FROM bookmark WHERE fk_bookmark_list_id="
-					+ bookmarkListId);
+			ResultSet rs = stmt.executeQuery("SELECT bookmark_id, "
+					+ "fk_profile_id, fk_bookmark_list_id FROM bookmark WHERE "
+					+ "fk_bookmark_list_id=" + bookmarkListId);
 
 			while (rs.next()) {
 				Bookmark b = new Bookmark();

@@ -18,6 +18,7 @@ import de.hdm.grouptwo.shared.bo.Information;
  * 
  * @author JeromeBadt, Thies
  */
+
 public class InformationMapper implements DataMapper<Information> {
 	private static InformationMapper informationMapper = null;
 
@@ -30,7 +31,6 @@ public class InformationMapper implements DataMapper<Information> {
 	/**
 	 * InformationMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
-	 * <p>
 	 * 
 	 * @return The <code>InformationMapper</code> instance.
 	 */
@@ -132,8 +132,8 @@ public class InformationMapper implements DataMapper<Information> {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT information_id, input_text, "
-							+ "fk_profile_id, fk_property_id, " +
-							"fk_search_profile_id FROM information");
+							+ "fk_profile_id, fk_property_id, "
+							+ "fk_search_profile_id FROM information");
 
 			while (rs.next()) {
 				Information i = new Information();
@@ -153,14 +153,15 @@ public class InformationMapper implements DataMapper<Information> {
 	}
 
 	/**
-	 * Find <code>Information</code> objects with a specific ID in the DB.
+	 * Find <code>Information</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>Information</code> objects with specified ID or null if not found
+	 * @return result <code>Information</code> object with specified ID or null
+	 *         if not found
 	 */
 	public Information findById(int id) {
 		return findBy("information_id", id).get(0);
 	}
-	
+
 	/**
 	 * Find all <code>Information</code> objects which belong to a specific
 	 * profile in the DB

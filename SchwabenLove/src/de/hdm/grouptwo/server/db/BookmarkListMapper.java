@@ -9,26 +9,27 @@ import java.util.ArrayList;
 import de.hdm.grouptwo.shared.bo.BookmarkList;
 
 /**
- * Mapper class to persist BookmarList Objects in the database
- * TODO Info: keine update methode, da nicht benötigt!?
+ * Implementation of a mapper class for BookmarList. <br>
+ * In the spirit of the MVC pattern mapper classes are used to move data between
+ * objects and a database while keeping them independent of each other.
  * 
- * @author joshuahill
- *
+ * @author Thies, JoshuaHill, JoergJarmer
  */
-public class BookmarkListMapper {
 
+public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	private static BookmarkListMapper bookmarkListMapper = null;
-	
+
 	/**
-	 * private constructor to prevent initialization with <code>new</new>
+	 * Private constructor to prevent initialization with <code>new</code>
 	 */
 	private BookmarkListMapper() {
-		
 	}
-	
+
 	/**
-	 * Singleton
-	 * @return
+	 * BookmarkListMapper should be instantiated by this method to ensure that
+	 * only a single instance exists.
+	 * 
+	 * @return The <code>BookmarkListMapper</code> instance.
 	 */
 	public static BookmarkListMapper bookmarkListMapper() {
 		if (bookmarkListMapper == null) {
@@ -37,127 +38,167 @@ public class BookmarkListMapper {
 
 		return bookmarkListMapper;
 	}
-	
+
 	/**
-	 * Add new bookmarklist to database
+	 * Insert a <code>BookmarkList</code> object into the DB
 	 * 
-	 * @param bl BookmarkList object
-	 * @return bl BookmarkList object
+	 * <p>
+	 * TODO: else block for inserting first object into DB?
+	 * 
+	 * @param bl
+	 *            The <code>BookmarkList</code> object to be inserted
 	 */
-	public BookmarkList insert(BookmarkList bl) {
-		// Establish database connection
+	public void insert(BookmarkList bl) {
 		Connection con = DBConnection.connection();
-				
-			try {
-				// new SQL statement
-				Statement stmt = con.createStatement();
-				// new ResultSet
-				ResultSet rs = stmt.executeQuery("SELECT MAX(bookmark_id) AS maxId FROM Bookmarklist");
-				if(rs.next()) {
-					// maxId + 1 for new entry
-					bl.setId(rs.getInt("maxId") + 1);
-					// new SQL statement
-					stmt = con.createStatement();
-					// insert into DB
-					stmt.executeUpdate("INSERT INTO Bookmarklist (fk_profile_bookmark_list_possession, bookmark_id) " +
-							"VALUES ('" + bl.getProfileId() + "', '" + bl.getId() + "')");
-					}
-				}
-			// Error handling
-			catch (SQLException e) {
-				e.printStackTrace();
+
+		try {
+			Statement stmt = con.createStatement();
+			// Query DB for current max id
+			ResultSet rs = stmt.executeQuery("SELECT MAX(bookmark_id) AS "
+					+ "maxId FROM bookmark_list");
+
+			if (rs.next()) {
+				// Set id to max + 1
+				bl.setId(rs.getInt("maxId") + 1);
+
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO bookmark_list ("
+						+ "bookmark_list_id, fk_profile_id) VALUES ("
+						+ bl.getId() + "," + bl.getProfileId() + ")");
 			}
-			return bl;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
-	 * Delete Bookmarklist from database
+	 * Update a <code>BookmarkList</code> object in the DB
 	 * 
-	 * @param bl BookmarkList Object
+	 * @param bl
+	 *            The <code>BookmarkList</code> object to be updated
+	 */
+	public void update(BookmarkList bl) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE bookmark_list SET bookmark_list_id="
+					+ bl.getId() + ",fk_profile_id=" + bl.getProfileId()
+					+ " WHERE bookmark_list_id=" + bl.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Delete a <code>BookmarkList</code> object from the DB
+	 * 
+	 * @param bl
+	 *            The <code>BookmarkList</code> object to be deleted
 	 */
 	public void delete(BookmarkList bl) {
-		// Establish database connection
 		Connection con = DBConnection.connection();
-		
+
 		try {
-			// New SQL Statement 
 			Statement stmt = con.createStatement();
-			// Execute SQL query
-			stmt.executeUpdate("DELETE FROM Bookmarklist WHERE bookmark_id = '" + bl.getId() + "'");
-		}
-		// Error Handling
-		catch (SQLException e) {
+			stmt.executeUpdate("DELETE FROM bookmarklist WHERE "
+					+ "bookmark_list_id=" + bl.getId());
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Find all bookmarklists in database
+	 * Find all <code>BookmarkList</code> objects in the DB
 	 * 
-	 * @return result ArrayList of BookmarkLists
+	 * @return ArrayList of all <code>BookmarkList</code> objects
 	 */
 	public ArrayList<BookmarkList> findAll() {
-		// Establish database connection
 		Connection con = DBConnection.connection();
-		// Create ArrayList for results
+
 		ArrayList<BookmarkList> result = new ArrayList<BookmarkList>();
-		
+
 		try {
-			// New SQL statement
 			Statement stmt = con.createStatement();
-			// Execute SQL query
-			ResultSet rs = stmt.executeQuery("SELECT *" +
-					" FROM Bookmarklist;");
-			while(rs.next()) {
-				// New bookmark 
+			ResultSet rs = stmt
+					.executeQuery("SELECT bookmark_list_id, fk_profile_id"
+							+ " FROM bookmark_list");
+
+			while (rs.next()) {
 				BookmarkList bl = new BookmarkList();
-				// Set bookmarklist properties
-				bl.setId(rs.getInt("bookmark_id"));
-				bl.setProfileId(rs.getInt("fk_profile_bookmark_list_possession"));
-				// Add bookmarklist to ArrayList
+				bl.setId(rs.getInt("bookmark_list_id"));
+				bl.setProfileId(rs.getInt("fk_profile_id"));
+
 				result.add(bl);
 			}
-		}
-		// Error handling
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// Return ArrayList of BookmarkLists
+
 		return result;
 	}
-	
+
 	/**
-	 * Find Bookmarklist of a profile
+	 * Find <code>BookmarkList</code> object with a specific ID in the DB.
 	 * 
-	 * @param profileID 
-	 * @return bl BookmarkList object
+	 * @param id
+	 *            The id by which to find the object
+	 * @return <code>BookmarkList</code> object with specified ID or null if not
+	 *         found
+	 */
+	public BookmarkList findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT bookmark_list_id, fk_profile_id"
+							+ "FROM bookmark_list WHERE bookmark_list_id=" + id);
+
+			if (rs.next()) {
+				BookmarkList bl = new BookmarkList();
+				bl.setId(rs.getInt("bookmark_list_id"));
+				bl.setProfileId(rs.getInt("fk_profile_id"));
+
+				return bl;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find the <code>BookmarkList</code> object for a specific profile in the
+	 * DB
+	 * 
+	 * @param profileId
+	 *            The profile id by which to find the object
+	 * @return The found <code>BookmarkList</code> object
 	 */
 	public BookmarkList findByProfile(int profileId) {
-		// Establish database connection
 		Connection con = DBConnection.connection();
-		
+
 		try {
-			// New SQL statement
 			Statement stmt = con.createStatement();
-			// Execute SQL query
-			ResultSet rs = stmt.executeQuery("SELECT *" +
-					" FROM Bookmarklist WHERE fk_profile_bookmark_list_possession = '" + profileId + "'");
-					while(rs.next()) {
-						// New bookmarklist 
-						BookmarkList bl = new BookmarkList();
-						// Set bookmark properties
-						bl.setId(rs.getInt("bookmark_id"));
-						bl.setProfileId(rs.getInt("fk_profile_bookmark_list_possession"));
-						// return the corresponding bookmarklist
-						return bl;
-					}
-				}
-				// Error handling
-				catch (SQLException e) {
-					e.printStackTrace();
-				}
-				// Return null if nothing found
-				return null;
+			ResultSet rs = stmt
+					.executeQuery("SELECT bookmark_list_id, fk_profile_id "
+							+ "FROM bookmark_list WHERE fk_profile_id="
+							+ profileId);
+
+			while (rs.next()) {
+				BookmarkList bl = new BookmarkList();
+				bl.setId(rs.getInt("bookmark_list"));
+				bl.setProfileId(rs.getInt("fk_profile_id"));
+
+				return bl;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
-	
 }
