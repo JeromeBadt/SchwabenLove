@@ -25,15 +25,14 @@ public class VisitMapper implements DataMapper<Visit> {
 	/**
 	 * Private constructor to prevent initialization with <code>new</code>
 	 */
-	protected VisitMapper() {
+	private VisitMapper() {
 	}
 
 	/**
 	 * VisitMapper should be instantiated by this method to ensure that only a
-	 * single instance exists.
-	 * <p>
+	 * single instance exists
 	 * 
-	 * @return The <code>VisitMapper</code> instance.
+	 * @return The <code>VisitMapper</code> instance
 	 */
 	public static VisitMapper visitMapper() {
 		if (visitMapper == null) {
@@ -147,7 +146,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Find <code>Visit</code> object with a specific ID in the DB.
+	 * Find <code>Visit</code> object with a specific ID in the DB
 	 * 
 	 * @param id
 	 *            The id by which to find the object
