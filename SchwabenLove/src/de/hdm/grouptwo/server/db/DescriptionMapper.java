@@ -43,26 +43,6 @@ public class DescriptionMapper {
 	}
 		return result;
 	}
-
-	public ArrayList<Description> findByExplanation(String explanation) {
-		Connection con = DBConnection.connection();
-		ArrayList<Description> result = new ArrayList<Description>();
-		try {
-		      Statement stmt = con.createStatement();
-		      ResultSet rs = stmt.executeQuery("SELECT property_id FROM Property"
-		    	+	"WHERE explanation= '" + explanation + "'");
-		      
-		      while (rs.next()) {
-		    	  Description d = new Description();
-		    	  d.setId(rs.getInt("property_id"));
-		      result.add(d);
-		      }
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 		
 	public Description insert(Description d) {
 		Connection con = DBConnection.connection();
