@@ -19,7 +19,7 @@ import de.hdm.grouptwo.shared.bo.Profile;
  * @author Thies, DucNguyen, JeromeBadt
  */
 
-public class ProfileMapper extends DBConnection {
+public class ProfileMapper implements DataMapper<Profile> {
 	private static ProfileMapper profileMapper = null;
 
 	/**
@@ -51,7 +51,7 @@ public class ProfileMapper extends DBConnection {
 	 * @param i
 	 *            The <code>Profile</code> object to be inserted
 	 */
-	public Profile insert(Profile p) {
+	public void insert(Profile p) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -98,7 +98,6 @@ public class ProfileMapper extends DBConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return p;
 	}
 
 	/**
@@ -107,7 +106,7 @@ public class ProfileMapper extends DBConnection {
 	 * @param i
 	 *            The <code>Profile</code> object to be updated
 	 */
-	public Profile update(Profile p) {
+	public void update(Profile p) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -125,7 +124,6 @@ public class ProfileMapper extends DBConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return p;
 	}
 
 	/**
@@ -189,6 +187,46 @@ public class ProfileMapper extends DBConnection {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Find <code>Profile</code> objects with a specific ID in the DB.
+	 * 
+	 * @return result <code>Profile</code> objects with specified ID or null if
+	 *         not found
+	 */
+	public Profile findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+
+			if (rs.next()) {
+				Profile p = new Profile();
+				p.setId(rs.getInt("profile_id"));
+				p.setEmail(rs.getString("email"));
+				p.setFirstName(rs.getString("first_name"));
+				p.setLastName(rs.getString("last_name"));
+				p.setGender(rs.getString("gender"));
+				p.setBirthdate(rs.getDate("birthdate"));
+				p.setLocation(rs.getString("location"));
+				p.setHeight(rs.getInt("height"));
+				p.setPysique(rs.getString("physique"));
+				p.setHairColor(rs.getString("hair_color"));
+				p.setSmoker(rs.getString("smoker"));
+				p.setEducation(rs.getString("education"));
+				p.setProfession(rs.getString("profession"));
+				p.setReligion(rs.getString("religion"));
+
+				return p;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	/**

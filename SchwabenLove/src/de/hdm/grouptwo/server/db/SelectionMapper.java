@@ -9,103 +9,157 @@ import java.util.ArrayList;
 import de.hdm.grouptwo.shared.bo.*;
 
 /**
- * Mapper class to persist selection Objects in database
- * @author DenisThierry
+ * Implementation of a mapper class for Selection. <br>
+ * In the spirit of the MVC pattern mapper classes are used to move data between
+ * objects and a database while keeping them independent of each other.
+ * 
+ * @author Thies, DenisThierry, JeromeBadt
  */
 
-public class SelectionMapper {
-
+public class SelectionMapper implements DataMapper<Selection> {
 	private static SelectionMapper selectionMapper = null;
+
+	/**
+	 * Private constructor to prevent initialization with <code>new</code>
+	 */
 	protected SelectionMapper() {
 	}
+
+	/**
+	 * SelectionMapper should be instantiated by this method to ensure that only
+	 * a single instance exists.
+	 * <p>
+	 * 
+	 * @return The <code>SelectionMapper</code> instance.
+	 */
 	public static SelectionMapper selectionMapper() {
 		if (selectionMapper == null) {
 			selectionMapper = new SelectionMapper();
 		}
+
 		return selectionMapper;
 	}
+
+	/**
+	 * Insert a <code>Selection</code> object into the DB
+	 * 
+	 * <p>
+	 * TODO: else block for inserting first object into DB?
+	 * 
+	 * @param s
+	 *            The <code>Selection</code> object to be inserted
+	 */
+	public void insert(Selection s) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			// Query DB for current max id
+			ResultSet rs = stmt
+					.executeQuery("SELECT MAX(property_id) AS maxid "
+							+ "FROM selection ");
+			
+			if (rs.next()) {
+				// Set id to max + 1
+				s.setId(rs.getInt("maxid") + 1);
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO selection (property_id) "
+						+ "VALUES (" + s.getId() + ")");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update a <code>Selection</code> object in the DB
+	 * 
+	 * @param s
+	 *            The <code>Selection</code> object to be updated
+	 */
+	public void update(Selection s) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("UPDATE selection SET property_id=" + s.getId()
+					+ " WHERE property_id=" + s.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Delete a <code>Selection</code> object from the DB
+	 * 
+	 * @param s
+	 *            The <code>Selection</code> object to be deleted
+	 */
+	public void delete(Selection s) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM selection WHERE property_id="
+					+ s.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Find all <code>Selection</code> objects in the DB
+	 * 
+	 * @return ArrayList of all <code>Selection</code> objects
+	 */
 	public ArrayList<Selection> findAll() {
 		Connection con = DBConnection.connection();
+
 		ArrayList<Selection> result = new ArrayList<Selection>();
+
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT property_id "
-			+ "FROM Selection");
+					+ "FROM selection");
+
 			while (rs.next()) {
 				Selection s = new Selection();
 				s.setId(rs.getInt("property_id"));
-			
-				
-			result.add(s);
-			}
-		}
-	catch (SQLException e) {
-		e.printStackTrace();
-	}
-		return result;
-	}
 
-	public ArrayList<Selection> findBySelectionItem(int selection_item_id) {
-		Connection con = DBConnection.connection();
-		ArrayList<Selection> result = new ArrayList<Selection>();
-		try {
-		      Statement stmt = con.createStatement();
-		      ResultSet rs = stmt.executeQuery("SELECT property_id FROM Selection "
-		    	+	"WHERE property_id= '" + selection_item_id + "'");
-		      
-		      while (rs.next()) {
-		    	  Selection s = new Selection();
-		    	  s.setId(rs.getInt("property_id"));
-		      result.add(s);
-		      }
-		}
-		catch (SQLException e) {
+				result.add(s);
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	public Selection insert(Selection s) {
+
+	/**
+	 * Find <code>Selection</code> objects with a specific ID in the DB.
+	 * 
+	 * @param id
+	 *            The id by which to find the object
+	 * @return <code>Selection</code> objects with specified ID or null if not
+	 *         found
+	 */
+	public Selection findById(int id) {
 		Connection con = DBConnection.connection();
-		
+
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT MAX(property_id) AS maxid "
-			          + "FROM Selection ");
+			ResultSet rs = stmt.executeQuery("SELECT property_id "
+					+ "FROM selection WHERE property_id=" + id);
+
 			if (rs.next()) {
-				s.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO Selection (property_id) "
-			            + "VALUES ('" + s.getId() + "')");
+				Selection s = new Selection();
+				s.setId(rs.getInt("property_id"));
+
+				return s;
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		catch (SQLException e) {
-		      e.printStackTrace();
+
+		return null;
 	}
-		return s;
-}
-	public Selection update(Selection s) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE Selection " + "SET property_id=\"" + s.getId() +  
-		           "WHERE selection_item_id=" + s.getId());
-		  }
-	    catch (SQLException e) {
-	    	e.printStackTrace();
-	    }
-		return s;
-	}
-	public void delete(Selection s) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM Selection " + "WHERE property_id=" + s.getId());
-			}
-	    catch (SQLException e) {
-	      e.printStackTrace();
-	      }
-	  }
 }

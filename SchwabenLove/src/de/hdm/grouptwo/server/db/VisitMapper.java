@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import de.hdm.grouptwo.shared.bo.Information;
 import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
@@ -50,7 +49,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
 	 * 
-	 * @param i
+	 * @param v
 	 *            The <code>Visit</code> object to be inserted
 	 */
 	public void insert(Visit v) {
@@ -68,38 +67,32 @@ public class VisitMapper implements DataMapper<Visit> {
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO visit (visit_id, "
-						+ "fk_profile_visitor, fk_profile_visited) "
+						+ "fk_visitor_profile_id, fk_visited_profile_id) "
 						+ "VALUES (" + v.getId() + ","
 						+ v.getVisitorProfileId() + ","
-						+ v.getVisitedProfileId() + "')");
+						+ v.getVisitedProfileId() + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void update(Visit t) {
-		// TODO Auto-generated method stub
-
-	}
-
 	/**
-	 * Update a <code>Information</code> object in the DB
+	 * Update a <code>Visit</code> object in the DB
 	 * 
-	 * @param i
-	 *            The <code>Information</code> object to be updated
+	 * @param v
+	 *            The <code>Visit</code> object to be updated
 	 */
-	public void update(Information i) {
+	public void update(Visit v) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE information SET input_text='"
-					+ i.getInputText() + "',fk_profile_id=" + i.getProfileId()
-					+ ",fk_property_id=" + i.getPropertyId()
-					+ ",fk_search_profile_id=" + i.getSearchProfileId()
-					+ " WHERE information_id=" + i.getId());
+			stmt.executeUpdate("UPDATE visit SET visit_id=" + v.getId()
+					+ ",fk_visitor_profile_id=" + v.getVisitorProfileId()
+					+ ",fk_visited_profile_id=" + v.getVisitedProfileId()
+					+ " WHERE visit_id=" + v.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +101,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	/**
 	 * Delete a <code>Visit</code> object from the DB
 	 * 
-	 * @param i
+	 * @param v
 	 *            The <code>Visit</code> object to be deleted
 	 */
 	public void delete(Visit v) {
@@ -116,8 +109,7 @@ public class VisitMapper implements DataMapper<Visit> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM visit " + "WHERE visit_id="
-					+ v.getId());
+			stmt.executeUpdate("DELETE FROM visit WHERE visit_id=" + v.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -126,7 +118,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	/**
 	 * Find all <code>Visit</code> objects in the DB
 	 * 
-	 * @return result ArrayList of all <code>Visit</code> objects
+	 * @return ArrayList of all <code>Visit</code> objects
 	 */
 	public ArrayList<Visit> findAll() {
 		Connection con = DBConnection.connection();
@@ -136,13 +128,14 @@ public class VisitMapper implements DataMapper<Visit> {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
-					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit");
 
 			while (rs.next()) {
 				Visit v = new Visit();
 				v.setId(rs.getInt("visit_id"));
-				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
-				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
 
 				result.add(v);
 			}
@@ -156,7 +149,9 @@ public class VisitMapper implements DataMapper<Visit> {
 	/**
 	 * Find <code>Visit</code> objects with a specific ID in the DB.
 	 * 
-	 * @return result <code>Visit</code> objects with specified ID or null if not found
+	 * @param id
+	 *            The id by which to find the object
+	 * @return <code>Visit</code> objects with specified ID or null if not found
 	 */
 	public Visit findById(int id) {
 		Connection con = DBConnection.connection();
@@ -164,13 +159,14 @@ public class VisitMapper implements DataMapper<Visit> {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
-					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit WHERE visit_id=" + id);
 
 			if (rs.next()) {
 				Visit v = new Visit();
 				v.setId(rs.getInt("visit_id"));
-				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
-				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
 
 				return v;
 			}
@@ -180,11 +176,14 @@ public class VisitMapper implements DataMapper<Visit> {
 
 		return null;
 	}
-	
+
 	/**
-	 * Find all <code>Visit</code> objects in the DB
+	 * Find all <code>Visit</code> objects with a specific visitor profile in
+	 * the DB
 	 * 
-	 * @return result ArrayList of found <code>Visit</code> objects
+	 * @param visitorProfileId
+	 *            The visitor profile id by which to find the objects
+	 * @return ArrayList of found <code>Visit</code> objects
 	 */
 	public ArrayList<Visit> findByVisitorProfileId(int visitorProfileId) {
 		Connection con = DBConnection.connection();
@@ -194,8 +193,9 @@ public class VisitMapper implements DataMapper<Visit> {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
-					+ "fk_profile_visitor, fk_profile_visited FROM visit "
-					+ "WHERE fk_profile_visitor = " + visitorProfileId);
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit WHERE fk_visitor_profile_id="
+					+ visitorProfileId);
 
 			while (rs.next()) {
 				Visit v = new Visit();

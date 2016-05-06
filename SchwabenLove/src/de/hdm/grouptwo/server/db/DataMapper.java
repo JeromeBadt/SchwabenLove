@@ -5,7 +5,6 @@ import java.util.ArrayList;
 /**
  * DataMapper interface provides the basic set of methods that need to be
  * implemented by mapper classes.
- * <p>
  * 
  * @author JeromeBadt
  */
