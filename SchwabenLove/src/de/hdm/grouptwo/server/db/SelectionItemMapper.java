@@ -142,11 +142,11 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	}
 
 	/**
-	 * Find <code>SelectionItem</code> objects with a specific ID in the DB.
+	 * Find <code>SelectionItem</code> object with a specific ID in the DB.
 	 * 
 	 * @param id
 	 *            The id by which to find the object
-	 * @return <code>SelectionItem</code> objects with specified ID or null if
+	 * @return <code>SelectionItem</code> object with specified ID or null if
 	 *         not found
 	 */
 	public SelectionItem findById(int id) {
@@ -155,7 +155,8 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT selection_item_id, name, "
-					+ "fk_selection_id FROM selection_item");
+					+ "fk_selection_id FROM selection_item WHERE "
+					+ "selection_item_id=" + id);
 
 			if (rs.next()) {
 				SelectionItem si = new SelectionItem();
@@ -172,6 +173,14 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 		return null;
 	}
 
+	/**
+	 * Find all <code>SelectionItem</code> objects with a specific visitor
+	 * profile in the DB
+	 * 
+	 * @param selectionId
+	 *            The selection id by which to find the objects
+	 * @return ArrayList of found <code>SelectionItem</code> objects
+	 */
 	public ArrayList<SelectionItem> findBySelection(int selectionId) {
 		Connection con = DBConnection.connection();
 		ArrayList<SelectionItem> result = new ArrayList<SelectionItem>();
