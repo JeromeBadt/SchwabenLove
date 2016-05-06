@@ -19,7 +19,7 @@ import de.hdm.grouptwo.shared.bo.Visit;
  * @author Thies, ManuelRuss, JeromeBadt
  */
 
-public class VisitMapper {
+public class VisitMapper implements DataMapper<Visit> {
 	private static VisitMapper visitMapper = null;
 
 	/**
@@ -49,10 +49,10 @@ public class VisitMapper {
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
 	 * 
-	 * @param i
+	 * @param v
 	 *            The <code>Visit</code> object to be inserted
 	 */
-	public Visit insert(Visit v) {
+	public void insert(Visit v) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -67,22 +67,41 @@ public class VisitMapper {
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO visit (visit_id, "
-						+ "fk_profile_visitor, fk_profile_visited) "
+						+ "fk_visitor_profile_id, fk_visited_profile_id) "
 						+ "VALUES (" + v.getId() + ","
 						+ v.getVisitorProfileId() + ","
-						+ v.getVisitedProfileId() + "')");
+						+ v.getVisitedProfileId() + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
 
-		return v;
+	/**
+	 * Update a <code>Visit</code> object in the DB
+	 * 
+	 * @param v
+	 *            The <code>Visit</code> object to be updated
+	 */
+	public void update(Visit v) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE visit SET visit_id=" + v.getId()
+					+ ",fk_visitor_profile_id=" + v.getVisitorProfileId()
+					+ ",fk_visited_profile_id=" + v.getVisitedProfileId()
+					+ " WHERE visit_id=" + v.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Delete a <code>Visit</code> object from the DB
 	 * 
-	 * @param i
+	 * @param v
 	 *            The <code>Visit</code> object to be deleted
 	 */
 	public void delete(Visit v) {
@@ -90,18 +109,16 @@ public class VisitMapper {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM visit " + "WHERE visit_id="
-					+ v.getId());
+			stmt.executeUpdate("DELETE FROM visit WHERE visit_id=" + v.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	
 	/**
 	 * Find all <code>Visit</code> objects in the DB
 	 * 
-	 * @return result ArrayList of all <code>Visit</code> objects
+	 * @return ArrayList of all <code>Visit</code> objects
 	 */
 	public ArrayList<Visit> findAll() {
 		Connection con = DBConnection.connection();
@@ -111,7 +128,74 @@ public class VisitMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
-					+ "fk_profile_visitor, fk_profile_visited FROM visit");
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit");
+
+			while (rs.next()) {
+				Visit v = new Visit();
+				v.setId(rs.getInt("visit_id"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
+
+				result.add(v);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Find <code>Visit</code> objects with a specific ID in the DB.
+	 * 
+	 * @param id
+	 *            The id by which to find the object
+	 * @return <code>Visit</code> objects with specified ID or null if not found
+	 */
+	public Visit findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit WHERE visit_id=" + id);
+
+			if (rs.next()) {
+				Visit v = new Visit();
+				v.setId(rs.getInt("visit_id"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
+
+				return v;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find all <code>Visit</code> objects with a specific visitor profile in
+	 * the DB
+	 * 
+	 * @param visitorProfileId
+	 *            The visitor profile id by which to find the objects
+	 * @return ArrayList of found <code>Visit</code> objects
+	 */
+	public ArrayList<Visit> findByVisitorProfileId(int visitorProfileId) {
+		Connection con = DBConnection.connection();
+
+		ArrayList<Visit> result = new ArrayList<Visit>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT visit_id, "
+					+ "fk_visitor_profile_id, fk_visited_profile_id "
+					+ "FROM visit WHERE fk_visitor_profile_id="
+					+ visitorProfileId);
 
 			while (rs.next()) {
 				Visit v = new Visit();

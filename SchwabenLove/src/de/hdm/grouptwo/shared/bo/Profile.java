@@ -2,6 +2,14 @@ package de.hdm.grouptwo.shared.bo;
 
 import java.util.Date;
 
+/**
+ * <code>Profile</code> objects are the representation of users and the
+ * centerpieces of the SchwabenLove platform. Profiles have a set of attributes
+ * but can be further refined by <code>Information</code> objects.
+ * 
+ * @author ManuelRuss, DucNguyen, JeromeBadt
+ */
+
 public class Profile extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +35,7 @@ public class Profile extends BusinessObject {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -107,7 +115,7 @@ public class Profile extends BusinessObject {
 	public void setEducation(String education) {
 		this.education = education;
 	}
-	
+
 	public String getProfession() {
 		return profession;
 	}
@@ -115,7 +123,7 @@ public class Profile extends BusinessObject {
 	public void setProfession(String profession) {
 		this.profession = profession;
 	}
-	
+
 	public String getReligion() {
 		return religion;
 	}

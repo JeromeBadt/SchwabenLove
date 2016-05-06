@@ -18,7 +18,7 @@ import de.hdm.grouptwo.shared.bo.Information;
  * 
  * @author JeromeBadt, Thies
  */
-public class InformationMapper {
+public class InformationMapper implements DataMapper<Information> {
 	private static InformationMapper informationMapper = null;
 
 	/**
@@ -152,6 +152,15 @@ public class InformationMapper {
 		return result;
 	}
 
+	/**
+	 * Find <code>Information</code> objects with a specific ID in the DB.
+	 * 
+	 * @return result <code>Information</code> objects with specified ID or null if not found
+	 */
+	public Information findById(int id) {
+		return findBy("information_id", id).get(0);
+	}
+	
 	/**
 	 * Find all <code>Information</code> objects which belong to a specific
 	 * profile in the DB

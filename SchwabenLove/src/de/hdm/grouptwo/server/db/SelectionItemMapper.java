@@ -1,111 +1,196 @@
 package de.hdm.grouptwo.server.db;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-import de.hdm.grouptwo.shared.bo.*;
+import de.hdm.grouptwo.shared.bo.SelectionItem;
 
 /**
- * Mapper class to persist selection items Objects in database
- * @author DenisThierry
+ * Implementation of a mapper class for SelectionItem. <br>
+ * In the spirit of the MVC pattern mapper classes are used to move data between
+ * objects and a database while keeping them independent of each other.
+ * 
+ * @author Thies, DenisThierry, JeromeBadt
  */
 
-public class SelectionItemMapper {
+public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	private static SelectionItemMapper selectionItemMapper = null;
+
+	/**
+	 * Private constructor to prevent initialization with <code>new</code>
+	 */
 	protected SelectionItemMapper() {
 	}
+
+	/**
+	 * SelectionItemMapper should be instantiated by this method to ensure that
+	 * only a single instance exists.
+	 * <p>
+	 * 
+	 * @return The <code>SelectionItemMapper</code> instance.
+	 */
 	public static SelectionItemMapper selectionItemMapper() {
 		if (selectionItemMapper == null) {
 			selectionItemMapper = new SelectionItemMapper();
 		}
+
 		return selectionItemMapper;
 	}
-	public ArrayList<SelectionItem> findAll() {
+
+	/**
+	 * Insert a <code>SelectionItem</code> object into the DB
+	 * 
+	 * <p>
+	 * TODO: else block for inserting first object into DB?
+	 * 
+	 * @param si
+	 *            The <code>SelectionItem</code> object to be inserted
+	 */
+	public void insert(SelectionItem si) {
 		Connection con = DBConnection.connection();
-		ArrayList<SelectionItem> result = new ArrayList<SelectionItem>();
+
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT selection_item_id, name, fk_selection "
-			+ "FROM SelectionItem");
+			// Query DB for current max id
+			ResultSet rs = stmt
+					.executeQuery("SELECT MAX(selection_item_id) AS maxid "
+							+ "FROM selection_item ");
+
+			if (rs.next()) {
+				// Set id to max + 1
+				si.setId(rs.getInt("maxid") + 1);
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO selection_item ("
+						+ "selection_item_id, name, fk_selection_id) VALUES ("
+						+ si.getId() + ",'" + si.getName() + "',"
+						+ si.getSelectionId() + ")");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update a <code>SelectionItem</code> object in the DB
+	 * 
+	 * @param si
+	 *            The <code>SelectionItem</code> object to be updated
+	 */
+	public void update(SelectionItem si) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeQuery("UPDATE selection_item "
+					+ "SET selection_item_id=" + si.getId() + ",name='"
+					+ si.getName() + "',fk_selection_id=" + si.getSelectionId()
+					+ " WHERE selection_item_id=" + si.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Delete a <code>SelectionItem</code> object from the DB
+	 * 
+	 * @param si
+	 *            The <code>SelectionItem</code> object to be deleted
+	 */
+	public void delete(SelectionItem si) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("DELETE FROM selection_item "
+					+ "WHERE selection_item_id=" + si.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Find all <code>SelectionItem</code> objects in the DB
+	 * 
+	 * @return ArrayList of all <code>SelectionItem</code> objects
+	 */
+	public ArrayList<SelectionItem> findAll() {
+		Connection con = DBConnection.connection();
+
+		ArrayList<SelectionItem> result = new ArrayList<SelectionItem>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT selection_item_id, name, "
+					+ "fk_selection_id FROM selection_item");
+
 			while (rs.next()) {
 				SelectionItem si = new SelectionItem();
 				si.setId(rs.getInt("selection_item_id"));
 				si.setName(rs.getString("name"));
-				si.setFk_selection(rs.getInt("fk_selection"));
-				
-			result.add(si);
+				si.setSelectionId(rs.getInt("fk_selection_id"));
+
+				result.add(si);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	catch (SQLException e) {
-		e.printStackTrace();
-	}
+
 		return result;
 	}
 
-	public ArrayList<SelectionItem> findByProperty(int property_id) {
+	/**
+	 * Find <code>SelectionItem</code> objects with a specific ID in the DB.
+	 * 
+	 * @param id
+	 *            The id by which to find the object
+	 * @return <code>SelectionItem</code> objects with specified ID or null if
+	 *         not found
+	 */
+	public SelectionItem findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT selection_item_id, name, "
+					+ "fk_selection_id FROM selection_item");
+
+			if (rs.next()) {
+				SelectionItem si = new SelectionItem();
+				si.setId(rs.getInt("selection_item_id"));
+				si.setName(rs.getString("name"));
+				si.setSelectionId(rs.getInt("fk_selection_id"));
+
+				return si;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public ArrayList<SelectionItem> findBySelection(int selectionId) {
 		Connection con = DBConnection.connection();
 		ArrayList<SelectionItem> result = new ArrayList<SelectionItem>();
 		try {
-		      Statement stmt = con.createStatement();
-		      ResultSet rs = stmt.executeQuery("SELECT property_id, name, fk_selection, selection_item_id FROM SelectionItem, Selection "
-		    	+	"WHERE fk_selection= '" + property_id + "'");
-		      
-		      while (rs.next()) {
-		    	  SelectionItem si = new SelectionItem();
-		    	  si.setId(rs.getInt("selection_item_id"));
-		    	  si.setName(rs.getString("name"));
-		    	  si.setFk_selection(rs.getInt("fk_selection"));
-		      result.add(si);
-		      }
-		}
-		catch (SQLException e) {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT selection_item_id, name, "
+					+ "fk_selection_id FROM selection_item WHERE "
+					+ "fk_selection_id=" + selectionId);
+
+			while (rs.next()) {
+				SelectionItem si = new SelectionItem();
+				si.setId(rs.getInt("selection_item_id"));
+				si.setName(rs.getString("name"));
+				si.setSelectionId(rs.getInt("fk_selection_id"));
+				result.add(si);
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-		
-	public SelectionItem insert(SelectionItem si) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT MAX(selection_item_id) AS maxid "
-			          + "FROM SelectionItem ");
-			if (rs.next()) {
-				si.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO SelectionItem (selection_item_id, name, fk_selection) "
-			            + "VALUES ('" + si.getId() + "','" + si.getName() + "','" + si.getFk_selection() + "')");
-			}
-		}
-		catch (SQLException e) {
-		      e.printStackTrace();
-	}
-		return si;
-}
-	public SelectionItem update(SelectionItem si) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE SelectionItem " + "SET selection_item_id=\"" + si.getId() + "\", name=\"" + si.getName() + "\", fk_property=\""
-		               + si.getFk_selection() + 
-		           "WHERE selection_item_id=" + si.getId());
-		  }
-	    catch (SQLException e) {
-	    	e.printStackTrace();
-	    }
-		return si;
-	}
-	public void delete(SelectionItem si) {
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM SelectionItem " + "WHERE selection_item_id=" + si.getId());
-			}
-	    catch (SQLException e) {
-	      e.printStackTrace();
-	      }
-	  }
 }

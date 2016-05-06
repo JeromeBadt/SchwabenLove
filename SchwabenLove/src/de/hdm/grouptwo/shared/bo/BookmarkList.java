@@ -1,28 +1,17 @@
 package de.hdm.grouptwo.shared.bo;
 
-import java.util.ArrayList;
-
-
 /**
- * A bookmarklist is used to store all bookmarks of a user
+ * A <code>BookmarkList</code> object belongs to a <code>Profile</code> and is
+ * used to store <code>Bookmark</code> objects.
  * 
- * @author joshuahill
- *
+ * @author JoshuaHill, Jerome Badt
  */
+
 public class BookmarkList extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<Bookmark> bookmarks;
 	private int profileId;
-
-	public ArrayList<Bookmark> getBookmarks() {
-		return bookmarks;
-	}
-
-	public void setBookmarks(ArrayList<Bookmark> bookmarks) {
-		this.bookmarks = bookmarks;
-	}
 
 	public int getProfileId() {
 		return profileId;

@@ -1,8 +1,8 @@
 package de.hdm.grouptwo.shared.bo;
 
 /**
- * A Visit object is created when one profile (the visitor) visits another
- * profile (the visited).
+ * A <code>Visit</code> object is created when one profile (the visitor) visits
+ * another profile (the visited).
  * 
  * @author ManuelRuss, JeromeBadt
  */
