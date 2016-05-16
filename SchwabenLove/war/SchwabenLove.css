@@ -32,3 +32,21 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+/** MenuBar Settings */
+/*
+.gwt-MenuBar {
+  width: 100%;
+}
+
+
+.gwt-MenuBar tr {
+	background-color: red;
+	width: 100%;
+}
+
+.gwt-MenuItem-logout {
+	position: absolute;
+	right: 0px;
+}
+*/
