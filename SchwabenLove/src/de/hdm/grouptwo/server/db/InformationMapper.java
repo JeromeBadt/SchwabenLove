@@ -23,7 +23,7 @@ public class InformationMapper implements DataMapper<Information> {
 	private static InformationMapper informationMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private InformationMapper() {
 	}
@@ -32,7 +32,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * InformationMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
 	 * 
-	 * @return The <code>InformationMapper</code> instance.
+	 * @return The <code>InformationMapper</code> instance
 	 */
 	public static InformationMapper informationMapper() {
 		if (informationMapper == null) {
@@ -43,7 +43,7 @@ public class InformationMapper implements DataMapper<Information> {
 	}
 
 	/**
-	 * Insert a <code>Information</code> object into the DB
+	 * Insert a <code>Information</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -78,7 +78,7 @@ public class InformationMapper implements DataMapper<Information> {
 	}
 
 	/**
-	 * Update a <code>Information</code> object in the DB
+	 * Update a <code>Information</code> object in the DB.
 	 * 
 	 * @param i
 	 *            The <code>Information</code> object to be updated
@@ -100,7 +100,7 @@ public class InformationMapper implements DataMapper<Information> {
 	}
 
 	/**
-	 * Delete a <code>Information</code> object from the DB
+	 * Delete a <code>Information</code> object from the DB.
 	 * 
 	 * @param i
 	 *            The <code>Information</code> object to be deleted
@@ -119,7 +119,7 @@ public class InformationMapper implements DataMapper<Information> {
 	}
 
 	/**
-	 * Find all <code>Information</code> objects in the DB
+	 * Find all <code>Information</code> objects in the DB.
 	 * 
 	 * @return result ArrayList of all <code>Information</code> objects
 	 */
@@ -164,7 +164,7 @@ public class InformationMapper implements DataMapper<Information> {
 
 	/**
 	 * Find all <code>Information</code> objects which belong to a specific
-	 * profile in the DB
+	 * profile in the DB.
 	 * 
 	 * @return result ArrayList of found <code>Information</code> objects
 	 */
@@ -174,7 +174,7 @@ public class InformationMapper implements DataMapper<Information> {
 
 	/**
 	 * Find all <code>Information</code> objects which refer to a specific
-	 * property in the DB
+	 * property in the DB.
 	 * 
 	 * @return result ArrayList of found <code>Information</code> objects
 	 */
@@ -184,7 +184,7 @@ public class InformationMapper implements DataMapper<Information> {
 
 	/**
 	 * Find all <code>Information</code> objects which belong to a specific
-	 * search profile in the DB
+	 * search profile in the DB.
 	 * 
 	 * @return result ArrayList of found <code>Information</code> objects
 	 */
@@ -194,7 +194,7 @@ public class InformationMapper implements DataMapper<Information> {
 
 	/**
 	 * Helper method to find all <code>Information</code> objects via a specific
-	 * key and value
+	 * key and value.
 	 * 
 	 * @return result ArrayList of found <code>Information</code> objects
 	 */

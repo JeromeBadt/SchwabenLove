@@ -23,7 +23,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	private static ProfileMapper profileMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private ProfileMapper() {
 	}
@@ -32,7 +32,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 * ProfileMapper should be instantiated by this method to ensure that only a
 	 * single instance exists.
 	 * 
-	 * @return The <code>ProfileMapper</code> instance.
+	 * @return The <code>ProfileMapper</code> instance
 	 */
 	public static ProfileMapper profileMapper() {
 		if (profileMapper == null) {
@@ -42,7 +42,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Insert a <code>Profile</code> object into the DB
+	 * Insert a <code>Profile</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -100,7 +100,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Update a <code>Profile</code> object in the DB
+	 * Update a <code>Profile</code> object in the DB.
 	 * 
 	 * @param p
 	 *            The <code>Profile</code> object to be updated
@@ -126,7 +126,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Delete a <code>Profile</code> object from the DB
+	 * Delete a <code>Profile</code> object from the DB.
 	 * 
 	 * @param p
 	 *            The <code>Profile</code> object to be deleted
@@ -145,7 +145,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Find all <code>Profile</code> objects in the DB
+	 * Find all <code>Profile</code> objects in the DB.
 	 * 
 	 * @return result ArrayList of all <code>Profile</code> objects
 	 */
@@ -236,7 +236,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	}
 
 	/**
-	 * Find a <code>Profile</code> object by a specific visitId in the DB
+	 * Find a <code>Profile</code> object by a specific visitId in the DB.
 	 * 
 	 * @return result The <code>Profile</code> object
 	 */

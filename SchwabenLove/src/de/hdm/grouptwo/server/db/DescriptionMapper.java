@@ -20,7 +20,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	private static DescriptionMapper descriptionMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private DescriptionMapper() {
 	}
@@ -29,7 +29,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	 * DescriptionMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
 	 * 
-	 * @return The <code>DescriptionMapper</code> instance.
+	 * @return The <code>DescriptionMapper</code> instance
 	 */
 	public static DescriptionMapper descriptionMapper() {
 		if (descriptionMapper == null) {
@@ -39,7 +39,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	}
 
 	/**
-	 * Insert a <code>Description</code> object into the DB
+	 * Insert a <code>Description</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -71,7 +71,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	}
 
 	/**
-	 * Update a <code>Description</code> object in the DB
+	 * Update a <code>Description</code> object in the DB.
 	 * 
 	 * @param d
 	 *            The <code>Description</code> object to be updated
@@ -89,7 +89,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	}
 
 	/**
-	 * Delete a <code>Description</code> object from the DB
+	 * Delete a <code>Description</code> object from the DB.
 	 * 
 	 * @param d
 	 *            The <code>Description</code> object to be deleted
@@ -107,7 +107,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	}
 
 	/**
-	 * Find all <code>Description</code> objects in the DB
+	 * Find all <code>Description</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>Description</code> objects
 	 */

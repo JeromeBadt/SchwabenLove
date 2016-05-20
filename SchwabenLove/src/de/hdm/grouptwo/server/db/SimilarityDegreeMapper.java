@@ -22,7 +22,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	private static SimilarityDegreeMapper similarityDegreeMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private SimilarityDegreeMapper() {
 	}
@@ -30,9 +30,8 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	/**
 	 * SimilarityDegreeMapper should be instantiated by this method to ensure
 	 * that only a single instance exists.
-	 * <p>
 	 * 
-	 * @return The <code>SimilarityDegreeMapper</code> instance.
+	 * @return The <code>SimilarityDegreeMapper</code> instance
 	 */
 	public static SimilarityDegreeMapper similarityDegreeMapper() {
 		if (similarityDegreeMapper == null) {
@@ -43,7 +42,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	}
 
 	/**
-	 * Insert a <code>SimilarityDegree</code> object into the DB
+	 * Insert a <code>SimilarityDegree</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -79,7 +78,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	}
 
 	/**
-	 * Update a <code>SimilarityDegree</code> object in the DB
+	 * Update a <code>SimilarityDegree</code> object in the DB.
 	 * 
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be updated
@@ -101,7 +100,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	}
 
 	/**
-	 * Delete a <code>SimilarityDegree</code> object from the DB
+	 * Delete a <code>SimilarityDegree</code> object from the DB.
 	 * 
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be deleted
@@ -120,7 +119,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	}
 
 	/**
-	 * Find all <code>SimilarityDegree</code> objects in the DB
+	 * Find all <code>SimilarityDegree</code> objects in the DB.
 	 * 
 	 * @return result ArrayList of all <code>SimilarityDegree</code> objects
 	 */
@@ -187,7 +186,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 
 	/**
 	 * Find all <code>SimilarityDegree</code> objects with a specific reference
-	 * profile in the DB
+	 * profile in the DB.
 	 * 
 	 * @param referenceProfileId
 	 *            The reference profile id by which to find the objects

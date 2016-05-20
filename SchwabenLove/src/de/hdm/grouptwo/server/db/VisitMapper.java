@@ -23,14 +23,14 @@ public class VisitMapper implements DataMapper<Visit> {
 	private static VisitMapper visitMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private VisitMapper() {
 	}
 
 	/**
 	 * VisitMapper should be instantiated by this method to ensure that only a
-	 * single instance exists
+	 * single instance exists.
 	 * 
 	 * @return The <code>VisitMapper</code> instance
 	 */
@@ -43,7 +43,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Insert a <code>Visit</code> object into the DB
+	 * Insert a <code>Visit</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -77,7 +77,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Update a <code>Visit</code> object in the DB
+	 * Update a <code>Visit</code> object in the DB.
 	 * 
 	 * @param v
 	 *            The <code>Visit</code> object to be updated
@@ -98,7 +98,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Delete a <code>Visit</code> object from the DB
+	 * Delete a <code>Visit</code> object from the DB.
 	 * 
 	 * @param v
 	 *            The <code>Visit</code> object to be deleted
@@ -115,7 +115,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Find all <code>Visit</code> objects in the DB
+	 * Find all <code>Visit</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>Visit</code> objects
 	 */
@@ -146,7 +146,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	}
 
 	/**
-	 * Find <code>Visit</code> object with a specific ID in the DB
+	 * Find <code>Visit</code> object with a specific ID in the DB.
 	 * 
 	 * @param id
 	 *            The id by which to find the object
@@ -178,7 +178,7 @@ public class VisitMapper implements DataMapper<Visit> {
 
 	/**
 	 * Find all <code>Visit</code> objects with a specific visitor profile in
-	 * the DB
+	 * the DB.
 	 * 
 	 * @param visitorProfileId
 	 *            The visitor profile id by which to find the objects

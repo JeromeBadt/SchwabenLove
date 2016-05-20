@@ -20,7 +20,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	private static SelectionItemMapper selectionItemMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private SelectionItemMapper() {
 	}
@@ -28,9 +28,8 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	/**
 	 * SelectionItemMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
-	 * <p>
 	 * 
-	 * @return The <code>SelectionItemMapper</code> instance.
+	 * @return The <code>SelectionItemMapper</code> instance
 	 */
 	public static SelectionItemMapper selectionItemMapper() {
 		if (selectionItemMapper == null) {
@@ -41,7 +40,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	}
 
 	/**
-	 * Insert a <code>SelectionItem</code> object into the DB
+	 * Insert a <code>SelectionItem</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -74,7 +73,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	}
 
 	/**
-	 * Update a <code>SelectionItem</code> object in the DB
+	 * Update a <code>SelectionItem</code> object in the DB.
 	 * 
 	 * @param si
 	 *            The <code>SelectionItem</code> object to be updated
@@ -94,7 +93,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	}
 
 	/**
-	 * Delete a <code>SelectionItem</code> object from the DB
+	 * Delete a <code>SelectionItem</code> object from the DB.
 	 * 
 	 * @param si
 	 *            The <code>SelectionItem</code> object to be deleted
@@ -112,7 +111,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	}
 
 	/**
-	 * Find all <code>SelectionItem</code> objects in the DB
+	 * Find all <code>SelectionItem</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>SelectionItem</code> objects
 	 */
@@ -175,7 +174,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 
 	/**
 	 * Find all <code>SelectionItem</code> objects with a specific visitor
-	 * profile in the DB
+	 * profile in the DB.
 	 * 
 	 * @param selectionId
 	 *            The selection id by which to find the objects

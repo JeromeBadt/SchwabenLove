@@ -20,7 +20,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	private static SelectionMapper selectionMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private SelectionMapper() {
 	}
@@ -28,9 +28,8 @@ public class SelectionMapper implements DataMapper<Selection> {
 	/**
 	 * SelectionMapper should be instantiated by this method to ensure that only
 	 * a single instance exists.
-	 * <p>
 	 * 
-	 * @return The <code>SelectionMapper</code> instance.
+	 * @return The <code>SelectionMapper</code> instance
 	 */
 	public static SelectionMapper selectionMapper() {
 		if (selectionMapper == null) {
@@ -41,7 +40,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Insert a <code>Selection</code> object into the DB
+	 * Insert a <code>Selection</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -72,7 +71,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Update a <code>Selection</code> object in the DB
+	 * Update a <code>Selection</code> object in the DB.
 	 * 
 	 * @param s
 	 *            The <code>Selection</code> object to be updated
@@ -90,7 +89,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Delete a <code>Selection</code> object from the DB
+	 * Delete a <code>Selection</code> object from the DB.
 	 * 
 	 * @param s
 	 *            The <code>Selection</code> object to be deleted
@@ -108,7 +107,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Find all <code>Selection</code> objects in the DB
+	 * Find all <code>Selection</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>Selection</code> objects
 	 */
