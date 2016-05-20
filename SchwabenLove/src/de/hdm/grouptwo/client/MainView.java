@@ -18,9 +18,13 @@ public class MainView extends Composite {
 	
 	private VerticalPanel mainView = new VerticalPanel();
 	private VerticalPanel contentPanel = new VerticalPanel();
-	private Menu menu = new Menu(contentPanel);
+	private Menu menu = null;
 	
-	public MainView() {
+	
+	public MainView(LoginInfo loginInfo) {
+		
+		menu = new Menu(contentPanel, loginInfo);
+		
 		initWidget(mainView);
 		
 		Anchor imprint = new Anchor("Impressum");
