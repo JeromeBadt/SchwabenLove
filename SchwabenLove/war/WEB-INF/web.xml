@@ -11,10 +11,20 @@
     <servlet-class>de.hdm.grouptwo.server.GreetingServiceImpl</servlet-class>
   </servlet>
   
+  <servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>de.hdm.grouptwo.server.LoginServiceImpl</servlet-class>
+	</servlet>
+  
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/schwabenlove/greet</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/schwabenlove/login</url-pattern>
+	</servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>

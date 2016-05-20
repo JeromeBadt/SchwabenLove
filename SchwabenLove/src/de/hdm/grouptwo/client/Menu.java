@@ -1,6 +1,7 @@
 package de.hdm.grouptwo.client;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -10,10 +11,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class Menu extends Composite {
 	private VerticalPanel contentPanel = null;
 	private MenuBar menuBar = new MenuBar();
+	private LoginInfo loginInfo = null;
 	
-	public Menu(VerticalPanel contentPanel) {
+	public Menu(VerticalPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(menuBar);
 		
+		this.loginInfo = loginInfo;
 		this.contentPanel = contentPanel;
 		initMenu();
 	}
@@ -63,6 +66,7 @@ public class Menu extends Composite {
 				contentPanel.clear();
 				Label lbl = new Label("Logout");
 				contentPanel.add(lbl);
+				 Window.Location.assign(loginInfo.getLogoutUrl());
 			}
 		};
 		
