@@ -23,7 +23,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	private static PropertyMapper propertyMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private PropertyMapper() {
 	}
@@ -32,7 +32,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * PropertyMapper should be instantiated by this method to ensure that only
 	 * a single instance exists.
 	 * 
-	 * @return The <code>PropertyMapper</code> instance.
+	 * @return The <code>PropertyMapper</code> instance
 	 */
 	public static PropertyMapper propertyMapper() {
 		if (propertyMapper == null) {
@@ -43,7 +43,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	}
 
 	/**
-	 * Insert a <code>Property</code> object into the DB
+	 * Insert a <code>Property</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -75,7 +75,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	}
 
 	/**
-	 * Update a <code>Property</code> object in the DB
+	 * Update a <code>Property</code> object in the DB.
 	 * 
 	 * @param p
 	 *            The <code>Property</code> object to be updated
@@ -96,7 +96,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	}
 
 	/**
-	 * Delete a <code>Property</code> object from the DB
+	 * Delete a <code>Property</code> object from the DB.
 	 * 
 	 * @param p
 	 *            The <code>Property</code> object to be deleted
@@ -115,7 +115,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	}
 
 	/**
-	 * Find all <code>Property</code> objects in the DB
+	 * Find all <code>Property</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>Property</code> objects
 	 */

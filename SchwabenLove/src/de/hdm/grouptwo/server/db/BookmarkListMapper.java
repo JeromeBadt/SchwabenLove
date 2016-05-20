@@ -20,7 +20,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	private static BookmarkListMapper bookmarkListMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private BookmarkListMapper() {
 	}
@@ -29,7 +29,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * BookmarkListMapper should be instantiated by this method to ensure that
 	 * only a single instance exists.
 	 * 
-	 * @return The <code>BookmarkListMapper</code> instance.
+	 * @return The <code>BookmarkListMapper</code> instance
 	 */
 	public static BookmarkListMapper bookmarkListMapper() {
 		if (bookmarkListMapper == null) {
@@ -40,7 +40,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	}
 
 	/**
-	 * Insert a <code>BookmarkList</code> object into the DB
+	 * Insert a <code>BookmarkList</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -72,7 +72,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	}
 
 	/**
-	 * Update a <code>BookmarkList</code> object in the DB
+	 * Update a <code>BookmarkList</code> object in the DB.
 	 * 
 	 * @param bl
 	 *            The <code>BookmarkList</code> object to be updated
@@ -92,7 +92,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	}
 
 	/**
-	 * Delete a <code>BookmarkList</code> object from the DB
+	 * Delete a <code>BookmarkList</code> object from the DB.
 	 * 
 	 * @param bl
 	 *            The <code>BookmarkList</code> object to be deleted
@@ -110,7 +110,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	}
 
 	/**
-	 * Find all <code>BookmarkList</code> objects in the DB
+	 * Find all <code>BookmarkList</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>BookmarkList</code> objects
 	 */
@@ -172,7 +172,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 
 	/**
 	 * Find the <code>BookmarkList</code> object for a specific profile in the
-	 * DB
+	 * DB.
 	 * 
 	 * @param profileId
 	 *            The profile id by which to find the object

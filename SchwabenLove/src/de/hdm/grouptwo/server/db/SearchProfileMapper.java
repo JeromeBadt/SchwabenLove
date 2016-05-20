@@ -21,7 +21,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	private static SearchProfileMapper searchProfileMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private SearchProfileMapper() {
 
@@ -30,9 +30,8 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	/**
 	 * VisitMapper should be instantiated by this method to ensure that only a
 	 * single instance exists.
-	 * <p>
 	 * 
-	 * @return The <code>VisitMapper</code> instance.
+	 * @return The <code>VisitMapper</code> instance
 	 */
 	public static SearchProfileMapper searchProfileMapper() {
 		if (searchProfileMapper == null) {
@@ -43,7 +42,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	}
 
 	/**
-	 * Insert a <code>SearchProfile</code> object into the DB
+	 * Insert a <code>SearchProfile</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -71,17 +70,17 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 						+ "hair_color, physique, min_height, max_height, "
 						+ "smoker, education, profession, religion) VALUES ("
 						+ sp.getId()
-						+ ","
+						+ ",'"
 						+ sp.getGender()
-						+ ","
+						+ "',"
 						+ sp.getMinAge()
 						+ ","
 						+ sp.getMaxAge()
-						+ ","
+						+ ",'"
 						+ sp.getHairColor()
-						+ ","
+						+ "','"
 						+ sp.getPhysique()
-						+ ","
+						+ "',"
 						+ sp.getMinHeight()
 						+ ","
 						+ sp.getMaxHeight()
@@ -98,7 +97,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	}
 
 	/**
-	 * Update a <code>SearchProfile</code> object in the DB
+	 * Update a <code>SearchProfile</code> object in the DB.
 	 * 
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be updated
@@ -111,17 +110,17 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 			stmt.executeQuery("UPDATE search_profile "
 					+ "SET search_profile_id="
 					+ sp.getId()
-					+ ",gender="
+					+ ",gender='"
 					+ sp.getGender()
-					+ ",min_age="
+					+ "',min_age="
 					+ sp.getMinAge()
 					+ ",max_age="
 					+ sp.getMaxAge()
-					+ ",hair_color="
+					+ ",hair_color='"
 					+ sp.getHairColor()
-					+ ",physique="
+					+ "',physique='"
 					+ sp.getPhysique()
-					+ ",min_height="
+					+ "',min_height="
 					+ sp.getMinHeight()
 					+ ",max_height="
 					+ sp.getMaxHeight()
@@ -141,7 +140,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	}
 
 	/**
-	 * Delete a <code>SearchProfile</code> object from the DB
+	 * Delete a <code>SearchProfile</code> object from the DB.
 	 * 
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be deleted
@@ -159,7 +158,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	}
 
 	/**
-	 * Find all <code>SearchProfile</code> objects in the DB
+	 * Find all <code>SearchProfile</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>SearchProfile</code> objects
 	 */
@@ -244,7 +243,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 	/**
 	 * Find the <code>SearchProfile</code> object for a specific information in
-	 * the DB
+	 * the DB.
 	 * 
 	 * @param informationId
 	 *            The information id by which to find the object

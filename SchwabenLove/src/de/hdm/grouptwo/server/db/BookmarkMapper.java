@@ -20,7 +20,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	private static BookmarkMapper bookmarkMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	private BookmarkMapper() {
 	}
@@ -29,7 +29,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * BookmarkMapper should be instantiated by this method to ensure that only
 	 * a single instance exists.
 	 * 
-	 * @return The <code>BookmarkMapper</code> instance.
+	 * @return The <code>BookmarkMapper</code> instance
 	 */
 	public static BookmarkMapper bookmarkMapper() {
 		if (bookmarkMapper == null) {
@@ -40,7 +40,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
-	 * Insert a <code>Bookmark</code> object into the DB
+	 * Insert a <code>Bookmark</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -65,7 +65,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
-	 * Update a <code>Bookmark</code> object in the DB
+	 * Update a <code>Bookmark</code> object in the DB.
 	 * 
 	 * @param b
 	 *            The <code>Bookmark</code> object to be updated
@@ -86,7 +86,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
-	 * Delete a <code>Bookmark</code> object from the DB
+	 * Delete a <code>Bookmark</code> object from the DB.
 	 * 
 	 * @param b
 	 *            The <code>Bookmark</code> object to be deleted
@@ -104,7 +104,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
-	 * Find all <code>Bookmark</code> objects in the DB
+	 * Find all <code>Bookmark</code> objects in the DB.
 	 * 
 	 * @return ArrayList of all <code>Bookmark</code> objects
 	 */
@@ -167,7 +167,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 
 	/**
 	 * Find all <code>Bookmark</code> objects which belong to a specific
-	 * bookmark list in the DB
+	 * bookmark list in the DB.
 	 * 
 	 * @param bookmarkListId
 	 *            The bookmark list id by which to find the objects

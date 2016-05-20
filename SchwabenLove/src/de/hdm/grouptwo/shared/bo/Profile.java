@@ -19,6 +19,7 @@ public class Profile extends BusinessObject {
 	private String lastName;
 	private String gender;
 	private Date birthdate;
+	private int age;
 	private String location;
 	private int height;
 	private String pysique;
@@ -66,6 +67,14 @@ public class Profile extends BusinessObject {
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
+	}
+	
+	public int getAge() {
+		return age;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 	public String getLocation() {

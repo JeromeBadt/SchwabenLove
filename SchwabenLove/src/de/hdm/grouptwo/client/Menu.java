@@ -13,11 +13,14 @@ public class Menu extends Composite {
 	private MenuBar menuBar = new MenuBar();
 	private LoginInfo loginInfo = null;
 	
+	MatchesPage matchesPage = new MatchesPage();
+	
 	public Menu(VerticalPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(menuBar);
 		
 		this.loginInfo = loginInfo;
 		this.contentPanel = contentPanel;
+		
 		initMenu();
 	}
 	
@@ -37,8 +40,8 @@ public class Menu extends Composite {
 			public void execute() {
 			
 				contentPanel.clear();
-				Label lbl = new Label("Matches");
-				contentPanel.add(lbl);
+				matchesPage.updatePage();
+				contentPanel.add(matchesPage);
 			}
 		};
 		

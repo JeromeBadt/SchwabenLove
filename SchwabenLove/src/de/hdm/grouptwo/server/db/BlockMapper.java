@@ -23,14 +23,14 @@ public class BlockMapper {
 	private static BlockMapper blockMapper = null;
 
 	/**
-	 * Private constructor to prevent initialization with <code>new</code>
+	 * Private constructor to prevent initialization with <code>new</code>.
 	 */
 	protected BlockMapper() {
 	}
 
 	/**
 	 * BlockMapper should be instantiated by this method to ensure that only a
-	 * single instance exists
+	 * single instance exists.
 	 * 
 	 * @return The <code>BlockMapper</code> instance
 	 */
@@ -43,7 +43,7 @@ public class BlockMapper {
 	}
 
 	/**
-	 * Insert a <code>Block</code> object into the DB
+	 * Insert a <code>Block</code> object into the DB.
 	 * 
 	 * <p>
 	 * TODO: else block for inserting first object into DB?
@@ -76,7 +76,7 @@ public class BlockMapper {
 	}
 
 	/**
-	 * Delete a <code>Block</code> object from the DB
+	 * Delete a <code>Block</code> object from the DB.
 	 * 
 	 * @param b
 	 *            The <code>Block</code> object to be deleted
@@ -93,7 +93,7 @@ public class BlockMapper {
 	}
 
 	/**
-	 * Find all <code>Block</code> objects in the DB
+	 * Find all <code>Block</code> objects in the DB.
 	 * 
 	 * @return result ArrayList of all <code>Block</code> objects
 	 */
@@ -125,7 +125,7 @@ public class BlockMapper {
 
 	/**
 	 * Find all <code>Block</code> objects of a specific blocker profile in the
-	 * DB
+	 * DB.
 	 * 
 	 * @return result ArrayList of found <code>Block</code> objects
 	 */
