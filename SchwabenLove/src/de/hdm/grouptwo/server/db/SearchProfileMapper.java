@@ -71,17 +71,17 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 						+ "hair_color, physique, min_height, max_height, "
 						+ "smoker, education, profession, religion) VALUES ("
 						+ sp.getId()
-						+ ","
+						+ ",'"
 						+ sp.getGender()
-						+ ","
+						+ "',"
 						+ sp.getMinAge()
 						+ ","
 						+ sp.getMaxAge()
-						+ ","
+						+ ",'"
 						+ sp.getHairColor()
-						+ ","
+						+ "','"
 						+ sp.getPhysique()
-						+ ","
+						+ "',"
 						+ sp.getMinHeight()
 						+ ","
 						+ sp.getMaxHeight()
@@ -111,17 +111,17 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 			stmt.executeQuery("UPDATE search_profile "
 					+ "SET search_profile_id="
 					+ sp.getId()
-					+ ",gender="
+					+ ",gender='"
 					+ sp.getGender()
-					+ ",min_age="
+					+ "',min_age="
 					+ sp.getMinAge()
 					+ ",max_age="
 					+ sp.getMaxAge()
-					+ ",hair_color="
+					+ ",hair_color='"
 					+ sp.getHairColor()
-					+ ",physique="
+					+ "',physique='"
 					+ sp.getPhysique()
-					+ ",min_height="
+					+ "',min_height="
 					+ sp.getMinHeight()
 					+ ",max_height="
 					+ sp.getMaxHeight()

@@ -69,25 +69,25 @@ public class ProfileMapper implements DataMapper<Profile> {
 						+ "location, height, physique, hair_color, smoker, "
 						+ "education, profession, religion) VALUES ("
 						+ p.getId()
-						+ ","
-						+ p.getEmail()
 						+ ",'"
+						+ p.getEmail()
+						+ "','"
 						+ p.getFirstName()
 						+ "','"
 						+ p.getLastName()
-						+ "',"
+						+ "','"
 						+ p.getGender()
-						+ ","
+						+ "','"
 						+ p.getBirthdate()
-						+ ",'"
+						+ "','"
 						+ p.getLocation()
 						+ "',"
 						+ p.getHeight()
-						+ ","
-						+ p.getPysique()
-						+ ","
-						+ p.getHairColor()
 						+ ",'"
+						+ p.getPysique()
+						+ "','"
+						+ p.getHairColor()
+						+ "','"
 						+ p.getSmoker()
 						+ "','"
 						+ p.getEducation()
@@ -110,13 +110,13 @@ public class ProfileMapper implements DataMapper<Profile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("UPDATE profile SET email=" + p.getEmail()
-					+ ",first_name='" + p.getFirstName() + "',last_name='"
-					+ p.getLastName() + "',gender=" + p.getGender()
-					+ ",birthdate=" + p.getBirthdate() + ",location='"
+			stmt.executeUpdate("UPDATE profile SET email='" + p.getEmail()
+					+ "',first_name='" + p.getFirstName() + "',last_name='"
+					+ p.getLastName() + "',gender='" + p.getGender()
+					+ "',birthdate='" + p.getBirthdate() + "',location='"
 					+ p.getLocation() + "', height=" + p.getHeight()
-					+ ",physique=" + p.getPysique() + ",hair_color="
-					+ p.getHairColor() + ",smoker='" + p.getSmoker()
+					+ ",physique='" + p.getPysique() + "',hair_color='"
+					+ p.getHairColor() + "',smoker='" + p.getSmoker()
 					+ "',education='" + p.getEducation() + "',profession='"
 					+ p.getProfession() + "',religion='" + p.getReligion()
 					+ "' WHERE profile_id=" + p.getId());
@@ -158,7 +158,8 @@ public class ProfileMapper implements DataMapper<Profile> {
 
 			ResultSet rs = stmt
 					.executeQuery("SELECT profile_id, email, first_name, "
-							+ "last_name, gender, birthdate, location, "
+							+ "last_name, gender, birthdate, TIMESTAMPDIFF"
+							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
 							+ "education, profession, religion FROM profile");
 
@@ -170,6 +171,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setLastName(rs.getString("last_name"));
 				p.setGender(rs.getString("gender"));
 				p.setBirthdate(rs.getDate("birthdate"));
+				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
 				p.setPysique(rs.getString("physique"));
@@ -201,7 +203,8 @@ public class ProfileMapper implements DataMapper<Profile> {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT profile_id, email, first_name, "
-							+ "last_name, gender, birthdate, location, "
+							+ "last_name, gender, birthdate, TIMESTAMPDIFF"
+							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
 							+ "education, profession, religion FROM profile");
 
@@ -213,6 +216,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setLastName(rs.getString("last_name"));
 				p.setGender(rs.getString("gender"));
 				p.setBirthdate(rs.getDate("birthdate"));
+				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
 				p.setPysique(rs.getString("physique"));
@@ -243,7 +247,8 @@ public class ProfileMapper implements DataMapper<Profile> {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT profile_id, email, first_name, "
-							+ "last_name, gender, birthdate, location, "
+							+ "last_name, gender, birthdate, TIMESTAMPDIFF"
+							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
 							+ "education, profession, religion FROM profile "
 							+ "JOIN visit ON fk_profile_visitor=profile_id "
@@ -257,6 +262,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setLastName(rs.getString("last_name"));
 				p.setGender(rs.getString("gender"));
 				p.setBirthdate(rs.getDate("birthdate"));
+				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
 				p.setPysique(rs.getString("physique"));
