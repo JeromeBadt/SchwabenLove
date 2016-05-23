@@ -5,8 +5,8 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.grouptwo.client.LoginInfo;
-import de.hdm.grouptwo.client.LoginService;
+import de.hdm.grouptwo.shared.LoginService;
+import de.hdm.grouptwo.shared.bo.LoginInfo;
 
 
 

@@ -1,52 +1,82 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+body {
+	font-size: 100% !important;
+	font-family: Lora !important;
+	color: #2b2b2b !important;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.wrapper {
+	left: 30px !important;
+	top: 30px !important;
+	right: 30px !important;
+	bottom: 30px !important;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.wrapper, .gwt-MenuBar * {
+	background-color: #f7f7f7 !important;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.main, .gwt-MenuBar, .footer {
+	margin: .9375rem !important;
 }
 
-.serverResponseLabelError {
-  color: red;
+.main {
+	margin: 0 1.875rem !important;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.logo {
+	font-size: 3.75rem;
+	border-bottom: 1px solid rgba(185, 157, 107, 0.5);
+	text-align: center;
 }
 
-/** MenuBar Settings */
-/*
 .gwt-MenuBar {
-  width: 100%;
+	border-style: none !important;
 }
 
-
-.gwt-MenuBar tr {
-	background-color: red;
-	width: 100%;
+.gwt-MenuBar, .gwt-MenuBar *, .footer {
+	font-family: Lato !important;
+	letter-spacing: .05em;
+	text-transform: uppercase;
+	font-size: inherit;
 }
 
-.gwt-MenuItem-logout {
-	position: absolute;
-	right: 0px;
+.gwt-MenuBar > table {
+	width: 100% !important;
 }
-*/
+
+.gwt-MenuItem, .footer {
+	display: inline-block;
+	cursor: pointer !important;
+	transition: color 0.2s;
+	text-decoration: none;
+	color: #2b2b2b !important;
+	padding: 0 .9375rem !important;
+}
+
+.gwt-MenuItem:last-of-type {
+	float: right;
+}
+
+.gwt-MenuItem:HOVER, .gwt-MenuItem-active, .footer:HOVER {
+	color: #b99d6b !important;
+	text-decoration: none;
+}
+
+.footer {
+	text-align: center;
+	padding-top: .9375rem !important;
+	border-top: 1px solid rgba(185, 157, 107, 0.5);
+}
+
+.gwt-Image-ScrollButton {
+	cursor: pointer;
+}
+
+.gwt-Image-ScrollButton:HOVER {
+	cursor: pointer;
+}
+
+.gwt-TabLayoutPanelTab {
+	color: #2b2b2b !important;
+	height: 1.20rem;
+}

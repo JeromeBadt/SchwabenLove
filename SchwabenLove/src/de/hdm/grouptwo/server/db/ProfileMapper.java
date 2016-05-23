@@ -84,7 +84,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 						+ "',"
 						+ p.getHeight()
 						+ ",'"
-						+ p.getPysique()
+						+ p.getPhysique()
 						+ "','"
 						+ p.getHairColor()
 						+ "','"
@@ -115,7 +115,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 					+ p.getLastName() + "',gender='" + p.getGender()
 					+ "',birthdate='" + p.getBirthdate() + "',location='"
 					+ p.getLocation() + "', height=" + p.getHeight()
-					+ ",physique='" + p.getPysique() + "',hair_color='"
+					+ ",physique='" + p.getPhysique() + "',hair_color='"
 					+ p.getHairColor() + "',smoker='" + p.getSmoker()
 					+ "',education='" + p.getEducation() + "',profession='"
 					+ p.getProfession() + "',religion='" + p.getReligion()
@@ -151,8 +151,9 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 */
 	public ArrayList<Profile> findAll() {
 		Connection con = DBConnection.connection();
+		
 		ArrayList<Profile> result = new ArrayList<Profile>();
-
+		
 		try {
 			Statement stmt = con.createStatement();
 
@@ -174,9 +175,9 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
-				p.setPysique(rs.getString("physique"));
+				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getString("smoker"));
+				p.setSmoker(rs.getBoolean("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
@@ -219,9 +220,9 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
-				p.setPysique(rs.getString("physique"));
+				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getString("smoker"));
+				p.setSmoker(rs.getBoolean("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
@@ -265,9 +266,9 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setAge(rs.getInt("age"));
 				p.setLocation(rs.getString("location"));
 				p.setHeight(rs.getInt("height"));
-				p.setPysique(rs.getString("physique"));
+				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getString("smoker"));
+				p.setSmoker(rs.getBoolean("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
