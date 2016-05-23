@@ -17,13 +17,13 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>schwabenAdministrationServlet</servlet-name>
-		<servlet-class>de.hdm.grouptwo.server.SchwabenAdministrationImpl</servlet-class>
+		<servlet-name>administrationServiceServlet</servlet-name>
+		<servlet-class>de.hdm.grouptwo.server.AdministrationServiceImpl</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>schwabenAdministrationServlet</servlet-name>
-		<url-pattern>/schwabenlove/schwabenadministration</url-pattern>
+		<servlet-name>administrationServiceServlet</servlet-name>
+		<url-pattern>/schwabenlove/administration</url-pattern>
 	</servlet-mapping>
   
   <!-- Default page to serve -->
