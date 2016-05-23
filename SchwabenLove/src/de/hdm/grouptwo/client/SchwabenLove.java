@@ -1,27 +1,34 @@
 package de.hdm.grouptwo.client;
 
+import java.util.logging.Level;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.logging.client.ConsoleLogHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import de.hdm.grouptwo.shared.bo.LoginInfo;
 
 /**
  * Main class <br>
  * Entry point classes define <code>onModuleLoad()</code>.
+ * 
+ * @author JoshuaHill, JeromeBadt
  */
 public class SchwabenLove implements EntryPoint {
-
 	private LoginInfo loginInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label("Sign in");
-	private Anchor signInLink = new Anchor("Sign In");
 
 	public void onModuleLoad() {
-		LoginServiceAsync loginService = GWT.create(LoginService.class);
-		loginService.login(GWT.getHostPageBaseURL(),
+		// Set logger settings here, since they seem to be ignored .gwt.xml and
+		// logging.properties
+		ClientsideSettings.getLogger().addHandler(new ConsoleLogHandler());
+		ClientsideSettings.getLogger().setLevel(Level.INFO);
+
+		ClientsideSettings.getLoginService().login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
 					public void onFailure(Throwable error) {
 						System.out.println(error);
@@ -29,33 +36,31 @@ public class SchwabenLove implements EntryPoint {
 
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
+						System.out.println(loginInfo.getEmailAddress());
 						if (loginInfo.isLoggedIn()) {
 							loadMainView();
-							System.out.println("User: "
-									+ loginInfo.getEmailAddress());
 						} else {
 							loadLogin();
 						}
 					}
 				});
-
 	}
 
 	private void loadLogin() {
+		VerticalPanel loginPanel = new VerticalPanel();
+		Label loginLabel = new Label("Sign in");
+		Anchor signInLink = new Anchor("Sign In");
 
 		signInLink.setHref(loginInfo.getLoginUrl());
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
-		RootPanel.get().add(loginPanel);
-
+		RootLayoutPanel.get().add(loginPanel);
 	}
 
 	private void loadMainView() {
-
-		MainView mainView = new MainView(loginInfo);
-		RootPanel.get().add(mainView);
-
+		RootLayoutPanel.get().add(new MainView(loginInfo));
 	}
+
 	// /**
 	// * The message displayed to the user when the server cannot be reached or
 	// * returns an error.
