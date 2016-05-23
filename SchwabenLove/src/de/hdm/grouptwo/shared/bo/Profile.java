@@ -1,6 +1,6 @@
 package de.hdm.grouptwo.shared.bo;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * <code>Profile</code> objects are the representation of users and the
@@ -22,9 +22,9 @@ public class Profile extends BusinessObject {
 	private int age;
 	private String location;
 	private int height;
-	private String pysique;
+	private String physique;
 	private String hairColor;
-	private String smoker;
+	private boolean smoker;
 	private String education;
 	private String profession;
 	private String religion;
@@ -93,19 +93,19 @@ public class Profile extends BusinessObject {
 		this.hairColor = hairColor;
 	}
 
-	public String getPysique() {
-		return pysique;
+	public String getPhysique() {
+		return physique;
 	}
 
-	public void setPysique(String pysique) {
-		this.pysique = pysique;
+	public void setPhysique(String physique) {
+		this.physique = physique;
 	}
 
-	public String getSmoker() {
+	public boolean getSmoker() {
 		return smoker;
 	}
 
-	public void setSmoker(String smoker) {
+	public void setSmoker(boolean smoker) {
 		this.smoker = smoker;
 	}
 
