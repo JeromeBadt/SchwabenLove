@@ -13,12 +13,9 @@ public class DBConnection {
     private static Connection con = null;
 
     private static String googleUrl = "jdbc:google:mysql://prof-thies.de:thies-bankproject:thies-bankproject/bankproject?user=demo&password=demo";
-    private static String localUrl = "jdbc:mysql://127.0.0.1:8889/itproject?user=root&password=root";
-    
-
+    private static String localUrl = "jdbc:mysql://127.0.0.1:3306/schwabenlove?user=root&password=root";
     
     public static Connection connection() {
-        // Wenn es bisher keine Conncetion zur DB gab, ...
         if (con == null) {
             String url = null;
             try {
