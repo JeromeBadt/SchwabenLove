@@ -1,4 +1,4 @@
-package de.hdm.grouptwo.client;
+package de.hdm.grouptwo.shared.bo;
 
 import java.io.Serializable;
 
