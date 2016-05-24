@@ -48,6 +48,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	 * @param s
 	 *            The <code>Selection</code> object to be inserted
 	 */
+	@Override
 	public void insert(Selection s) {
 		Connection con = DBConnection.connection();
 
@@ -57,7 +58,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 			ResultSet rs = stmt
 					.executeQuery("SELECT MAX(fk_property_id) AS maxid "
 							+ "FROM selection ");
-			
+
 			if (rs.next()) {
 				// Set id to max + 1
 				s.setId(rs.getInt("maxid") + 1);
@@ -71,21 +72,14 @@ public class SelectionMapper implements DataMapper<Selection> {
 	}
 
 	/**
-	 * Update a <code>Selection</code> object in the DB.
+	 * Update a <code>Selection</code> object in the DB. <br>
+	 * Empty since Selection only has on id and no other attributes to update.
 	 * 
 	 * @param s
 	 *            The <code>Selection</code> object to be updated
 	 */
+	@Override
 	public void update(Selection s) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE selection SET fk_property_id=" + s.getId()
-					+ " WHERE fk_property_id=" + s.getId());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -94,6 +88,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	 * @param s
 	 *            The <code>Selection</code> object to be deleted
 	 */
+	@Override
 	public void delete(Selection s) {
 		Connection con = DBConnection.connection();
 
@@ -111,6 +106,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	 * 
 	 * @return ArrayList of all <code>Selection</code> objects
 	 */
+	@Override
 	public ArrayList<Selection> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -141,6 +137,7 @@ public class SelectionMapper implements DataMapper<Selection> {
 	 * @return <code>Selection</code> object with specified ID or null if not
 	 *         found
 	 */
+	@Override
 	public Selection findById(int id) {
 		Connection con = DBConnection.connection();
 

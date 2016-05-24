@@ -20,6 +20,9 @@ import de.hdm.grouptwo.shared.bo.Visit;
 
 @RemoteServiceRelativePath("administration")
 public interface AdministrationService extends RemoteService {
+	public Profile getProfile();
+	public void setProfile(String email);
+	
 	public ArrayList<Profile> getMatchesByProfileId(int profileId);
 
 	public String insertDemoProfile();

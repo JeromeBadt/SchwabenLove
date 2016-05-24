@@ -48,6 +48,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * @param bl
 	 *            The <code>BookmarkList</code> object to be inserted
 	 */
+	@Override
 	public void insert(BookmarkList bl) {
 		Connection con = DBConnection.connection();
 
@@ -77,15 +78,16 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * @param bl
 	 *            The <code>BookmarkList</code> object to be updated
 	 */
+	@Override
 	public void update(BookmarkList bl) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE bookmark_list SET bookmark_list_id="
-					+ bl.getId() + ",fk_profile_id=" + bl.getProfileId()
-					+ " WHERE bookmark_list_id=" + bl.getId());
+			stmt.executeUpdate("UPDATE bookmark_list SET fk_profile_id="
+					+ bl.getProfileId() + " WHERE bookmark_list_id="
+					+ bl.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -97,6 +99,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * @param bl
 	 *            The <code>BookmarkList</code> object to be deleted
 	 */
+	@Override
 	public void delete(BookmarkList bl) {
 		Connection con = DBConnection.connection();
 
@@ -114,6 +117,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * 
 	 * @return ArrayList of all <code>BookmarkList</code> objects
 	 */
+	@Override
 	public ArrayList<BookmarkList> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -147,6 +151,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 	 * @return <code>BookmarkList</code> object with specified ID or null if not
 	 *         found
 	 */
+	@Override
 	public BookmarkList findById(int id) {
 		Connection con = DBConnection.connection();
 

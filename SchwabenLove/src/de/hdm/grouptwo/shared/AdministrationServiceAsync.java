@@ -18,6 +18,10 @@ import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.bo.Visit;
 
 public interface AdministrationServiceAsync {
+	public void getProfile(AsyncCallback<Profile> callback);
+
+	public void setProfile(String email, AsyncCallback<Void> callback);
+
 	public void getMatchesByProfileId(int profileId,
 			AsyncCallback<ArrayList<Profile>> callback);
 

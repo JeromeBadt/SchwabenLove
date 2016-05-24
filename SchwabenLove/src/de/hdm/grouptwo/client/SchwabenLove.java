@@ -36,8 +36,10 @@ public class SchwabenLove implements EntryPoint {
 
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
-						System.out.println(loginInfo.getEmailAddress());
+						ClientsideSettings.getLogger().log(Level.INFO,
+								loginInfo.getEmailAddress());
 						if (loginInfo.isLoggedIn()) {
+							setProfile(loginInfo.getEmailAddress());
 							loadMainView();
 						} else {
 							loadLogin();
@@ -59,6 +61,19 @@ public class SchwabenLove implements EntryPoint {
 
 	private void loadMainView() {
 		RootLayoutPanel.get().add(new MainView(loginInfo));
+	}
+
+	private void setProfile(String email) {
+		ClientsideSettings.getAdministrationService().setProfile(email,
+				new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.SEVERE,
+								"Set profile failed: " + caught.getMessage());
+					}
+
+					public void onSuccess(Void result) {
+					}
+				});
 	}
 
 	// /**

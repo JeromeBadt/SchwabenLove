@@ -47,6 +47,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	 * @param d
 	 *            The <code>Description</code> object to be inserted
 	 */
+	@Override
 	public void insert(Description d) {
 		Connection con = DBConnection.connection();
 
@@ -71,21 +72,14 @@ public class DescriptionMapper implements DataMapper<Description> {
 	}
 
 	/**
-	 * Update a <code>Description</code> object in the DB.
+	 * Update a <code>Description</code> object in the DB. <br>
+	 * Empty since Description only has on id and no other attributes to update.
 	 * 
 	 * @param d
 	 *            The <code>Description</code> object to be updated
 	 */
+	@Override
 	public void update(Description d) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE description " + "SET fk_property_id="
-					+ d.getId() + "WHERE fk_property_id=" + d.getId());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -94,6 +88,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	 * @param d
 	 *            The <code>Description</code> object to be deleted
 	 */
+	@Override
 	public void delete(Description d) {
 		Connection con = DBConnection.connection();
 
@@ -111,6 +106,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	 * 
 	 * @return ArrayList of all <code>Description</code> objects
 	 */
+	@Override
 	public ArrayList<Description> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -142,6 +138,7 @@ public class DescriptionMapper implements DataMapper<Description> {
 	 * @return <code>Description</code> object with specified ID or null if not
 	 *         found
 	 */
+	@Override
 	public Description findById(int id) {
 		Connection con = DBConnection.connection();
 

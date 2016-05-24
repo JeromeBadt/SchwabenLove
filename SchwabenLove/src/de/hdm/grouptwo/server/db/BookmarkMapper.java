@@ -48,6 +48,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * @param b
 	 *            The <code>Bookmark</code> object to be inserted
 	 */
+	@Override
 	public void insert(Bookmark b) {
 		Connection con = DBConnection.connection();
 
@@ -70,16 +71,16 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * @param b
 	 *            The <code>Bookmark</code> object to be updated
 	 */
+	@Override
 	public void update(Bookmark b) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE bookmark SET bookmark_id=" + b.getId()
-					+ ",fk_profile_id=" + b.getProfileId()
-					+ ",fk_bookmark_list_id=" + b.getBookmarkListId()
-					+ " WHERE bookmark_id=" + b.getId());
+			stmt.executeUpdate("UPDATE bookmark SET fk_profile_id="
+					+ b.getProfileId() + ",fk_bookmark_list_id="
+					+ b.getBookmarkListId() + " WHERE bookmark_id=" + b.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -91,6 +92,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * @param b
 	 *            The <code>Bookmark</code> object to be deleted
 	 */
+	@Override
 	public void delete(Bookmark b) {
 		Connection con = DBConnection.connection();
 
@@ -108,6 +110,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * 
 	 * @return ArrayList of all <code>Bookmark</code> objects
 	 */
+	@Override
 	public ArrayList<Bookmark> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -141,6 +144,7 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	 * @return <code>Bookmark</code> object with specified ID or null if not
 	 *         found
 	 */
+	@Override
 	public Bookmark findById(int id) {
 		Connection con = DBConnection.connection();
 

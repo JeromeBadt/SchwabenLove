@@ -51,6 +51,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	 * @param v
 	 *            The <code>Visit</code> object to be inserted
 	 */
+	@Override
 	public void insert(Visit v) {
 		Connection con = DBConnection.connection();
 
@@ -82,16 +83,16 @@ public class VisitMapper implements DataMapper<Visit> {
 	 * @param v
 	 *            The <code>Visit</code> object to be updated
 	 */
+	@Override
 	public void update(Visit v) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE visit SET visit_id=" + v.getId()
-					+ ",fk_visitor_profile_id=" + v.getVisitorProfileId()
-					+ ",fk_visited_profile_id=" + v.getVisitedProfileId()
-					+ " WHERE visit_id=" + v.getId());
+			stmt.executeUpdate("UPDATE visit SET fk_visitor_profile_id="
+					+ v.getVisitorProfileId() + ",fk_visited_profile_id="
+					+ v.getVisitedProfileId() + " WHERE visit_id=" + v.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +104,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	 * @param v
 	 *            The <code>Visit</code> object to be deleted
 	 */
+	@Override
 	public void delete(Visit v) {
 		Connection con = DBConnection.connection();
 
@@ -119,6 +121,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	 * 
 	 * @return ArrayList of all <code>Visit</code> objects
 	 */
+	@Override
 	public ArrayList<Visit> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -152,6 +155,7 @@ public class VisitMapper implements DataMapper<Visit> {
 	 *            The id by which to find the object
 	 * @return <code>Visit</code> object with specified ID or null if not found
 	 */
+	@Override
 	public Visit findById(int id) {
 		Connection con = DBConnection.connection();
 

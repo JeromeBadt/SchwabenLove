@@ -50,6 +50,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be inserted
 	 */
+	@Override
 	public void insert(SearchProfile sp) {
 		Connection con = DBConnection.connection();
 
@@ -102,38 +103,21 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be updated
 	 */
+	@Override
 	public void update(SearchProfile sp) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE search_profile "
-					+ "SET search_profile_id="
-					+ sp.getId()
-					+ ",gender='"
-					+ sp.getGender()
-					+ "',min_age="
-					+ sp.getMinAge()
-					+ ",max_age="
-					+ sp.getMaxAge()
-					+ ",hair_color='"
-					+ sp.getHairColor()
-					+ "',physique='"
-					+ sp.getPhysique()
-					+ "',min_height="
-					+ sp.getMinHeight()
-					+ ",max_height="
-					+ sp.getMaxHeight()
-					+ ",smoker='"
-					+ sp.getSmoker()
-					+ "',education='"
-					+ sp.getEducation()
-					+ "',profession='"
-					+ sp.getProfession()
-					+ "',religion='"
-					+ sp.getReligion()
-					+ "' WHERE search_profile_id="
-					+ sp.getId());
+			stmt.executeQuery("UPDATE search_profile " + "SET gender='"
+					+ sp.getGender() + "',min_age=" + sp.getMinAge()
+					+ ",max_age=" + sp.getMaxAge() + ",hair_color='"
+					+ sp.getHairColor() + "',physique='" + sp.getPhysique()
+					+ "',min_height=" + sp.getMinHeight() + ",max_height="
+					+ sp.getMaxHeight() + ",smoker='" + sp.getSmoker()
+					+ "',education='" + sp.getEducation() + "',profession='"
+					+ sp.getProfession() + "',religion='" + sp.getReligion()
+					+ "' WHERE search_profile_id=" + sp.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -145,6 +129,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be deleted
 	 */
+	@Override
 	public void delete(SearchProfile sp) {
 		Connection con = DBConnection.connection();
 
@@ -162,6 +147,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * 
 	 * @return ArrayList of all <code>SearchProfile</code> objects
 	 */
+	@Override
 	public ArrayList<SearchProfile> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -206,6 +192,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	 * @return <code>SearchProfile</code> object with specified ID or null if
 	 *         not found
 	 */
+	@Override
 	public SearchProfile findById(int id) {
 		Connection con = DBConnection.connection();
 

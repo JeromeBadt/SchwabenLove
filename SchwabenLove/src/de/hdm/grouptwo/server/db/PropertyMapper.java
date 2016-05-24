@@ -51,6 +51,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * @param p
 	 *            The <code>Property</code> object to be inserted
 	 */
+	@Override
 	public void insert(Property p) {
 		Connection con = DBConnection.connection();
 
@@ -80,15 +81,15 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * @param p
 	 *            The <code>Property</code> object to be updated
 	 */
+	@Override
 	public void update(Property p) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE property SET property_id=" + p.getId()
-					+ ",explanation='" + p.getExplanation()
-					+ "' WHERE property_id=" + p.getId());
+			stmt.executeUpdate("UPDATE property SET explanation='"
+					+ p.getExplanation() + "' WHERE property_id=" + p.getId());
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -101,6 +102,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * @param p
 	 *            The <code>Property</code> object to be deleted
 	 */
+	@Override
 	public void delete(Property p) {
 		Connection con = DBConnection.connection();
 
@@ -119,6 +121,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * 
 	 * @return ArrayList of all <code>Property</code> objects
 	 */
+	@Override
 	public ArrayList<Property> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -152,6 +155,7 @@ public class PropertyMapper implements DataMapper<Property> {
 	 * @return <code>Property</code> object with specified ID or null if not
 	 *         found
 	 */
+	@Override
 	public Property findById(int id) {
 		Connection con = DBConnection.connection();
 

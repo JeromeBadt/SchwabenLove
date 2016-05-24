@@ -48,6 +48,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	 * @param si
 	 *            The <code>SelectionItem</code> object to be inserted
 	 */
+	@Override
 	public void insert(SelectionItem si) {
 		Connection con = DBConnection.connection();
 
@@ -78,14 +79,14 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	 * @param si
 	 *            The <code>SelectionItem</code> object to be updated
 	 */
+	@Override
 	public void update(SelectionItem si) {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE selection_item "
-					+ "SET selection_item_id=" + si.getId() + ",name='"
-					+ si.getName() + "',fk_selection_id=" + si.getSelectionId()
+			stmt.executeQuery("UPDATE selection_item SET name='" + si.getName()
+					+ "',fk_selection_id=" + si.getSelectionId()
 					+ " WHERE selection_item_id=" + si.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,6 +99,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	 * @param si
 	 *            The <code>SelectionItem</code> object to be deleted
 	 */
+	@Override
 	public void delete(SelectionItem si) {
 		Connection con = DBConnection.connection();
 
@@ -115,6 +117,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	 * 
 	 * @return ArrayList of all <code>SelectionItem</code> objects
 	 */
+	@Override
 	public ArrayList<SelectionItem> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -148,6 +151,7 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 	 * @return <code>SelectionItem</code> object with specified ID or null if
 	 *         not found
 	 */
+	@Override
 	public SelectionItem findById(int id) {
 		Connection con = DBConnection.connection();
 

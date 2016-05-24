@@ -19,7 +19,7 @@ import de.hdm.grouptwo.shared.bo.Block;
  * @author Thies, ManuelRuss, JeromeBadt
  */
 
-public class BlockMapper {
+public class BlockMapper implements DataMapper<Block> {
 	private static BlockMapper blockMapper = null;
 
 	/**
@@ -51,6 +51,7 @@ public class BlockMapper {
 	 * @param b
 	 *            The <code>Block</code> object to be inserted
 	 */
+	@Override
 	public void insert(Block b) {
 		Connection con = DBConnection.connection();
 
@@ -76,11 +77,33 @@ public class BlockMapper {
 	}
 
 	/**
+	 * Update a <code>Block</code> object in the DB.
+	 * 
+	 * @param b
+	 *            The <code>Block</code> object to be updated
+	 */
+	@Override
+	public void update(Block b) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE block SET fk_blocker_profile_id="
+					+ b.getBlockerProfileId() + ",fk_blocked_profile_id="
+					+ b.getBlockedProfileId() + " WHERE block_id=" + b.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Delete a <code>Block</code> object from the DB.
 	 * 
 	 * @param b
 	 *            The <code>Block</code> object to be deleted
 	 */
+	@Override
 	public void delete(Block b) {
 		Connection con = DBConnection.connection();
 
@@ -95,8 +118,9 @@ public class BlockMapper {
 	/**
 	 * Find all <code>Block</code> objects in the DB.
 	 * 
-	 * @return result ArrayList of all <code>Block</code> objects
+	 * @return ArrayList of all <code>Block</code> objects
 	 */
+	@Override
 	public ArrayList<Block> findAll() {
 		Connection con = DBConnection.connection();
 
@@ -124,10 +148,40 @@ public class BlockMapper {
 	}
 
 	/**
+	 * Find <code>Block</code> object with a specific ID in the DB.
+	 * 
+	 * @return <code>Block</code> object with specified ID or null if not found
+	 */
+	@Override
+	public Block findById(int id) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT block_id, "
+					+ "fk_blocker_profile_id, fk_blocked_profile_id "
+					+ "FROM block WHERE block_id=" + id);
+
+			if (rs.next()) {
+				Block b = new Block();
+				b.setId(rs.getInt("block_id"));
+				b.setBlockerProfileId(rs.getInt("fk_blocker_profile_id"));
+				b.setBlockedProfileId(rs.getInt("fk_blocked_profile_id"));
+
+				return b;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
 	 * Find all <code>Block</code> objects of a specific blocker profile in the
 	 * DB.
 	 * 
-	 * @return result ArrayList of found <code>Block</code> objects
+	 * @return ArrayList of found <code>Block</code> objects
 	 */
 	public ArrayList<Block> findByBlockerProfileId(int blockerProfileId) {
 		Connection con = DBConnection.connection();
