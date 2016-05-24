@@ -39,6 +39,15 @@ import de.hdm.grouptwo.shared.bo.Visit;
 public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		AdministrationService {
 	private static final long serialVersionUID = 1L;
+	private Profile user = null;
+
+	public Profile getProfile() {
+		return user;
+	}
+
+	public void setProfile(String email) {
+		user = ProfileMapper.profileMapper().findByEmail(email);
+	}
 
 	@Override
 	public ArrayList<Profile> getMatchesByProfileId(int profileId) {
