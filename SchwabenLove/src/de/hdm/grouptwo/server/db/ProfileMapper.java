@@ -50,6 +50,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 * @param p
 	 *            The <code>Profile</code> object to be inserted
 	 */
+	@Override
 	public void insert(Profile p) {
 		Connection con = DBConnection.connection();
 
@@ -105,6 +106,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 * @param p
 	 *            The <code>Profile</code> object to be updated
 	 */
+	@Override
 	public void update(Profile p) {
 		Connection con = DBConnection.connection();
 
@@ -131,6 +133,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	 * @param p
 	 *            The <code>Profile</code> object to be deleted
 	 */
+	@Override
 	public void delete(Profile p) {
 		Connection con = DBConnection.connection();
 
@@ -147,13 +150,14 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Find all <code>Profile</code> objects in the DB.
 	 * 
-	 * @return result ArrayList of all <code>Profile</code> objects
+	 * @return ArrayList of all <code>Profile</code> objects
 	 */
+	@Override
 	public ArrayList<Profile> findAll() {
 		Connection con = DBConnection.connection();
-		
+
 		ArrayList<Profile> result = new ArrayList<Profile>();
-		
+
 		try {
 			Statement stmt = con.createStatement();
 
@@ -194,9 +198,10 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Find <code>Profile</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>Profile</code> object with specified ID or null if
-	 *         not found
+	 * @return <code>Profile</code> object with specified ID or null if not
+	 *         found
 	 */
+	@Override
 	public Profile findById(int id) {
 		Connection con = DBConnection.connection();
 
@@ -207,7 +212,54 @@ public class ProfileMapper implements DataMapper<Profile> {
 							+ "last_name, gender, birthdate, TIMESTAMPDIFF"
 							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
-							+ "education, profession, religion FROM profile");
+							+ "education, profession, religion FROM profile "
+							+ "WHERE profile_id=" + id);
+
+			if (rs.next()) {
+				Profile p = new Profile();
+				p.setId(rs.getInt("profile_id"));
+				p.setEmail(rs.getString("email"));
+				p.setFirstName(rs.getString("first_name"));
+				p.setLastName(rs.getString("last_name"));
+				p.setGender(rs.getString("gender"));
+				p.setBirthdate(rs.getDate("birthdate"));
+				p.setAge(rs.getInt("age"));
+				p.setLocation(rs.getString("location"));
+				p.setHeight(rs.getInt("height"));
+				p.setPhysique(rs.getString("physique"));
+				p.setHairColor(rs.getString("hair_color"));
+				p.setSmoker(rs.getBoolean("smoker"));
+				p.setEducation(rs.getString("education"));
+				p.setProfession(rs.getString("profession"));
+				p.setReligion(rs.getString("religion"));
+
+				return p;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find <code>Profile</code> object with a specific email adress in the DB.
+	 * 
+	 * @return <code>Profile</code> object with specified email adress or null
+	 *         if not found
+	 */
+	public Profile findByEmail(String email) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT profile_id, email, first_name, "
+							+ "last_name, gender, birthdate, TIMESTAMPDIFF"
+							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
+							+ "height, physique, hair_color, smoker, "
+							+ "education, profession, religion FROM profile "
+							+ "WHERE email = " + email);
 
 			if (rs.next()) {
 				Profile p = new Profile();
@@ -239,7 +291,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Find a <code>Profile</code> object by a specific visitId in the DB.
 	 * 
-	 * @return result The <code>Profile</code> object
+	 * @return The found <code>Profile</code> object
 	 */
 	public Profile findByVisitId(int visitId) {
 		Connection con = DBConnection.connection();

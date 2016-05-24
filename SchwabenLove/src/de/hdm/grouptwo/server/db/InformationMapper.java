@@ -51,6 +51,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * @param i
 	 *            The <code>Information</code> object to be inserted
 	 */
+	@Override
 	public void insert(Information i) {
 		Connection con = DBConnection.connection();
 
@@ -83,6 +84,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * @param i
 	 *            The <code>Information</code> object to be updated
 	 */
+	@Override
 	public void update(Information i) {
 		Connection con = DBConnection.connection();
 
@@ -105,6 +107,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * @param i
 	 *            The <code>Information</code> object to be deleted
 	 */
+	@Override
 	public void delete(Information i) {
 		Connection con = DBConnection.connection();
 
@@ -121,8 +124,9 @@ public class InformationMapper implements DataMapper<Information> {
 	/**
 	 * Find all <code>Information</code> objects in the DB.
 	 * 
-	 * @return result ArrayList of all <code>Information</code> objects
+	 * @return ArrayList of all <code>Information</code> objects
 	 */
+	@Override
 	public ArrayList<Information> findAll() {
 		Connection con = DBConnection.connection();
 		ArrayList<Information> result = new ArrayList<Information>();
@@ -155,9 +159,10 @@ public class InformationMapper implements DataMapper<Information> {
 	/**
 	 * Find <code>Information</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>Information</code> object with specified ID or null
+	 * @return <code>Information</code> object with specified ID or null
 	 *         if not found
 	 */
+	@Override
 	public Information findById(int id) {
 		return findBy("information_id", id).get(0);
 	}
@@ -166,7 +171,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * Find all <code>Information</code> objects which belong to a specific
 	 * profile in the DB.
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return ArrayList of found <code>Information</code> objects
 	 */
 	public ArrayList<Information> findByProfileId(int profileId) {
 		return findBy("fk_profile_id", profileId);
@@ -176,7 +181,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * Find all <code>Information</code> objects which refer to a specific
 	 * property in the DB.
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return ArrayList of found <code>Information</code> objects
 	 */
 	public ArrayList<Information> findByPropertyId(int propertyId) {
 		return findBy("fk_property_id", propertyId);
@@ -186,7 +191,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * Find all <code>Information</code> objects which belong to a specific
 	 * search profile in the DB.
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return ArrayList of found <code>Information</code> objects
 	 */
 	public ArrayList<Information> findBySearchProfileId(int searchProfileId) {
 		return findBy("fk_search_profile_id", searchProfileId);
@@ -196,7 +201,7 @@ public class InformationMapper implements DataMapper<Information> {
 	 * Helper method to find all <code>Information</code> objects via a specific
 	 * key and value.
 	 * 
-	 * @return result ArrayList of found <code>Information</code> objects
+	 * @return ArrayList of found <code>Information</code> objects
 	 */
 	private ArrayList<Information> findBy(String key, int value) {
 		Connection con = DBConnection.connection();

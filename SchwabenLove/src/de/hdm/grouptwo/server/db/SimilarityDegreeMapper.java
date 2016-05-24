@@ -50,6 +50,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be inserted
 	 */
+	@Override
 	public void insert(SimilarityDegree sd) {
 		Connection con = DBConnection.connection();
 
@@ -83,6 +84,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be updated
 	 */
+	@Override
 	public void update(SimilarityDegree sd) {
 		Connection con = DBConnection.connection();
 
@@ -105,6 +107,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be deleted
 	 */
+	@Override
 	public void delete(SimilarityDegree sd) {
 		Connection con = DBConnection.connection();
 
@@ -121,8 +124,9 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	/**
 	 * Find all <code>SimilarityDegree</code> objects in the DB.
 	 * 
-	 * @return result ArrayList of all <code>SimilarityDegree</code> objects
+	 * @return ArrayList of all <code>SimilarityDegree</code> objects
 	 */
+	@Override
 	public ArrayList<SimilarityDegree> findAll() {
 		Connection con = DBConnection.connection();
 		ArrayList<SimilarityDegree> result = new ArrayList<SimilarityDegree>();
@@ -154,9 +158,10 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	/**
 	 * Find <code>SimilarityDegree</code> object with a specific ID in the DB.
 	 * 
-	 * @return result <code>SimilarityDegree</code> object with specified ID or
-	 *         null if not found
+	 * @return <code>SimilarityDegree</code> object with specified ID or null if
+	 *         not found
 	 */
+	@Override
 	public SimilarityDegree findById(int id) {
 		Connection con = DBConnection.connection();
 
@@ -190,7 +195,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	 * 
 	 * @param referenceProfileId
 	 *            The reference profile id by which to find the objects
-	 * @return result ArrayList of found <code>SimilarityDegree</code> objects
+	 * @return ArrayList of found <code>SimilarityDegree</code> objects
 	 */
 	public ArrayList<SimilarityDegree> findByReferenceProfileId(
 			int referenceProfileId) {
