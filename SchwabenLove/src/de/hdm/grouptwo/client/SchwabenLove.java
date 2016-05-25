@@ -36,12 +36,15 @@ public class SchwabenLove implements EntryPoint {
 
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
-						ClientsideSettings.getLogger().log(Level.INFO,
-								loginInfo.getEmailAddress());
+						
 						if (loginInfo.isLoggedIn()) {
+							ClientsideSettings.getLogger().log(Level.INFO,
+									"Logged in: " + loginInfo.getEmailAddress());
 							setProfile(loginInfo.getEmailAddress());
 							loadMainView();
 						} else {
+							ClientsideSettings.getLogger().log(Level.INFO,
+									"Not logged in.");
 							loadLogin();
 						}
 					}
