@@ -25,7 +25,7 @@ public class Menu extends Composite {
 	public Menu(DeckLayoutPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(fPanel);
 		this.contentPanel = contentPanel;
-		
+
 		Label logo = new Label("SchwabenLove");
 		logo.setStyleName("logo");
 		fPanel.add(logo);
