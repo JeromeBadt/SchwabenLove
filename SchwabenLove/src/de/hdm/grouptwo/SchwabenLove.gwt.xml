@@ -13,8 +13,10 @@
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
 
   <!-- Other module inherits                                      -->
-  <inherits name="com.google.gwt.logging.Logging"/>
-  <set-property name="gwt.logging.enabled" value="TRUE"/>
+  <inherits name='com.google.gwt.logging.Logging'/>
+  <!-- 2.6 compatibility	                                      -->
+  <define-property name='gwt.logging.popupHandler' values='ENABLED, DISABLED' />
+  <set-property name='gwt.logging.enabled' value='TRUE'/>
   <set-property name='gwt.logging.popupHandler' value='DISABLED'/>
 	
   <!-- Specify the app entry point class.                         -->
