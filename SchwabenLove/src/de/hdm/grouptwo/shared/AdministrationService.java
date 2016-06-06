@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import de.hdm.grouptwo.server.db.ProfileMapper;
 import de.hdm.grouptwo.shared.bo.Block;
 import de.hdm.grouptwo.shared.bo.Bookmark;
 import de.hdm.grouptwo.shared.bo.BookmarkList;
@@ -22,6 +23,8 @@ import de.hdm.grouptwo.shared.bo.Visit;
 public interface AdministrationService extends RemoteService {
 	public Profile getProfile();
 	public void setProfile(String email);
+	
+	public Profile getProfileById(int id);
 	
 	public ArrayList<Profile> getMatchesByProfileId(int profileId);
 

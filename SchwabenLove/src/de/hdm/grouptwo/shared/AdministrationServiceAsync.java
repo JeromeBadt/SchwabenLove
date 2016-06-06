@@ -22,6 +22,8 @@ public interface AdministrationServiceAsync {
 
 	public void setProfile(String email, AsyncCallback<Void> callback);
 
+	public void getProfileById(int id, AsyncCallback<Profile> callback);
+	
 	public void getMatchesByProfileId(int profileId,
 			AsyncCallback<ArrayList<Profile>> callback);
 

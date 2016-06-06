@@ -49,6 +49,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		user = ProfileMapper.profileMapper().findByEmail(email);
 	}
 
+	public Profile getProfileById(int id) {
+		return ProfileMapper.profileMapper().findById(id);
+	}
+	
+	
 	@Override
 	public ArrayList<Profile> getMatchesByProfileId(int profileId) {
 		ArrayList<Profile> matches = ProfileMapper.profileMapper().findAll();
