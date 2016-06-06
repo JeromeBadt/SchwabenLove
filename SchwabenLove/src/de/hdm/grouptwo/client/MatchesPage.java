@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -19,20 +18,27 @@ import de.hdm.grouptwo.shared.bo.Profile;
 
 public class MatchesPage extends ContentPage {
 	LayoutPanel hPanel = new LayoutPanel();
-	VerticalPanel matchesPanel = new VerticalPanel();
+	LayoutPanel matchesPanel = new LayoutPanel();
 
 	public MatchesPage() {
 		super("Partnervorschläge");
 		initWidget(hPanel);
+		hPanel.setStyleName("matches-page");
+		matchesPanel.setStyleName("matches");
 
 		VerticalPanel searchProfilePanel = new VerticalPanel();
-		
+
 		hPanel.add(matchesPanel);
 		hPanel.add(searchProfilePanel);
-		
-		hPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PCT, 50, Unit.PCT);
-		hPanel.setWidgetLeftRight(searchProfilePanel, 50, Unit.PCT, 0, Unit.PCT);
-		
+
+		searchProfilePanel.getElement().getStyle()
+				.setBorderStyle(BorderStyle.SOLID);
+		searchProfilePanel.getElement().getStyle()
+				.setBorderWidth(1, Unit.PX);
+
+		hPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 310, Unit.PX);
+		hPanel.setWidgetRightWidth(searchProfilePanel, 0, Unit.PX, 300, Unit.PX);
+
 		Button btn1 = new Button("Insert demo profile");
 		btn1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -64,6 +70,7 @@ public class MatchesPage extends ContentPage {
 	@Override
 	public void updatePage() {
 		matchesPanel.clear();
+		hPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
 		// getMatchesByProfileId(1);
 	}
 
@@ -87,59 +94,45 @@ public class MatchesPage extends ContentPage {
 	public void showMatches(ArrayList<Profile> matches) {
 		matchesPanel.clear();
 
-		//matchesPanel.add(new Label("test"));
-		
+		int offset = 0;
 		for (Profile match : matches) {
-			HorizontalPanel matchPanel = new HorizontalPanel();
-			// matchPanel.setBorderWidth(1);
-			matchPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-			matchPanel.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
-
-			Image profilePicture = new Image("images/38.png");
-			profilePicture.setWidth("96px");
-
-			VerticalPanel vPanel1 = new VerticalPanel();
-			vPanel1.setWidth("400px");
-
-			HorizontalPanel hPanel1 = new HorizontalPanel();
-			Label nameLabel = new Label(match.getFirstName() + " "
-					+ match.getLastName());
-			Label ageLabel = new Label(", " + match.getBirthdate());
-			Label genderLabel = new Label(", " + match.getGender());
-			hPanel1.add(nameLabel);
-			hPanel1.add(ageLabel);
-			hPanel1.add(genderLabel);
-
-			HorizontalPanel hPanel2 = new HorizontalPanel();
-			Label professionLabel = new Label(match.getProfession());
-			Label locationLabel = new Label(", " + match.getLocation());
-			hPanel2.add(professionLabel);
-			hPanel2.add(locationLabel);
-
-			Label heightLabel = new Label(Integer.toString(match.getHeight()));
-
-			vPanel1.add(hPanel1);
-			vPanel1.add(hPanel2);
-			vPanel1.add(heightLabel);
-
-			VerticalPanel vPanel2 = new VerticalPanel();
-
-			HorizontalPanel hPanel3 = new HorizontalPanel();
-			Label bookmarkLabel = new Label("Bookmark");
-			Label blockLabel = new Label("Block");
-			hPanel3.add(bookmarkLabel);
-			hPanel3.add(blockLabel);
-
-			Label similarityLabel = new Label("120");
-
-			vPanel2.add(hPanel3);
-			vPanel2.add(similarityLabel);
-
-			matchPanel.add(profilePicture);
-			matchPanel.add(vPanel1);
-			matchPanel.add(vPanel2);
-
-			matchesPanel.add(matchPanel);
+			MatchProfileWidget profileWidget = new MatchProfileWidget(match);
+			
+			matchesPanel.add(profileWidget);
+			matchesPanel.setWidgetTopHeight(profileWidget, offset, Unit.PX,
+					118, Unit.PX);
+			offset += 128;
+		}
+		hPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
+	}
+	
+	private class MatchProfileWidget extends ProfileWidget {
+		MatchProfileWidget(Profile profile) {
+			super(profile);
+			
+			Image bookmarkIcon = new Image("images/icons/bookmark.png");
+			bookmarkIcon.setWidth("24px");
+			bookmarkIcon.setTitle("Profil merken");
+			rightPanel.add(bookmarkIcon);
+			Image blockIcon = new Image("images/icons/block.png");
+			blockIcon.setWidth("24px");
+			blockIcon.setTitle("Profil blocken");
+			rightPanel.add(blockIcon);
+			LayoutPanel heartPanel = new LayoutPanel();
+			rightPanel.add(heartPanel);
+			Image heartIcon = new Image("images/icons/heart.png");
+			heartIcon.setWidth("72px");
+			heartPanel.add(heartIcon);
+			Label similarityDegreeLbl = new Label("120");
+			similarityDegreeLbl.setStyleName("similarity-degree-label");
+			heartPanel.add(similarityDegreeLbl);
+			
+			rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24, Unit.PX);
+			rightPanel.setWidgetRightWidth(blockIcon, 20, Unit.PCT, 24, Unit.PX);
+			rightPanel.setWidgetTopHeight(bookmarkIcon, 0, Unit.PCT, 24, Unit.PX);
+			rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
+			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
+			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);			
 		}
 	}
 }

@@ -13,8 +13,8 @@
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
 
   <!-- Other module inherits                                      -->
-  <inherits name="com.google.gwt.logging.Logging"/>
-  <set-property name="gwt.logging.enabled" value="TRUE"/>
+  <inherits name='com.google.gwt.logging.Logging'/>
+  <set-property name='gwt.logging.enabled' value='TRUE'/>
 	
   <!-- Specify the app entry point class.                         -->
   <entry-point class='de.hdm.grouptwo.client.SchwabenLove'/>
