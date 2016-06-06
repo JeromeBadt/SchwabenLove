@@ -80,3 +80,28 @@ body {
 	color: #2b2b2b !important;
 	height: 1.20rem;
 }
+
+.profile-widget {
+	border: 1px solid black;
+}
+
+.profile-widget * {
+	font-family: Lora !important;
+}
+
+.matches-page {
+	overflow: auto;
+}
+
+.profile-header {
+	font-size: 1.15rem;
+}
+
+.similarity-degree-label {
+	text-align: center;
+	height: 70px;
+	line-height: 70px;
+	font-weight: bold;
+	font-family: Lato !important;
+	font-size: 1.075rem;
+}

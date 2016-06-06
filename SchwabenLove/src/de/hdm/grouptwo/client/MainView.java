@@ -33,8 +33,6 @@ public class MainView extends ResizeComposite {
 		mainView.addNorth(menu, 10);
 		mainView.addSouth(createFooterPanel(), 4);
 		mainView.add(contentPanel);
-		
-		
 	}
 
 	private Anchor createFooterPanel() {
