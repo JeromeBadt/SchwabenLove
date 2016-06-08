@@ -12,80 +12,81 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.grouptwo.shared.bo.Profile;
+import de.hdm.grouptwo.shared.bo.SearchProfile;
 
 public class MatchesPage extends ContentPage {
-	LayoutPanel hPanel = new LayoutPanel();
+	LayoutPanel lPanel = new LayoutPanel();
 	LayoutPanel matchesPanel = new LayoutPanel();
+	LayoutPanel searchProfilePanel = new LayoutPanel();
 
 	public MatchesPage() {
 		super("Partnervorschläge");
-		initWidget(hPanel);
-		hPanel.setStyleName("matches-page");
+		initWidget(lPanel);
+		lPanel.setStyleName("matches-page");
 		matchesPanel.setStyleName("matches");
 
-		VerticalPanel searchProfilePanel = new VerticalPanel();
+		lPanel.add(matchesPanel);
+		lPanel.add(searchProfilePanel);
 
-		hPanel.add(matchesPanel);
-		hPanel.add(searchProfilePanel);
+		lPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 310, Unit.PX);
+		lPanel.setWidgetRightWidth(searchProfilePanel, 0, Unit.PX, 300, Unit.PX);
 
+		initSearchProfilePanel();
+	}
+
+	private void initSearchProfilePanel() {
 		searchProfilePanel.getElement().getStyle()
 				.setBorderStyle(BorderStyle.SOLID);
-		searchProfilePanel.getElement().getStyle()
-				.setBorderWidth(1, Unit.PX);
-
-		hPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 310, Unit.PX);
-		hPanel.setWidgetRightWidth(searchProfilePanel, 0, Unit.PX, 300, Unit.PX);
-
-		Button btn1 = new Button("Insert demo profile");
-		btn1.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				administrationService
-						.insertDemoProfile(new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								System.out.println("An error has occured");
-							}
-
-							public void onSuccess(String result) {
-								matchesPanel.clear();
-								matchesPanel.add(new Label(result));
-							}
-						});
-			}
-		});
-
-		Button btn2 = new Button("Show all profiles");
-		btn2.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				getMatchesByProfileId(1);
-			}
-		});
-
-		searchProfilePanel.add(btn1);
-		searchProfilePanel.add(btn2);
+		searchProfilePanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+	}
+	
+	private void loadSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
+		ListBox searchProfileDropBox = new ListBox();
+		for(SearchProfile sp : searchProfiles) {
+			// add missing search profile name to db
+			searchProfileDropBox.addItem(Integer.toString(sp.getId()));
+		}
+		
+		Image addIcon = new Image("images/icons/add.png");
+		Image deleteIcon = new Image("images/icons/delete.png");
+		
+		searchProfilePanel.add(searchProfileDropBox);
+		searchProfilePanel.add(addIcon);
+		searchProfilePanel.add(deleteIcon);
+		
 	}
 
 	@Override
 	public void updatePage() {
 		matchesPanel.clear();
-		hPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
-		// getMatchesByProfileId(1);
+		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
+		getMatchesByProfileId(1);
+
+		administrationService.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().log(Level.WARNING,
+						caught.getMessage());
+			}
+
+			public void onSuccess(ArrayList<SearchProfile> result) {
+				loadSearchProfiles(result);
+			}
+		});
 	}
 
 	public void getMatchesByProfileId(int profileId) {
 		administrationService.getMatchesByProfileId(profileId,
 				new AsyncCallback<ArrayList<Profile>>() {
 					public void onFailure(Throwable caught) {
-						System.out.println("An error has occured");
 						ClientsideSettings.getLogger().log(Level.WARNING,
-								"error");
+								caught.getMessage());
 					}
 
 					public void onSuccess(ArrayList<Profile> result) {
-						ClientsideSettings.getLogger().log(Level.WARNING,
-								"success");
 						showMatches(result);
 					}
 				});
@@ -97,19 +98,19 @@ public class MatchesPage extends ContentPage {
 		int offset = 0;
 		for (Profile match : matches) {
 			MatchProfileWidget profileWidget = new MatchProfileWidget(match);
-			
+
 			matchesPanel.add(profileWidget);
 			matchesPanel.setWidgetTopHeight(profileWidget, offset, Unit.PX,
 					118, Unit.PX);
 			offset += 128;
 		}
-		hPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
+		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
 	}
-	
+
 	private class MatchProfileWidget extends ProfileWidget {
 		MatchProfileWidget(Profile profile) {
 			super(profile);
-			
+
 			Image bookmarkIcon = new Image("images/icons/bookmark.png");
 			bookmarkIcon.setWidth("24px");
 			bookmarkIcon.setTitle("Profil merken");
@@ -126,13 +127,16 @@ public class MatchesPage extends ContentPage {
 			Label similarityDegreeLbl = new Label("120");
 			similarityDegreeLbl.setStyleName("similarity-degree-label");
 			heartPanel.add(similarityDegreeLbl);
-			
-			rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24, Unit.PX);
-			rightPanel.setWidgetRightWidth(blockIcon, 20, Unit.PCT, 24, Unit.PX);
-			rightPanel.setWidgetTopHeight(bookmarkIcon, 0, Unit.PCT, 24, Unit.PX);
+
+			rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24,
+					Unit.PX);
+			rightPanel
+					.setWidgetRightWidth(blockIcon, 20, Unit.PCT, 24, Unit.PX);
+			rightPanel.setWidgetTopHeight(bookmarkIcon, 0, Unit.PCT, 24,
+					Unit.PX);
 			rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
 			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
-			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);			
+			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
 		}
 	}
 }
