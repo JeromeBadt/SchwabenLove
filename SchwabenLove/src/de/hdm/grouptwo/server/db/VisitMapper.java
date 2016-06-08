@@ -45,14 +45,12 @@ public class VisitMapper implements DataMapper<Visit> {
 	/**
 	 * Insert a <code>Visit</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param v
 	 *            The <code>Visit</code> object to be inserted
+	 * @return The inserted Visit (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Visit v) {
+	public Visit insert(Visit v) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -75,6 +73,8 @@ public class VisitMapper implements DataMapper<Visit> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return v;
 	}
 
 	/**

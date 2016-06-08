@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author JeromeBadt
  */
 public interface DataMapper<T> {
-	public void insert(T t);
+	public T insert(T t);
 
 	public void update(T t);
 
