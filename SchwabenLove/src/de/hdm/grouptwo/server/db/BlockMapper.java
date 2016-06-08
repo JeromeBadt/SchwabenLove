@@ -45,14 +45,12 @@ public class BlockMapper implements DataMapper<Block> {
 	/**
 	 * Insert a <code>Block</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param b
 	 *            The <code>Block</code> object to be inserted
+	 * @return The inserted Block (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Block b) {
+	public Block insert(Block b) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -74,6 +72,8 @@ public class BlockMapper implements DataMapper<Block> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return b;
 	}
 
 	/**

@@ -44,14 +44,13 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 	/**
 	 * Insert a <code>SimilarityDegree</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param sd
 	 *            The <code>SimilarityDegree</code> object to be inserted
+	 * @return The inserted SimilarityDegree (returned because it gets an
+	 *         assigned id)
 	 */
 	@Override
-	public void insert(SimilarityDegree sd) {
+	public SimilarityDegree insert(SimilarityDegree sd) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -76,6 +75,8 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return sd;
 	}
 
 	/**

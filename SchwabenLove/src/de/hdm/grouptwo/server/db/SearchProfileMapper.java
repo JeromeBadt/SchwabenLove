@@ -44,14 +44,13 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	/**
 	 * Insert a <code>SearchProfile</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be inserted
+	 * @return The inserted SearchProfile (returned because it gets an assigned
+	 *         id)
 	 */
 	@Override
-	public void insert(SearchProfile sp) {
+	public SearchProfile insert(SearchProfile sp) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -95,6 +94,8 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return sp;
 	}
 
 	/**
