@@ -228,4 +228,43 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 
 		return result;
 	}
+	
+	/**
+	 * Find all <code>SimilarityDegree</code> objects with a specific comparison
+	 * profile in the DB.
+	 * 
+	 * @param comparisonProfileId
+	 *            The comparison profile id by which to find the objects
+	 * @return ArrayList of found <code>SimilarityDegree</code> objects
+	 */
+	public ArrayList<SimilarityDegree> findByComparisonProfileId(
+			int comparisonProfileId) {
+		Connection con = DBConnection.connection();
+		ArrayList<SimilarityDegree> result = new ArrayList<SimilarityDegree>();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt
+					.executeQuery("SELECT similarity_degree_id, score, "
+							+ "fk_reference_profile_id, fk_comparison_profile_id "
+							+ "FROM similarity_degree "
+							+ "WHERE fk_comparison_profile_id="
+							+ comparisonProfileId);
+
+			while (rs.next()) {
+				SimilarityDegree sd = new SimilarityDegree();
+				sd.setId(rs.getInt("similarity_degree_id"));
+				sd.setScore(rs.getInt("score"));
+				sd.setReferenceProfileId(rs.getInt("fk_reference_profile_id"));
+				sd.setComparisonProfileId(rs.getInt("fk_comparison_profile_id"));
+
+				result.add(sd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 }
