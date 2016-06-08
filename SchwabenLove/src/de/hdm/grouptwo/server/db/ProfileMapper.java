@@ -259,7 +259,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
 							+ "education, profession, religion FROM profile "
-							+ "WHERE email = " + email);
+							+ "WHERE email='" + email + "'");
 
 			if (rs.next()) {
 				Profile p = new Profile();
