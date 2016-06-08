@@ -105,3 +105,56 @@ body {
 	font-family: Lato !important;
 	font-size: 1.075rem;
 }
+
+.search-profile-dropbox {
+	width: 232px;
+	-webkit-appearance: menulist-button;
+	line-height: 24px;
+	height: 24px;
+}
+
+.search-profile-panel-inner {
+	display : table;
+	border: 1px solid black;
+
+}
+
+.search-profile-panel-h {
+	padding: 10px;
+}
+
+.search-profile-panel-inner .gwt-Label {
+	height: 24px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.search-profile-header {
+	background-color: #BF534A;
+	width: 300px;
+	color: white;
+	padding-left: 10px;
+}
+
+.attribute-label {
+	border-bottom: 1px solid black;
+}
+
+.info-object-label {
+	border-top: 1px solid black;
+}
+
+.search-profile-save-button {
+	width: 300px;
+	text-align: center;
+	color: #BF534A;
+	font-weight: bold;
+}
+
+span.gwt-CheckBox {
+	height: 18px;
+}
+
+input.gwt-TextBox {
+	height: 12px;
+}
