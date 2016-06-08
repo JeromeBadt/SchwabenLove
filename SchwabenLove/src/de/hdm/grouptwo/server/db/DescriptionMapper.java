@@ -41,14 +41,13 @@ public class DescriptionMapper implements DataMapper<Description> {
 	/**
 	 * Insert a <code>Description</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param d
 	 *            The <code>Description</code> object to be inserted
+	 * @return The inserted Description (returned because it gets an assigned
+	 *         id)
 	 */
 	@Override
-	public void insert(Description d) {
+	public Description insert(Description d) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -69,6 +68,8 @@ public class DescriptionMapper implements DataMapper<Description> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return d;
 	}
 
 	/**

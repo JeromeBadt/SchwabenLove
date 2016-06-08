@@ -44,14 +44,13 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 	/**
 	 * Insert a <code>SearchProfile</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param sp
 	 *            The <code>SearchProfile</code> object to be inserted
+	 * @return The inserted SearchProfile (returned because it gets an assigned
+	 *         id)
 	 */
 	@Override
-	public void insert(SearchProfile sp) {
+	public SearchProfile insert(SearchProfile sp) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -95,6 +94,8 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return sp;
 	}
 
 	/**
@@ -203,51 +204,6 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 					+ "min_height, max_height, smoker, education, profession, "
 					+ "religion FROM search_profile WHERE search_profile_id="
 					+ id);
-
-			if (rs.next()) {
-				SearchProfile sp = new SearchProfile();
-				sp.setId(rs.getInt("search_profile_id"));
-				sp.setGender(rs.getString("gender"));
-				sp.setMinAge(rs.getInt("min_age"));
-				sp.setMaxAge(rs.getInt("max_age"));
-				sp.setHairColor(rs.getString("hair_color"));
-				sp.setPhysique(rs.getString("physique"));
-				sp.setMinHeight(rs.getInt("min_height"));
-				sp.setMaxHeight(rs.getInt("max_height"));
-				sp.setSmoker(rs.getString("smoker"));
-				sp.setEducation(rs.getString("education"));
-				sp.setProfession(rs.getString("profession"));
-				sp.setReligion(rs.getString("religion"));
-
-				return sp;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	/**
-	 * Find the <code>SearchProfile</code> object for a specific information in
-	 * the DB.
-	 * 
-	 * @param informationId
-	 *            The information id by which to find the object
-	 * @return The found <code>SearchProfile</code> object
-	 */
-	public SearchProfile findByInformationId(int informationId) {
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("SELECT search_profile_id, gender, min_age, "
-							+ "max_age, hair_color, physique, min_height, "
-							+ "max_height, smoker, education, profession, "
-							+ "religion FROM search_profile JOIN information "
-							+ "ON fk_search_profile_id=search_profile_id "
-							+ "WHERE information_id=" + informationId);
 
 			if (rs.next()) {
 				SearchProfile sp = new SearchProfile();

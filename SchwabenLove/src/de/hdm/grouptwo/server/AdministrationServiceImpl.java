@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -41,19 +42,134 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 	private Profile user = null;
 
+	@Override
 	public Profile getProfile() {
 		return user;
 	}
 
+	@Override
 	public void setProfile(String email) {
 		user = ProfileMapper.profileMapper().findByEmail(email);
 	}
 
+	@Override
 	public Profile getProfileById(int id) {
 		return ProfileMapper.profileMapper().findById(id);
 	}
+
+	@Override
+	public void addBookmarkByProfileId(int profileId) {
+		Bookmark bookmark = new Bookmark();
+		bookmark.setBookmarkListId(BookmarkListMapper.bookmarkListMapper()
+				.findByProfile(user.getId()).getId());
+		bookmark.setProfileId(profileId);
+	}
 	
-	
+	public ArrayList<Information> getInformationByProfileId(int profileId) {
+		return InformationMapper.informationMapper().findByProfileId(profileId);
+	}
+
+	@Override
+	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId) {
+		SimilarityDegree similarityDegree = null;
+		for (SimilarityDegree s : SimilarityDegreeMapper
+				.similarityDegreeMapper()
+				.findByReferenceProfileId(user.getId())) {
+			if (s.getComparisonProfileId() == profileId) {
+				similarityDegree = s;
+			}
+		}
+
+		return similarityDegree;
+	}
+
+	@Override
+	public void deleteProfile() {
+		int userId = user.getId();
+		ArrayList<SearchProfile> searchProfiles = getSearchProfiles();
+		BookmarkList bookmarkList = BookmarkListMapper.bookmarkListMapper()
+				.findByProfile(userId);
+		ArrayList<Bookmark> bookmarks = BookmarkMapper.bookmarkMapper()
+				.findByBookmarkListId(bookmarkList.getId());
+
+		for (Information i : InformationMapper.informationMapper()
+				.findByProfileId(userId)) {
+			InformationMapper.informationMapper().delete(i);
+		}
+
+		for (SearchProfile sp : searchProfiles) {
+			SearchProfileMapper.searchProfileMapper().delete(sp);
+		}
+
+		for (Block b : BlockMapper.blockMapper().findByBlockerProfileId(userId)) {
+			BlockMapper.blockMapper().delete(b);
+		}
+
+		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(userId)) {
+			BlockMapper.blockMapper().delete(b);
+		}
+
+		BookmarkListMapper.bookmarkListMapper().delete(bookmarkList);
+
+		for (Bookmark b : bookmarks) {
+			BookmarkMapper.bookmarkMapper().delete(b);
+		}
+
+		for (SimilarityDegree sd : SimilarityDegreeMapper
+				.similarityDegreeMapper().findByReferenceProfileId(userId)) {
+			SimilarityDegreeMapper.similarityDegreeMapper().delete(sd);
+		}
+
+		for (SimilarityDegree sd : SimilarityDegreeMapper
+				.similarityDegreeMapper().findByComparisonProfileId(userId)) {
+			SimilarityDegreeMapper.similarityDegreeMapper().delete(sd);
+		}
+
+		ProfileMapper.profileMapper().delete(user);
+	}
+
+	@Override
+	public ArrayList<SearchProfile> getSearchProfiles() {
+		ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
+		LinkedHashSet<Integer> searchProfileIds = new LinkedHashSet<Integer>();
+
+		for (Information i : InformationMapper.informationMapper()
+				.findByProfileId(user.getId())) {
+			searchProfileIds.add(i.getSearchProfileId());
+		}
+
+		for (Integer id : searchProfileIds) {
+			searchProfiles.add(SearchProfileMapper.searchProfileMapper()
+					.findById(id));
+		}
+
+		return searchProfiles;
+	}
+
+	@Override
+	public SearchProfile addSearchProfile(SearchProfile searchProfile) {
+		return SearchProfileMapper.searchProfileMapper().insert(searchProfile);
+	}
+
+	@Override
+	public void updateSearchProfile(SearchProfile searchProfile) {
+		SearchProfileMapper.searchProfileMapper().update(searchProfile);
+	}
+
+	@Override
+	public void deleteSearchProfile(SearchProfile searchProfile) {
+		SearchProfileMapper.searchProfileMapper().delete(searchProfile);
+	}
+
+	@Override
+	public void addBlockByProfileId(int profileId) {
+		Block block = new Block();
+		block.setBlockerProfileId(user.getId());
+		block.setBlockedProfileId(profileId);
+
+		BlockMapper.blockMapper().insert(block);
+	}
+
 	@Override
 	public ArrayList<Profile> getMatchesByProfileId(int profileId) {
 		ArrayList<Profile> matches = ProfileMapper.profileMapper().findAll();
@@ -84,6 +200,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return "Demo profile inserted";
 	}
 
+	public ArrayList<Profile> getBookmarkedProfiles() {
+		ArrayList<Profile> bookmarks = new ArrayList<Profile>();
+		// get bookmarklist
+		// get bookmarks by bookmarklist
+		// get profiles by bookmark
+		
+		return bookmarks;
+	}
+	
 	@Override
 	public ArrayList<String> loadTableNames() {
 		ArrayList<String> tableNames = new ArrayList<String>();

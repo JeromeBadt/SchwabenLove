@@ -45,14 +45,13 @@ public class InformationMapper implements DataMapper<Information> {
 	/**
 	 * Insert a <code>Information</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param i
 	 *            The <code>Information</code> object to be inserted
+	 * @return The inserted Information (returned because it gets an assigned
+	 *         id)
 	 */
 	@Override
-	public void insert(Information i) {
+	public Information insert(Information i) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -76,6 +75,8 @@ public class InformationMapper implements DataMapper<Information> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return i;
 	}
 
 	/**
@@ -159,8 +160,8 @@ public class InformationMapper implements DataMapper<Information> {
 	/**
 	 * Find <code>Information</code> object with a specific ID in the DB.
 	 * 
-	 * @return <code>Information</code> object with specified ID or null
-	 *         if not found
+	 * @return <code>Information</code> object with specified ID or null if not
+	 *         found
 	 */
 	@Override
 	public Information findById(int id) {

@@ -36,7 +36,9 @@ public class Menu extends Composite {
 
 	private void initMenu(LoginInfo loginInfo) {
 		ArrayList<ContentPage> contentPages = new ArrayList<ContentPage>();
-		contentPages.add(new ProfilePage());
+		// Save profilePage to load it on login later
+		ProfilePage profilePage = new ProfilePage();
+		contentPages.add(profilePage);
 		contentPages.add(new MatchesPage());
 		contentPages.add(new BookmarkListPage());
 		contentPages.add(new BlockListPage());
@@ -63,6 +65,9 @@ public class Menu extends Composite {
 
 			menuBar.addItem(item);
 		}
+
+		// Load profile page on login
+		pages.get(profilePage).getScheduledCommand().execute();
 	}
 
 	private void clearMenuItemStyles() {
