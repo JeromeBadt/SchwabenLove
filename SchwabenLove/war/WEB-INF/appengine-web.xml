@@ -7,6 +7,7 @@
     Allows App Engine to send multiple requests to one instance in parallel:
   -->
   <threadsafe>true</threadsafe>
+  <use-google-connector-j>true</use-google-connector-j>
 
   <!-- Configure serving/caching of GWT files -->
   <static-files>
@@ -22,6 +23,10 @@
   <!-- Configure java.util.logging -->
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+    <!--  
+   	<property name="ae-cloudsql.cloudsql-database-url" value="jdbc:google:mysql://schwabenlove:schwabenlove2/schwabenlove?user=testuser&amp;password=uFx97-21hvw-65zay" />
+    <property name="ae-cloudsql.local-database-url" value="jdbc:google:mysql://schwabenlove:schwabenlove2/schwabenlove?user=testuser&amp;password=uFx97-21hvw-65zay" />
+  	-->
   </system-properties>
 
   <!--

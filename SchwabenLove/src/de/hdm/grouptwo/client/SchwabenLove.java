@@ -11,6 +11,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.grouptwo.server.AdministrationServiceImpl;
+import de.hdm.grouptwo.shared.AdministrationService;
+import de.hdm.grouptwo.shared.AdministrationServiceAsync;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 
 /**
@@ -21,6 +24,9 @@ import de.hdm.grouptwo.shared.bo.LoginInfo;
  */
 public class SchwabenLove implements EntryPoint {
 	private LoginInfo loginInfo = null;
+	private final AdministrationServiceAsync admin = GWT
+			.create(AdministrationService.class);
+	
 
 	public void onModuleLoad() {
 		// Set logger settings here, since they seem to be ignored .gwt.xml and
@@ -42,10 +48,36 @@ public class SchwabenLove implements EntryPoint {
 									"Logged in: " + loginInfo.getEmailAddress());
 							// setProfile(loginInfo.getEmailAddress());
 							loadMainView();
+							// DB Test
+//							admin.insertDemoProfile(new AsyncCallback<String>() {
+//								@Override
+//								public void onFailure(Throwable caught) {
+//									// TODO Auto-generated method stub
+//
+//								}
+//
+//								@Override
+//								public void onSuccess(String result) {
+//									
+//								}
+//							});
 						} else {
 							ClientsideSettings.getLogger().log(Level.INFO,
 									"Not logged in.");
 							loadLogin();
+							// DB Test
+//							admin.insertDemoProfile(new AsyncCallback<String>() {
+//								@Override
+//								public void onFailure(Throwable caught) {
+//									// TODO Auto-generated method stub
+//
+//								}
+//
+//								@Override
+//								public void onSuccess(String result) {
+//									
+//								}
+//							});
 						}
 					}
 				});

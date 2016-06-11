@@ -12,7 +12,7 @@ public class DBConnection {
 
     private static Connection con = null;
 
-    private static String googleUrl = "jdbc:google:mysql://prof-thies.de:thies-bankproject:thies-bankproject/bankproject?user=demo&password=demo";
+    private static String googleUrl = "jdbc:google:mysql://schwabenlove:schwabenlove2/schwabenlove?user=root";
     private static String localUrl = "jdbc:mysql://127.0.0.1:3306/schwabenlove?user=root&password=root";
     
     public static Connection connection() {
