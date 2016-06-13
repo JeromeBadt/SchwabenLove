@@ -42,14 +42,12 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	/**
 	 * Insert a <code>Bookmark</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param b
 	 *            The <code>Bookmark</code> object to be inserted
+	 * @return The inserted Bookmark (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Bookmark b) {
+	public Bookmark insert(Bookmark b) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -63,6 +61,8 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return b;
 	}
 
 	/**

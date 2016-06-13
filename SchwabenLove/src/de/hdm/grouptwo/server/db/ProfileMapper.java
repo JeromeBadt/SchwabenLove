@@ -44,14 +44,12 @@ public class ProfileMapper implements DataMapper<Profile> {
 	/**
 	 * Insert a <code>Profile</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param p
 	 *            The <code>Profile</code> object to be inserted
+	 * @return The inserted Profile (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Profile p) {
+	public Profile insert(Profile p) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -98,6 +96,8 @@ public class ProfileMapper implements DataMapper<Profile> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return p;
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 							+ "(YEAR, birthdate, CURDATE()) AS age, location, "
 							+ "height, physique, hair_color, smoker, "
 							+ "education, profession, religion FROM profile "
-							+ "WHERE email = " + email);
+							+ "WHERE email='" + email + "'");
 
 			if (rs.next()) {
 				Profile p = new Profile();

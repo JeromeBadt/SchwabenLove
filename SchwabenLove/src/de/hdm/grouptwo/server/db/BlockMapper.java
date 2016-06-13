@@ -45,14 +45,12 @@ public class BlockMapper implements DataMapper<Block> {
 	/**
 	 * Insert a <code>Block</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param b
 	 *            The <code>Block</code> object to be inserted
+	 * @return The inserted Block (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Block b) {
+	public Block insert(Block b) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -74,6 +72,8 @@ public class BlockMapper implements DataMapper<Block> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return b;
 	}
 
 	/**
@@ -195,6 +195,40 @@ public class BlockMapper implements DataMapper<Block> {
 							+ "fk_blocker_profile_id, fk_blocked_profile_id "
 							+ "FROM block WHERE fk_profile_blocker="
 							+ blockerProfileId);
+
+			while (rs.next()) {
+				Block b = new Block();
+				b.setId(rs.getInt("block_id"));
+				b.setBlockerProfileId(rs.getInt("fk_blocker_profile_id"));
+				b.setBlockedProfileId(rs.getInt("fk_blocked_profile_id"));
+
+				result.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Find all <code>Block</code> objects of a specific blocked profile in the
+	 * DB.
+	 * 
+	 * @return ArrayList of found <code>Block</code> objects
+	 */
+	public ArrayList<Block> findByBlockedProfileId(int blockedProfileId) {
+		Connection con = DBConnection.connection();
+
+		ArrayList<Block> result = new ArrayList<Block>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT block_id, "
+							+ "fk_blocker_profile_id, fk_blocked_profile_id "
+							+ "FROM block WHERE fk_profile_blocked="
+							+ blockedProfileId);
 
 			while (rs.next()) {
 				Block b = new Block();

@@ -23,7 +23,29 @@ public interface AdministrationServiceAsync {
 	public void setProfile(String email, AsyncCallback<Void> callback);
 
 	public void getProfileById(int id, AsyncCallback<Profile> callback);
+
+	public void addBookmarkByProfileId(int profileId,
+			AsyncCallback<Void> callback);
+
+	public void addBlockByProfileId(int profileId, AsyncCallback<Void> callback);
+
+	public void deleteProfile(AsyncCallback<Void> callback);
 	
+	public void getSimilarityDegreeByProfileId(int profileId,
+			AsyncCallback<SimilarityDegree> callback);
+
+	public void getSearchProfiles(
+			AsyncCallback<ArrayList<SearchProfile>> callback);
+
+	public void addSearchProfile(SearchProfile searchProfile,
+			AsyncCallback<SearchProfile> callback);
+
+	public void updateSearchProfile(SearchProfile searchProfile,
+			AsyncCallback<Void> callback);
+
+	public void deleteSearchProfile(SearchProfile searchProfile,
+			AsyncCallback<Void> callback);
+
 	public void getMatchesByProfileId(int profileId,
 			AsyncCallback<ArrayList<Profile>> callback);
 

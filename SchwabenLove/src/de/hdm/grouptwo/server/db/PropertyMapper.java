@@ -45,14 +45,12 @@ public class PropertyMapper implements DataMapper<Property> {
 	/**
 	 * Insert a <code>Property</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param p
 	 *            The <code>Property</code> object to be inserted
+	 * @return The inserted Property (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Property p) {
+	public Property insert(Property p) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -73,6 +71,8 @@ public class PropertyMapper implements DataMapper<Property> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return p;
 	}
 
 	/**

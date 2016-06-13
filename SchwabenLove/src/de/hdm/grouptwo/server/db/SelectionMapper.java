@@ -42,14 +42,12 @@ public class SelectionMapper implements DataMapper<Selection> {
 	/**
 	 * Insert a <code>Selection</code> object into the DB.
 	 * 
-	 * <p>
-	 * TODO: else block for inserting first object into DB?
-	 * 
 	 * @param s
 	 *            The <code>Selection</code> object to be inserted
+	 * @return The inserted Selection (returned because it gets an assigned id)
 	 */
 	@Override
-	public void insert(Selection s) {
+	public Selection insert(Selection s) {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -69,6 +67,8 @@ public class SelectionMapper implements DataMapper<Selection> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		return s;
 	}
 
 	/**
