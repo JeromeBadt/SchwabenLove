@@ -3,6 +3,8 @@ package de.hdm.grouptwo.client;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -31,10 +33,21 @@ public class MatchesPage extends ContentPage {
 
 		lPanel.add(matchesPanel);
 		lPanel.add(searchProfilePanel);
+	}
 
-		lPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 330, Unit.PX);
-		lPanel.setWidgetRightWidth(searchProfilePanel, 10, Unit.PX, 300,
-				Unit.PX);
+	@Override
+	public void onResize() {
+		if (getElement().getClientWidth() >= 920) {
+			int offset = (getElement().getClientWidth() - 910) / 2;
+			lPanel.setWidgetLeftWidth(matchesPanel, offset, Unit.PX, 590,
+					Unit.PX);
+			lPanel.setWidgetRightWidth(searchProfilePanel, offset, Unit.PX,
+					300, Unit.PX);
+		} else {
+			lPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 330, Unit.PX);
+			lPanel.setWidgetRightWidth(searchProfilePanel, 10, Unit.PX, 300,
+					Unit.PX);
+		}
 	}
 
 	private void loadSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
@@ -65,7 +78,7 @@ public class MatchesPage extends ContentPage {
 
 		VerticalPanel labelPanel = new VerticalPanel();
 		labelPanel.setWidth("119px");
-		
+
 		labelPanel.add(new Label("Geschlecht:"));
 		labelPanel.add(new Label("Alter:"));
 		labelPanel.add(new Label("Körperbau:"));
@@ -79,14 +92,14 @@ public class MatchesPage extends ContentPage {
 		VerticalPanel inputPanel = new VerticalPanel();
 		inputPanel.setWidth("159px");
 		inputPanel.setStyleName("search-profile-input-panel");
-		
+
 		HorizontalPanel genderPanel = new HorizontalPanel();
 		genderPanel.setHeight("24px");
 		CheckBox maleCheckBox = new CheckBox("m");
 		CheckBox femaleCheckBox = new CheckBox("w");
 		genderPanel.add(maleCheckBox);
 		genderPanel.add(femaleCheckBox);
-		
+
 		HorizontalPanel agePanel = new HorizontalPanel();
 		TextBox minAgeTextBox = new TextBox();
 		minAgeTextBox.setWidth("35px");
@@ -95,31 +108,40 @@ public class MatchesPage extends ContentPage {
 		agePanel.add(minAgeTextBox);
 		agePanel.add(new Label("-"));
 		agePanel.add(maxAgeTextBox);
-		
+		agePanel.add(new Label("Jahre"));
+
 		TextBox physiqueTextBox = new TextBox();
-		
-		
+
 		HorizontalPanel heightPanel = new HorizontalPanel();
-		TextBox heightTextBox = new TextBox();
-		heightPanel.add(heightTextBox);
+		TextBox minHeightTextBox = new TextBox();
+		minHeightTextBox.setWidth("35px");
+		TextBox maxHeightTextBox = new TextBox();
+		maxHeightTextBox.setWidth("35px");
+		heightPanel.add(minHeightTextBox);
+		heightPanel.add(new Label("-"));
+		heightPanel.add(maxHeightTextBox);
 		heightPanel.add(new Label("cm"));
 		
+//		HorizontalPanel heightPanel = new HorizontalPanel();
+//		TextBox heightTextBox = new TextBox();
+//		heightPanel.add(heightTextBox);
+//		heightPanel.add(new Label("cm"));
+
 		TextBox hairColorTextBox = new TextBox();
-		
+
 		TextBox professionTextBox = new TextBox();
-		
+
 		HorizontalPanel smokerPanel = new HorizontalPanel();
 		smokerPanel.setHeight("24px");
 		CheckBox yesCheckBox = new CheckBox("ja");
 		CheckBox noCheckBox = new CheckBox("nein");
 		smokerPanel.add(yesCheckBox);
 		smokerPanel.add(noCheckBox);
-		
+
 		TextBox educationTextBox = new TextBox();
-		
+
 		TextBox religionTextBox = new TextBox();
-		
-		
+
 		inputPanel.add(genderPanel);
 		inputPanel.add(agePanel);
 		inputPanel.add(physiqueTextBox);
@@ -129,8 +151,7 @@ public class MatchesPage extends ContentPage {
 		inputPanel.add(smokerPanel);
 		inputPanel.add(educationTextBox);
 		inputPanel.add(religionTextBox);
-		
-		
+
 		Label infoObjectsLabel = new Label("Info Objekte");
 		infoObjectsLabel.addStyleName("search-profile-header");
 		infoObjectsLabel.addStyleName("info-object-label");
@@ -207,6 +228,15 @@ public class MatchesPage extends ContentPage {
 			offset += 128;
 		}
 		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
+
+		// Adjust the layout when the browser event loop returns (wait for
+		// scrollbar to render)
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				onResize();
+			}
+		});
 	}
 
 	private class MatchProfileWidget extends ProfileWidget {
