@@ -46,7 +46,7 @@ public class SchwabenLove implements EntryPoint {
 						if (loginInfo.isLoggedIn()) {
 							ClientsideSettings.getLogger().log(Level.INFO,
 									"Logged in: " + loginInfo.getEmailAddress());
-							// setProfile(loginInfo.getEmailAddress());
+							setProfile(loginInfo.getEmailAddress());
 							loadMainView();
 							// DB Test
 //							admin.insertDemoProfile(new AsyncCallback<String>() {
