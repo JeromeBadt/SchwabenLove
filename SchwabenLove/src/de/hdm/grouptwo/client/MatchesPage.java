@@ -121,11 +121,6 @@ public class MatchesPage extends ContentPage {
 		heightPanel.add(new Label("-"));
 		heightPanel.add(maxHeightTextBox);
 		heightPanel.add(new Label("cm"));
-		
-//		HorizontalPanel heightPanel = new HorizontalPanel();
-//		TextBox heightTextBox = new TextBox();
-//		heightPanel.add(heightTextBox);
-//		heightPanel.add(new Label("cm"));
 
 		TextBox hairColorTextBox = new TextBox();
 
