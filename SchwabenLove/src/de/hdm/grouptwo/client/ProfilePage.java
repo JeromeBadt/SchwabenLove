@@ -71,18 +71,22 @@ public class ProfilePage extends ContentPage {
 		vPanel2.add(new Label(profile.getPhysique()));
 		vPanel2.add(new Label(profile.getHairColor()));
 		
-		Image deleteIcon = new Image("images/trashbin.png");
+		Image deleteIcon = new Image("images/icons/trash.png");
+		deleteIcon.setWidth("24px");
+		deleteIcon.setTitle("Profil löschen");
 
 		attributePanel.add(profilePicture);
 		attributePanel.add(vPanel1);
 		attributePanel.add(vPanel2);
-
+		attributePanel.add(deleteIcon);		
+		
 		attributePanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
 		attributePanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
+		attributePanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
 
 		lPanel.add(attributePanel);
 		lPanel.add(informationPanel);
+		lPanel.setWidgetTopHeight(informationPanel, 281, Unit.PX, 0, Unit.PX);
 
 	}
-
 }
