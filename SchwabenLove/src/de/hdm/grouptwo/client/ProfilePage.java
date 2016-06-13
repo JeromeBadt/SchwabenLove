@@ -6,7 +6,10 @@ import java.util.logging.Level;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -20,6 +23,14 @@ public class ProfilePage extends ContentPage {
 	public ProfilePage() {
 		super("Profil");
 		initWidget(lPanel);
+	
+		Button deleteIcon = new Button();
+		deleteIcon.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				
+			}
+		});
+	
 	}
 
 	public ProfilePage(int id) {
@@ -27,6 +38,8 @@ public class ProfilePage extends ContentPage {
 		initWidget(lPanel);
 	}
 
+
+	
 	@Override
 	public void updatePage() {
 		lPanel.clear();
@@ -41,7 +54,7 @@ public class ProfilePage extends ContentPage {
 			}
 		});
 	}
-
+	
 	public void showProfile(Profile profile) {
 		LayoutPanel attributePanel = new LayoutPanel();
 		LayoutPanel informationPanel = new LayoutPanel();
