@@ -18,9 +18,11 @@ import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.bo.Visit;
 
 public interface AdministrationServiceAsync {
+	public void createProfile(Profile profile, AsyncCallback<Void> callback);
+
 	public void getProfile(AsyncCallback<Profile> callback);
 
-	public void setProfile(String email, AsyncCallback<Void> callback);
+	public void setProfile(String email, AsyncCallback<Profile> callback);
 
 	public void getProfileById(int id, AsyncCallback<Profile> callback);
 
@@ -30,7 +32,7 @@ public interface AdministrationServiceAsync {
 	public void addBlockByProfileId(int profileId, AsyncCallback<Void> callback);
 
 	public void deleteProfile(AsyncCallback<Void> callback);
-	
+
 	public void getSimilarityDegreeByProfileId(int profileId,
 			AsyncCallback<SimilarityDegree> callback);
 
@@ -48,8 +50,6 @@ public interface AdministrationServiceAsync {
 
 	public void getMatchesByProfileId(int profileId,
 			AsyncCallback<ArrayList<Profile>> callback);
-
-	public void insertDemoProfile(AsyncCallback<String> callback);
 
 	public void loadTableNames(AsyncCallback<ArrayList<String>> callback);
 
@@ -81,4 +81,7 @@ public interface AdministrationServiceAsync {
 			AsyncCallback<ArrayList<SimilarityDegree>> callback);
 
 	public void getAllVisits(AsyncCallback<ArrayList<Visit>> callback);
+
+	public void validateDate(int year, int month, int day,
+			AsyncCallback<Boolean> callback);
 }
