@@ -20,9 +20,11 @@ import de.hdm.grouptwo.shared.bo.Visit;
 
 @RemoteServiceRelativePath("administration")
 public interface AdministrationService extends RemoteService {
+	public void createProfile(Profile profile);
+
 	public Profile getProfile();
 
-	public void setProfile(String email);
+	public Profile setProfile(String email);
 
 	public Profile getProfileById(int id);
 
@@ -31,7 +33,7 @@ public interface AdministrationService extends RemoteService {
 	public void addBlockByProfileId(int profileId);
 
 	public void deleteProfile();
-	
+
 	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId);
 
 	public ArrayList<SearchProfile> getSearchProfiles();
@@ -43,8 +45,6 @@ public interface AdministrationService extends RemoteService {
 	public void deleteSearchProfile(SearchProfile searchProfile);
 
 	public ArrayList<Profile> getMatchesByProfileId(int profileId);
-
-	public String insertDemoProfile();
 
 	public ArrayList<String> loadTableNames();
 
@@ -71,4 +71,6 @@ public interface AdministrationService extends RemoteService {
 	public ArrayList<SimilarityDegree> getAllSimilarityDegrees();
 
 	public ArrayList<Visit> getAllVisits();
+
+	public boolean validateDate(int year, int month, int day);
 }

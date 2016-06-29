@@ -8,28 +8,20 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 
 public class Menu extends Composite {
-	private FlowPanel fPanel = new FlowPanel();
 	private MenuBar menuBar = new MenuBar();
 	private DeckLayoutPanel contentPanel = null;
 
 	Map<ContentPage, MenuItem> pages = new HashMap<ContentPage, MenuItem>();
 
 	public Menu(DeckLayoutPanel contentPanel, LoginInfo loginInfo) {
-		initWidget(fPanel);
+		initWidget(menuBar);
 		this.contentPanel = contentPanel;
-
-		Label logo = new Label("SchwabenLove");
-		logo.setStyleName("logo");
-		fPanel.add(logo);
-		fPanel.add(menuBar);
 
 		initMenu(loginInfo);
 	}

@@ -1,11 +1,13 @@
 package de.hdm.grouptwo.server;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -43,13 +45,22 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	private Profile user = null;
 
 	@Override
+	public void createProfile(Profile profile) {
+		ProfileMapper.profileMapper().insert(profile);
+
+		// ToDo: Create dependencies
+	}
+
+	@Override
 	public Profile getProfile() {
 		return user;
 	}
 
 	@Override
-	public void setProfile(String email) {
+	public Profile setProfile(String email) {
 		user = ProfileMapper.profileMapper().findByEmail(email);
+
+		return user;
 	}
 
 	@Override
@@ -64,7 +75,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 				.findByProfile(user.getId()).getId());
 		bookmark.setProfileId(profileId);
 	}
-	
+
 	public ArrayList<Information> getInformationByProfileId(int profileId) {
 		return InformationMapper.informationMapper().findByProfileId(profileId);
 	}
@@ -177,38 +188,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return matches;
 	}
 
-	@Override
-	public String insertDemoProfile() {
-
-		Profile demo = new Profile();
-		demo.setEmail("demo@user.com");
-		demo.setFirstName("demo");
-		demo.setLastName("User");
-		demo.setGender("m");
-		demo.setBirthdate(Date.valueOf("1990-01-01"));
-		demo.setLocation("Stuttgart");
-		demo.setHeight(180);
-		demo.setPhysique("sportlich");
-		demo.setHairColor("braun");
-		demo.setSmoker(true);
-		demo.setEducation("Abitur");
-		demo.setProfession("Student");
-		demo.setReligion("Christlich");
-
-		ProfileMapper.profileMapper().insert(demo);
-
-		return "Demo profile inserted";
-	}
-
 	public ArrayList<Profile> getBookmarkedProfiles() {
 		ArrayList<Profile> bookmarks = new ArrayList<Profile>();
 		// get bookmarklist
 		// get bookmarks by bookmarklist
 		// get profiles by bookmark
-		
+
 		return bookmarks;
 	}
-	
+
 	@Override
 	public ArrayList<String> loadTableNames() {
 		ArrayList<String> tableNames = new ArrayList<String>();
@@ -289,5 +277,69 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public ArrayList<Visit> getAllVisits() {
 		return VisitMapper.visitMapper().findAll();
+	}
+
+	/**
+	 * Method to validate a birthdate. Checks if the day and month are valid and
+	 * if the user is within the permissible age range.<br>
+	 * This check is performed on the server side because GWT does not support
+	 * <code>Calendar</code> on the client side.
+	 * 
+	 * @param day
+	 *            the value for the day
+	 * @param month
+	 *            the value for the month
+	 * @param year
+	 *            the value for the year
+	 * 
+	 * @return <code>true</code> if the date is valid, <code>false</code> if it
+	 *         isn't
+	 */
+	@Override
+	public boolean validateDate(int day, int month, int year) {
+		int threshold = 0;
+		switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			threshold = 31;
+			break;
+		case 2:
+			threshold = new GregorianCalendar().isLeapYear(year) ? 29 : 28;
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			threshold = 30;
+			break;
+		default:
+			return false;
+		}
+
+		if (day < 1 || day > threshold) {
+			return false;
+		}
+
+		Calendar calendar = Calendar.getInstance();
+		// Check if the user is at least 18 years old...
+		calendar.add(Calendar.YEAR, -18);
+		Date minAge = calendar.getTime();
+		// and at most 100 years old
+		calendar.add(Calendar.YEAR, -82);
+		Date maxAge = calendar.getTime();
+
+		calendar.set(year, month - 1, day);
+		Date birthdate = calendar.getTime();
+
+		if (birthdate.after(minAge) || birthdate.before(maxAge)) {
+			return false;
+		}
+
+		return true;
 	}
 }
