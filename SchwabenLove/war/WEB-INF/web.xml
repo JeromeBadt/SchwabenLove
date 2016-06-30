@@ -25,6 +25,16 @@
 		<servlet-name>administrationServiceServlet</servlet-name>
 		<url-pattern>/schwabenlove/administration</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>reportService</servlet-name>
+	    <servlet-class>de.hdm.grouptwo.server.ReportServiceImpl</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>reportService</servlet-name>
+	    <url-pattern>/schwabenlove/report</url-pattern>
+	</servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
