@@ -20,7 +20,7 @@ public class ImprintPage extends ContentPage {
 
 	private void initImprint() {
 		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setWidth("800px");
+		vPanel.setWidth("90%");
 
 		HTML html1 = new HTML();
 		HTML html2 = new HTML();
@@ -89,7 +89,7 @@ public class ImprintPage extends ContentPage {
 		html5.setHTML("<br><strong>Datenschutz</strong><br><br>"
 				+ "	Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten"
 				+ " möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, "
-				+ "Anschrift oder eMail-Adressen)erhoben werden, erfolgt dies, soweit möglich, stets "
+				+ "Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets "
 				+ "auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht"
 				+ " an Dritte weitergegeben. <br>"
 				+ " Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der "
