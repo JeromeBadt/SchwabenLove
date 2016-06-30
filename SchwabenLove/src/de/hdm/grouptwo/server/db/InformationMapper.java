@@ -65,18 +65,15 @@ public class InformationMapper implements DataMapper<Information> {
 				// Set id to max + 1
 				i.setId(rs.getInt("maxId") + 1);
 
-				// Set nullable fields
-				String inputText = i.getInputText() == null ? "NULL" : "'"
-						+ i.getInputText() + "'";
-				String searchProfileId = i.getSearchProfileId() == 0 ? "NULL"
-						: Integer.toString(i.getSearchProfileId());
-
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO information "
 						+ "(information_id, input_text, fk_profile_id, "
 						+ "fk_property_id, fk_search_profile_id) VALUES ("
-						+ i.getId() + "," + inputText + "," + i.getProfileId()
-						+ "," + i.getPropertyId() + "," + searchProfileId + ")");
+						+ i.getId() + ","
+						+ DataMapperHelper.checkNull(i.getInputText()) + ","
+						+ i.getProfileId() + "," + i.getPropertyId() + ","
+						+ DataMapperHelper.checkNull(i.getSearchProfileId())
+						+ ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,10 +95,12 @@ public class InformationMapper implements DataMapper<Information> {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE information SET input_text='"
-					+ i.getInputText() + "',fk_profile_id=" + i.getProfileId()
+			stmt.executeUpdate("UPDATE information SET input_text="
+					+ DataMapperHelper.checkNull(i.getInputText())
+					+ ",fk_profile_id=" + i.getProfileId()
 					+ ",fk_property_id=" + i.getPropertyId()
-					+ ",fk_search_profile_id=" + i.getSearchProfileId()
+					+ ",fk_search_profile_id="
+					+ DataMapperHelper.checkNull(i.getSearchProfileId())
 					+ " WHERE information_id=" + i.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();

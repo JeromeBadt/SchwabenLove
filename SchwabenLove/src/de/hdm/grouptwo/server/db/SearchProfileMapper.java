@@ -66,10 +66,10 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO search_profile ("
-						+ "search_profile_id, gender, min_age, max_age, "
+						+ "search_profile_id, name, gender, min_age, max_age, "
 						+ "hair_color, physique, min_height, max_height, "
 						+ "smoker, education, profession, religion) VALUES ("
-						+ sp.getId() + ","
+						+ sp.getId() + ",'" + sp.getName() + "',"
 						+ DataMapperHelper.checkNull(sp.getGender()) + ","
 						+ DataMapperHelper.checkNull(sp.getMinAge()) + ","
 						+ DataMapperHelper.checkNull(sp.getMaxAge()) + ","
@@ -101,15 +101,27 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE search_profile " + "SET gender='"
-					+ sp.getGender() + "',min_age=" + sp.getMinAge()
-					+ ",max_age=" + sp.getMaxAge() + ",hair_color='"
-					+ sp.getHairColor() + "',physique='" + sp.getPhysique()
-					+ "',min_height=" + sp.getMinHeight() + ",max_height="
-					+ sp.getMaxHeight() + ",smoker='" + sp.getSmoker()
-					+ "',education='" + sp.getEducation() + "',profession='"
-					+ sp.getProfession() + "',religion='" + sp.getReligion()
-					+ "' WHERE search_profile_id=" + sp.getId());
+			stmt.executeQuery("UPDATE search_profile " + "SET name='"
+					+ sp.getName() + "',gender="
+					+ DataMapperHelper.checkNull(sp.getGender())
+					+ ",min_age=" + DataMapperHelper.checkNull(sp.getMinAge())
+					+ ",max_age=" + DataMapperHelper.checkNull(sp.getMaxAge())
+					+ ",hair_color="
+					+ DataMapperHelper.checkNull(sp.getHairColor())
+					+ ",physique="
+					+ DataMapperHelper.checkNull(sp.getPhysique())
+					+ ",min_height="
+					+ DataMapperHelper.checkNull(sp.getMinHeight())
+					+ ",max_height="
+					+ DataMapperHelper.checkNull(sp.getMaxHeight())
+					+ ",smoker=" + DataMapperHelper.checkNull(sp.getSmoker())
+					+ ",education="
+					+ DataMapperHelper.checkNull(sp.getEducation())
+					+ ",profession="
+					+ DataMapperHelper.checkNull(sp.getProfession())
+					+ ",religion="
+					+ DataMapperHelper.checkNull(sp.getReligion())
+					+ " WHERE search_profile_id=" + sp.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -147,7 +159,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT search_profile_id, "
+			ResultSet rs = stmt.executeQuery("SELECT search_profile_id, name, "
 					+ "gender, min_age, max_age, hair_color, physique, "
 					+ "min_height, max_height, smoker, education, profession, "
 					+ "religion FROM search_profile");
@@ -155,6 +167,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 			while (rs.next()) {
 				SearchProfile sp = new SearchProfile();
 				sp.setId(rs.getInt("search_profile_id"));
+				sp.setName(rs.getString("name"));
 				sp.setGender(rs.getString("gender"));
 				sp.setMinAge(rs.getInt("min_age"));
 				sp.setMaxAge(rs.getInt("max_age"));
@@ -190,7 +203,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT search_profile_id, "
+			ResultSet rs = stmt.executeQuery("SELECT search_profile_id, name, "
 					+ "gender, min_age, max_age, hair_color, physique, "
 					+ "min_height, max_height, smoker, education, profession, "
 					+ "religion FROM search_profile WHERE search_profile_id="
@@ -199,6 +212,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 			if (rs.next()) {
 				SearchProfile sp = new SearchProfile();
 				sp.setId(rs.getInt("search_profile_id"));
+				sp.setName(rs.getString("name"));
 				sp.setGender(rs.getString("gender"));
 				sp.setMinAge(rs.getInt("min_age"));
 				sp.setMaxAge(rs.getInt("max_age"));
