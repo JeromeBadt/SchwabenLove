@@ -5,6 +5,8 @@ import java.util.logging.Level;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -24,14 +26,33 @@ public class ProfilePage extends ContentPage {
 	public ProfilePage(int id) {
 		super("Profil");
 		initWidget(lPanel);
+
+		administrationService.getProfileById(id, new AsyncCallback<Profile>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().log(Level.WARNING,
+						caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Profile result) {
+				showProfile(result);
+			}
+
+		});
+
 	}
 
 	@Override
 	public void updatePage() {
 		lPanel.clear();
+
+		// change to getProfile()
 		administrationService.getProfileById(1, new AsyncCallback<Profile>() {
 			public void onSuccess(Profile result) {
 				showProfile(result);
+				// show edit buttons
 			}
 
 			public void onFailure(Throwable caught) {
@@ -42,8 +63,18 @@ public class ProfilePage extends ContentPage {
 	}
 
 	public void showProfile(Profile profile) {
-		LayoutPanel attributePanel = new LayoutPanel();
+		LayoutPanel attrPanel = new LayoutPanel();
 		LayoutPanel informationPanel = new LayoutPanel();
+
+		Image[] images = new Image[10];
+		int[] x = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		for (int y : x)
+		{
+			images[y] = new Image("images/icons/edit.png");
+			images[y].setWidth("1em");
+			images[y].setTitle("Attribut editieren");
+		}
+		;
 
 		Image profilePicture = new Image("images/38.png");
 		profilePicture.getElement().getStyle()
@@ -73,21 +104,76 @@ public class ProfilePage extends ContentPage {
 		vPanel2.add(new Label(profile.getPhysique()));
 		vPanel2.add(new Label(profile.getHairColor()));
 
+		// Funktioniert noch nicht
 		Image deleteIcon = new Image("images/icons/trash.png");
 		deleteIcon.setWidth("24px");
 		deleteIcon.setTitle("Profil löschen");
+		deleteIcon.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				administrationService.
+						deleteProfile(new AsyncCallback<Void>()
+						{
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING,
+										caught.getMessage());
+							}
 
-		attributePanel.add(profilePicture);
-		attributePanel.add(vPanel1);
-		attributePanel.add(vPanel2);
-		attributePanel.add(deleteIcon);
+							@Override
+							public void onSuccess(Void result) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING,
+										"Profile deleted");
+							}
+						});
+			}
+		});
 
-		attributePanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
-		attributePanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
-		attributePanel
-				.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+		attrPanel.add(profilePicture);
+		attrPanel.add(vPanel1);
+		attrPanel.add(vPanel2);
+		attrPanel.add(deleteIcon);
 
-		lPanel.add(attributePanel);
+		attrPanel.add(images[0]);
+		attrPanel.add(images[1]);
+		attrPanel.add(images[2]);
+		attrPanel.add(images[3]);
+		attrPanel.add(images[4]);
+		attrPanel.add(images[5]);
+		attrPanel.add(images[6]);
+		attrPanel.add(images[7]);
+		attrPanel.add(images[8]);
+		attrPanel.add(images[9]);
+		attrPanel.add(images[10]);
+
+		attrPanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+
+		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+
+		attrPanel.setWidgetLeftWidth(images[0], 335, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[1], 515, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[2], 15, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[2], 335, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[3], 515, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[3], 15, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[4], 35, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[4], 335, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[5], 515, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[5], 35, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[6], 52, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[6], 335, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[7], 52, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[7], 515, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[8], 70, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[8], 335, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[9], 70, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[9], 515, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopBottom(images[10], 87, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetLeftWidth(images[10], 335, Unit.PX, 150, Unit.PX);
+
+		lPanel.add(attrPanel);
 		lPanel.add(informationPanel);
 		lPanel.setWidgetTopHeight(informationPanel, 281, Unit.PX, 0, Unit.PX);
 
