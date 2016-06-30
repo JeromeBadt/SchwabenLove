@@ -44,7 +44,8 @@ public interface AdministrationService extends RemoteService {
 
 	public void deleteSearchProfile(SearchProfile searchProfile);
 
-	public ArrayList<Profile> getMatchesByProfileId(int profileId);
+	public ArrayList<Profile> getMatchesBySearchProfile(
+			SearchProfile searchProfile);
 
 	public ArrayList<String> loadTableNames();
 

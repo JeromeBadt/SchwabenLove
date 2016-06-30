@@ -48,7 +48,8 @@ public interface AdministrationServiceAsync {
 	public void deleteSearchProfile(SearchProfile searchProfile,
 			AsyncCallback<Void> callback);
 
-	public void getMatchesByProfileId(int profileId,
+	public void getMatchesBySearchProfile(
+			SearchProfile searchProfile,
 			AsyncCallback<ArrayList<Profile>> callback);
 
 	public void loadTableNames(AsyncCallback<ArrayList<String>> callback);

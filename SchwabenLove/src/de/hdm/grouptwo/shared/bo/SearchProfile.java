@@ -14,6 +14,7 @@ public class SearchProfile extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 
+	private String name;
 	private String gender;
 	private int minAge;
 	private int maxAge;
@@ -25,6 +26,14 @@ public class SearchProfile extends BusinessObject {
 	private String education;
 	private String profession;
 	private String religion;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getGender() {
 		return gender;

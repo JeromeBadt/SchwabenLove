@@ -20,7 +20,7 @@ import de.hdm.grouptwo.shared.bo.Profile;
  */
 public class SchwabenLove implements EntryPoint {
 	private LoginInfo loginInfo = null;
-	MainView mainView = null;
+	private MainView mainView = null;
 
 	public void onModuleLoad() {
 		// Set logger settings here, since they seem to be ignored .gwt.xml and

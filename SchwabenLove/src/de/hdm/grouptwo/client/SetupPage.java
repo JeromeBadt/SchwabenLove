@@ -56,7 +56,7 @@ public class SetupPage extends ContentPage {
 	private StringBuilder error = new StringBuilder();
 
 	// The profile that is being created
-	Profile p = new Profile();
+	private Profile p = new Profile();
 
 	public SetupPage(Menu menu, LoginInfo loginInfo) {
 		super("Profil");

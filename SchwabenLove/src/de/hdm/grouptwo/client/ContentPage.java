@@ -10,7 +10,7 @@ public abstract class ContentPage extends ResizeComposite {
 	protected AdministrationServiceAsync administrationService = ClientsideSettings
 			.getAdministrationService();
 
-	ContentPage(String name) {
+	public ContentPage(String name) {
 		this.name = name;
 	}
 
