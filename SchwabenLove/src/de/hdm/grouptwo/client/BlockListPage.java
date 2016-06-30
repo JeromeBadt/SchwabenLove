@@ -1,20 +1,31 @@
 package de.hdm.grouptwo.client;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import java.util.ArrayList;
+import java.util.logging.Level;
 
-public class BlockListPage extends ContentPage {
-	SimpleLayoutPanel sPanel = new SimpleLayoutPanel();
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.grouptwo.shared.bo.Profile;
+
+public class BlockListPage extends ListPage {
 	public BlockListPage() {
 		super("Blockliste");
-		initWidget(sPanel);
 	}
 
 	@Override
 	public void updatePage() {
-		sPanel.clear();
+		listPanel.clear();
 
-		sPanel.add(new Label(name));
+		administrationService
+				.getAllProfiles(new AsyncCallback<ArrayList<Profile>>() {
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+
+					public void onSuccess(ArrayList<Profile> result) {
+						showList(result);
+					}
+				});
 	}
 }
