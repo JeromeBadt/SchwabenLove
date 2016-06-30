@@ -22,6 +22,8 @@ public class Menu extends Composite {
 	private ArrayList<ContentPage> contentPages = new ArrayList<ContentPage>();
 	private Map<ContentPage, MenuItem> pages = new HashMap<ContentPage, MenuItem>();
 
+	private SetupPage setupPage = null;
+
 	public Menu(DeckLayoutPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(menuBar);
 
@@ -30,8 +32,7 @@ public class Menu extends Composite {
 	}
 
 	public void loadBasicMenu() {
-		// Save setupPage to load it on login later
-		SetupPage setupPage = new SetupPage(this, loginInfo);
+		setupPage = new SetupPage(this, loginInfo);
 		contentPages.add(setupPage);
 		contentPages.add(new LogoutPage(loginInfo));
 
@@ -43,6 +44,9 @@ public class Menu extends Composite {
 
 	public void loadFullMenu() {
 		contentPages.clear();
+		if (setupPage != null) {
+			contentPanel.remove(setupPage);
+		}
 
 		// Save profilePage to load it on login later
 		ProfilePage profilePage = new ProfilePage();
@@ -61,7 +65,6 @@ public class Menu extends Composite {
 
 	private void createMenu() {
 		pages.clear();
-		contentPanel.clear();
 		menuBar.clearItems();
 
 		for (ContentPage page : contentPages) {
