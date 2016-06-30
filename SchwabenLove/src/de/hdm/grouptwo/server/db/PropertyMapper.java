@@ -57,12 +57,13 @@ public class PropertyMapper implements DataMapper<Property> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(property_id) AS maxid "
+					.executeQuery("SELECT MAX(property_id) AS maxId "
 							+ "FROM property ");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				p.setId(rs.getInt("maxid") + 1);
+				p.setId(rs.getInt("maxId") + 1);
+
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO property (property_id, "
 						+ "explanation) VALUES (" + p.getId() + ",'"

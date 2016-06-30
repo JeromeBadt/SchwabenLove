@@ -46,9 +46,39 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void createProfile(Profile profile) {
-		ProfileMapper.profileMapper().insert(profile);
+		profile = ProfileMapper.profileMapper().insert(profile);
 
-		// ToDo: Create dependencies
+		int profileId = profile.getId();
+
+		// Create an empty bookmark list
+		BookmarkList bl = new BookmarkList();
+		bl.setProfileId(profileId);
+		BookmarkListMapper.bookmarkListMapper().insert(bl);
+
+		// Create a default search profile
+		int searchProfileId = SearchProfileMapper.searchProfileMapper()
+				.insert(new SearchProfile()).getId();
+
+		ArrayList<Property> properties = getAllProperties();
+
+		// Create empty Information objects for the profile
+		for (Property p : properties) {
+			Information i = new Information();
+			i.setProfileId(profileId);
+			i.setPropertyId(p.getId());
+			InformationMapper.informationMapper().insert(i);
+		}
+
+		// Create empty Information objects for the search profile
+		for (Property p : properties) {
+			Information i = new Information();
+			i.setProfileId(profileId);
+			i.setPropertyId(p.getId());
+			i.setSearchProfileId(searchProfileId);
+			InformationMapper.informationMapper().insert(i);
+		}
+
+		// ToDo: Calculate similarity degrees
 	}
 
 	@Override

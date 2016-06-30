@@ -55,12 +55,13 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(selection_item_id) AS maxid "
+					.executeQuery("SELECT MAX(selection_item_id) AS maxId "
 							+ "FROM selection_item ");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				si.setId(rs.getInt("maxid") + 1);
+				si.setId(rs.getInt("maxId") + 1);
+
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO selection_item ("
 						+ "selection_item_id, name, fk_selection_id) VALUES ("

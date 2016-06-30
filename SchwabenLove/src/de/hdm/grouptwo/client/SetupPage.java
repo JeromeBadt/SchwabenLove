@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -23,11 +23,11 @@ import de.hdm.grouptwo.shared.AdministrationServiceAsync;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 
-public class SetupPage extends ResizeComposite {
+public class SetupPage extends ContentPage {
 	private AdministrationServiceAsync administrationService = ClientsideSettings
 			.getAdministrationService();
 
-	private MainView mainView = null;
+	private Menu menu = null;
 	private LoginInfo loginInfo = null;
 
 	private ScrollPanel sPanel = new ScrollPanel();
@@ -42,22 +42,27 @@ public class SetupPage extends ResizeComposite {
 	private RadioButton genderMaleRB = new RadioButton("gender", "m");
 	private RadioButton genderFemaleRB = new RadioButton("gender", "w");
 	private TextBox heightInput = new TextBox();
-	private TextBox hairColorInput = new TextBox();
-	private TextBox physiqueInput = new TextBox();
+	private ListBox hairColorList = new ListBox();
+	private ListBox physiqueList = new ListBox();
 	private RadioButton smokerYesRB = new RadioButton("smoker", "Ja");
 	private RadioButton smokerNoRB = new RadioButton("smoker", "Nein");
 	private TextBox professionInput = new TextBox();
 	private TextBox locationInput = new TextBox();
-	private TextBox educationInput = new TextBox();
+	private ListBox educationList = new ListBox();
 	private TextBox religionInput = new TextBox();
 
+	// HTML element to output any errors
 	private HTML errorOutput = new HTML();
 	private StringBuilder error = new StringBuilder();
 
-	public SetupPage(MainView mainView, LoginInfo loginInfo) {
+	// The profile that is being created
+	Profile p = new Profile();
+
+	public SetupPage(Menu menu, LoginInfo loginInfo) {
+		super("Profil");
 		initWidget(sPanel);
 
-		this.mainView = mainView;
+		this.menu = menu;
 		this.loginInfo = loginInfo;
 
 		Label title = new Label("Neues Profil erstellen");
@@ -103,13 +108,33 @@ public class SetupPage extends ResizeComposite {
 		genderPanel.add(genderMaleRB);
 		genderPanel.add(genderFemaleRB);
 		heightInput.getElement().setPropertyString("placeholder", "cm");
+		hairColorList.addItem("Blond");
+		hairColorList.addItem("Dunkelblond");
+		hairColorList.addItem("Rot");
+		hairColorList.addItem("Rotbraun");
+		hairColorList.addItem("Hellbraun");
+		hairColorList.addItem("Braun");
+		hairColorList.addItem("Dunkelbraun");
+		hairColorList.addItem("Schwarz");
+		hairColorList.addItem("Grau");
+		physiqueList.addItem("Dünn");
+		physiqueList.addItem("Fit");
+		physiqueList.addItem("Muskulös");
+		physiqueList.addItem("Normal");
+		physiqueList.addItem("Kurvig");
+		physiqueList.addItem("Vollschlank");
 		FlowPanel smokerPanel = new FlowPanel();
 		smokerPanel.setStyleName("h-panel-padding");
 		smokerPanel.add(smokerYesRB);
 		smokerPanel.add(smokerNoRB);
 		professionInput.setMaxLength(45);
 		locationInput.setMaxLength(45);
-		educationInput.setMaxLength(45);
+		educationList.addItem("Studium");
+		educationList.addItem("Fachschule");
+		educationList.addItem("Berufsausbildung");
+		educationList.addItem("Hochschulreife");
+		educationList.addItem("Mittlere Reife");
+		educationList.addItem("Hauptschulabschluss");
 		religionInput.setMaxLength(45);
 
 		inputPanel.add(firstNameInput);
@@ -117,12 +142,12 @@ public class SetupPage extends ResizeComposite {
 		inputPanel.add(birthdatePanel);
 		inputPanel.add(genderPanel);
 		inputPanel.add(heightInput);
-		inputPanel.add(hairColorInput);
-		inputPanel.add(physiqueInput);
+		inputPanel.add(hairColorList);
+		inputPanel.add(physiqueList);
 		inputPanel.add(smokerPanel);
 		inputPanel.add(professionInput);
 		inputPanel.add(locationInput);
-		inputPanel.add(educationInput);
+		inputPanel.add(educationList);
 		inputPanel.add(religionInput);
 
 		attributePanel.add(labelPanel);
@@ -152,20 +177,18 @@ public class SetupPage extends ResizeComposite {
 	}
 
 	private void setProfile() {
-		Profile p = new Profile();
-
 		p.setEmail(loginInfo.getEmailAddress());
 		p.setFirstName(firstNameInput.getText());
 		p.setLastName(lastNameInput.getText());
 		p.setBirthdate(getBirthdate());
-		p.setGender(genderMaleRB.getFormValue());
+		p.setGender(genderMaleRB.getValue() ? "m" : "w");
 		p.setHeight(Integer.parseInt(heightInput.getText()));
-		p.setHairColor(hairColorInput.getText()); // ToDo: Selection
-		p.setPhysique(physiqueInput.getText()); // ToDo: Selection
-		p.setSmoker(smokerYesRB.getFormValue().equals("Ja"));
+		p.setHairColor(hairColorList.getSelectedItemText());
+		p.setPhysique(physiqueList.getSelectedItemText());
+		p.setSmoker(Boolean.toString(smokerYesRB.getValue()));
 		p.setProfession(professionInput.getText());
 		p.setLocation(locationInput.getText());
-		p.setEducation(educationInput.getText()); // ToDo: Selection
+		p.setEducation(educationList.getSelectedItemText());
 		p.setReligion(religionInput.getText());
 
 		administrationService.createProfile(p, new AsyncCallback<Void>() {
@@ -173,7 +196,7 @@ public class SetupPage extends ResizeComposite {
 				administrationService.setProfile(p.getEmail(),
 						new AsyncCallback<Profile>() {
 							public void onSuccess(Profile result) {
-								mainView.addMenu(loginInfo);
+								menu.loadFullMenu();
 							}
 
 							public void onFailure(Throwable caught) {
@@ -242,18 +265,6 @@ public class SetupPage extends ResizeComposite {
 			}
 		}
 
-		// Validate hairColor
-		// ToDo: Selection
-		if (hairColorInput.getText().length() == 0) {
-			error.append("Bitte eine Haarfarbe angeben.<br>");
-		}
-
-		// Validate physique
-		// ToDo: Selection
-		if (physiqueInput.getText().length() == 0) {
-			error.append("Bitte einen Körperbau angeben.<br>");
-		}
-
 		// Validate smoker
 		if (!smokerYesRB.getValue() && !smokerNoRB.getValue()) {
 			error.append("Bitte angeben, ob Sie rauchen.<br>");
@@ -267,13 +278,6 @@ public class SetupPage extends ResizeComposite {
 		// Validate location
 		if (locationInput.getText().length() == 0) {
 			error.append("Bitte einen Wohnort angeben.<br>");
-		}
-
-		// Validate education
-		// ToDo: Select: UNI, BHS, AHS, BMS, Lehre, Pflichtschule
-		if (educationInput.getText().length() == 0) {
-			error.append("Bitte geben Sie Ihre höchste abgeschlossene "
-					+ "Ausbildung an.<br>");
 		}
 
 		// Validate religion
@@ -343,5 +347,9 @@ public class SetupPage extends ResizeComposite {
 		}
 
 		return true;
+	}
+
+	@Override
+	public void updatePage() {
 	}
 }

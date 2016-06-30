@@ -56,12 +56,12 @@ public class BlockMapper implements DataMapper<Block> {
 		try {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
-			ResultSet rs = stmt.executeQuery("SELECT MAX(block_id) AS maxid "
+			ResultSet rs = stmt.executeQuery("SELECT MAX(block_id) AS maxId "
 					+ "FROM block");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				b.setId(rs.getInt("maxid") + 1);
+				b.setId(rs.getInt("maxId") + 1);
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO block (block_id, "

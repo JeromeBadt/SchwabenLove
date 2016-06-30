@@ -52,10 +52,20 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO bookmark (bookmark_id, "
-					+ "fk_profile_id, fk_bookmark_list_id) VALUES ("
-					+ b.getId() + "," + b.getProfileId() + ","
-					+ b.getBookmarkListId() + ")");
+			// Query DB for current max id
+			ResultSet rs = stmt.executeQuery("SELECT MAX(bookmark_id) AS "
+					+ "maxId FROM bookmark");
+
+			if (rs.next()) {
+				// Set id to max + 1
+				b.setId(rs.getInt("maxId") + 1);
+
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO bookmark (bookmark_id, "
+						+ "fk_profile_id, fk_bookmark_list_id) VALUES ("
+						+ b.getId() + "," + b.getProfileId() + ","
+						+ b.getBookmarkListId() + ")");
+			}
 		}
 
 		catch (SQLException e) {

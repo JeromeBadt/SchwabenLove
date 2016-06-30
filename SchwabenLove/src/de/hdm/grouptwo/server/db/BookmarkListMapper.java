@@ -54,7 +54,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 		try {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
-			ResultSet rs = stmt.executeQuery("SELECT MAX(bookmark_id) AS "
+			ResultSet rs = stmt.executeQuery("SELECT MAX(bookmark_list_id) AS "
 					+ "maxId FROM bookmark_list");
 
 			if (rs.next()) {

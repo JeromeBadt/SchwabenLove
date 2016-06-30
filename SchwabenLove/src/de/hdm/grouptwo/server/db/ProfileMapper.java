@@ -55,12 +55,12 @@ public class ProfileMapper implements DataMapper<Profile> {
 		try {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
-			ResultSet rs = stmt.executeQuery("Select MAX(profile_id) AS maxid "
+			ResultSet rs = stmt.executeQuery("Select MAX(profile_id) AS maxId "
 					+ "FROM profile ");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				p.setId(rs.getInt("maxid") + 1);
+				p.setId(rs.getInt("maxId") + 1);
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO profile (profile_id, email, "
@@ -181,7 +181,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setHeight(rs.getInt("height"));
 				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getBoolean("smoker"));
+				p.setSmoker(rs.getString("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
@@ -228,7 +228,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setHeight(rs.getInt("height"));
 				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getBoolean("smoker"));
+				p.setSmoker(rs.getString("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
@@ -274,7 +274,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setHeight(rs.getInt("height"));
 				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getBoolean("smoker"));
+				p.setSmoker(rs.getString("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));
@@ -320,7 +320,7 @@ public class ProfileMapper implements DataMapper<Profile> {
 				p.setHeight(rs.getInt("height"));
 				p.setPhysique(rs.getString("physique"));
 				p.setHairColor(rs.getString("hair_color"));
-				p.setSmoker(rs.getBoolean("smoker"));
+				p.setSmoker(rs.getString("smoker"));
 				p.setEducation(rs.getString("education"));
 				p.setProfession(rs.getString("profession"));
 				p.setReligion(rs.getString("religion"));

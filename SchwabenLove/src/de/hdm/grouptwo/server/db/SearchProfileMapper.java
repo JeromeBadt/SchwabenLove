@@ -69,27 +69,18 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 						+ "search_profile_id, gender, min_age, max_age, "
 						+ "hair_color, physique, min_height, max_height, "
 						+ "smoker, education, profession, religion) VALUES ("
-						+ sp.getId()
-						+ ",'"
-						+ sp.getGender()
-						+ "',"
-						+ sp.getMinAge()
-						+ ","
-						+ sp.getMaxAge()
-						+ ",'"
-						+ sp.getHairColor()
-						+ "','"
-						+ sp.getPhysique()
-						+ "',"
-						+ sp.getMinHeight()
-						+ ","
-						+ sp.getMaxHeight()
-						+ ",'"
-						+ sp.getSmoker()
-						+ "','"
-						+ sp.getEducation()
-						+ "','"
-						+ sp.getProfession() + "','" + sp.getReligion() + "'");
+						+ sp.getId() + ","
+						+ DataMapperHelper.checkNull(sp.getGender()) + ","
+						+ DataMapperHelper.checkNull(sp.getMinAge()) + ","
+						+ DataMapperHelper.checkNull(sp.getMaxAge()) + ","
+						+ DataMapperHelper.checkNull(sp.getHairColor()) + ","
+						+ DataMapperHelper.checkNull(sp.getPhysique()) + ","
+						+ DataMapperHelper.checkNull(sp.getMinHeight()) + ","
+						+ DataMapperHelper.checkNull(sp.getMaxHeight()) + ","
+						+ DataMapperHelper.checkNull(sp.getSmoker()) + ","
+						+ DataMapperHelper.checkNull(sp.getEducation()) + ","
+						+ DataMapperHelper.checkNull(sp.getProfession()) + ","
+						+ DataMapperHelper.checkNull(sp.getReligion()) + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -228,4 +219,5 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 		return null;
 	}
+
 }

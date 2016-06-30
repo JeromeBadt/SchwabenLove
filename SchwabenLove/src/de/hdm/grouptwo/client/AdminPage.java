@@ -247,7 +247,7 @@ public class AdminPage extends ContentPage {
 		}, "smoker");
 		table.addColumn(new TextColumn<Profile>() {
 			public String getValue(Profile object) {
-				return Boolean.toString(object.getSmoker());
+				return object.getSmoker();
 			}
 		}, "education");
 		table.addColumn(new TextColumn<Profile>() {

@@ -182,6 +182,14 @@ input.gwt-TextBox {
 	padding: 0;
 	height: 24px !important;
 	margin: 2px 0;
+	width: 140px;
+}
+
+.profile-setup-panel .gwt-ListBox {
+	padding: 0;
+	height: 26px !important;
+	margin: 2px 0;
+	width: 142px;
 }
 
 .h-panel-padding {
