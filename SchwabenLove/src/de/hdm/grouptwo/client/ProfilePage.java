@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.grouptwo.shared.bo.Profile;
 
 public class ProfilePage extends ContentPage {
-	LayoutPanel lPanel = new LayoutPanel();
+	private LayoutPanel lPanel = new LayoutPanel();
 
 	public ProfilePage() {
 		super("Profil");
@@ -28,18 +28,14 @@ public class ProfilePage extends ContentPage {
 		initWidget(lPanel);
 
 		administrationService.getProfileById(id, new AsyncCallback<Profile>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				ClientsideSettings.getLogger().log(Level.WARNING,
-						caught.getMessage());
-			}
-
-			@Override
 			public void onSuccess(Profile result) {
 				showProfile(result);
 			}
 
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().log(Level.WARNING,
+						caught.getMessage());
+			}
 		});
 
 	}
@@ -49,7 +45,7 @@ public class ProfilePage extends ContentPage {
 		lPanel.clear();
 
 		// change to getProfile()
-		administrationService.getProfileById(1, new AsyncCallback<Profile>() {
+		administrationService.getProfile(new AsyncCallback<Profile>() {
 			public void onSuccess(Profile result) {
 				showProfile(result);
 				// show edit buttons
@@ -66,15 +62,12 @@ public class ProfilePage extends ContentPage {
 		LayoutPanel attrPanel = new LayoutPanel();
 		LayoutPanel informationPanel = new LayoutPanel();
 
-		Image[] images = new Image[10];
-		int[] x = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-		for (int y : x)
-		{
-			images[y] = new Image("images/icons/edit.png");
-			images[y].setWidth("1em");
-			images[y].setTitle("Attribut editieren");
+		Image[] images = new Image[11];
+		for (int i = 0; i < images.length; i++) {
+			images[i] = new Image("images/icons/edit.png");
+			images[i].setWidth("1em");
+			images[i].setTitle("Attribut editieren");
 		}
-		;
 
 		Image profilePicture = new Image("images/38.png");
 		profilePicture.getElement().getStyle()
@@ -113,17 +106,16 @@ public class ProfilePage extends ContentPage {
 				administrationService.
 						deleteProfile(new AsyncCallback<Void>()
 						{
-							public void onFailure(Throwable caught) {
-								ClientsideSettings.getLogger().log(
-										Level.WARNING,
-										caught.getMessage());
-							}
-
-							@Override
 							public void onSuccess(Void result) {
 								ClientsideSettings.getLogger().log(
 										Level.WARNING,
 										"Profile deleted");
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING,
+										caught.getMessage());
 							}
 						});
 			}
@@ -149,9 +141,7 @@ public class ProfilePage extends ContentPage {
 		attrPanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
-
 		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
-
 		attrPanel.setWidgetLeftWidth(images[0], 335, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetLeftWidth(images[1], 515, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetTopBottom(images[2], 15, Unit.PX, 150, Unit.PX);
@@ -176,6 +166,5 @@ public class ProfilePage extends ContentPage {
 		lPanel.add(attrPanel);
 		lPanel.add(informationPanel);
 		lPanel.setWidgetTopHeight(informationPanel, 281, Unit.PX, 0, Unit.PX);
-
 	}
 }

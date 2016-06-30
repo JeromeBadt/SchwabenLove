@@ -54,7 +54,7 @@ public class Menu extends Composite {
 		contentPages.add(new MatchesPage());
 		contentPages.add(new BookmarkListPage());
 		contentPages.add(new BlockListPage());
-		contentPages.add(new AdminPage());
+		// contentPages.add(new AdminPage());
 		contentPages.add(new LogoutPage(loginInfo));
 
 		createMenu();

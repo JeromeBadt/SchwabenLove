@@ -17,9 +17,10 @@ import de.hdm.grouptwo.shared.bo.BookmarkList;
 import de.hdm.grouptwo.shared.bo.Profile;
 
 public class AdminPage extends ContentPage {
-	SimpleLayoutPanel sPanel = new SimpleLayoutPanel();
-	ScrolledTabLayoutPanel tabPanel = new ScrolledTabLayoutPanel(47, Unit.PX,
-			Resources.INSTANCE.arrowLeft(), Resources.INSTANCE.arrowRight());
+	private SimpleLayoutPanel sPanel = new SimpleLayoutPanel();
+	private ScrolledTabLayoutPanel tabPanel = new ScrolledTabLayoutPanel(47,
+			Unit.PX, Resources.INSTANCE.arrowLeft(),
+			Resources.INSTANCE.arrowRight());
 
 	public AdminPage() {
 		super("Admin");

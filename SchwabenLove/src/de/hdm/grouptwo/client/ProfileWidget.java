@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.grouptwo.shared.bo.Profile;
 
 public class ProfileWidget extends ResizeComposite {
-	LayoutPanel lPanel = new LayoutPanel();
-	LayoutPanel rightPanel = new LayoutPanel();
+	protected LayoutPanel lPanel = new LayoutPanel();
+	protected LayoutPanel rightPanel = new LayoutPanel();
 
 	public ProfileWidget(Profile profile) {
 		initWidget(lPanel);
@@ -29,10 +29,10 @@ public class ProfileWidget extends ResizeComposite {
 				+ profile.getAge() + ", " + profile.getGender());
 		label1.setStyleName("profile-header");
 		vPanel1.add(label1);
-		
+
 		String line2 = profile.getProfession() + ", " + profile.getLocation();
 		vPanel1.add(new Label(line2));
-		
+
 		String line3 = profile.getHeight() + "cm";
 		vPanel1.add(new Label(line3));
 

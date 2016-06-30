@@ -56,8 +56,10 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		BookmarkListMapper.bookmarkListMapper().insert(bl);
 
 		// Create a default search profile
+		SearchProfile sp = new SearchProfile();
+		sp.setName("Standard");
 		int searchProfileId = SearchProfileMapper.searchProfileMapper()
-				.insert(new SearchProfile()).getId();
+				.insert(sp).getId();
 
 		ArrayList<Property> properties = getAllProperties();
 
@@ -176,7 +178,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		for (Information i : InformationMapper.informationMapper()
 				.findByProfileId(user.getId())) {
-			searchProfileIds.add(i.getSearchProfileId());
+			if (i.getSearchProfileId() != 0) {
+				searchProfileIds.add(i.getSearchProfileId());
+			}
 		}
 
 		for (Integer id : searchProfileIds) {
@@ -203,19 +207,89 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+	public ArrayList<Profile> getMatchesBySearchProfile(SearchProfile sp) {
+		// ToDo: get profiles ordered by similarity degree
+
+		ArrayList<Profile> profiles = getAllProfiles();
+		ArrayList<Profile> results = new ArrayList<Profile>();
+
+		for (Profile p : profiles) {
+			if (sp.getGender() != null) {
+				if (p.getGender() != sp.getGender()) {
+					continue;
+				}
+			}
+
+			if (sp.getMinAge() != 0) {
+				if (p.getAge() < sp.getMinAge()) {
+					continue;
+				}
+			}
+			if (sp.getMaxAge() != 0) {
+				if (p.getAge() > sp.getMaxAge()) {
+					continue;
+				}
+			}
+			if (sp.getHairColor() != null) {
+				if (p.getHairColor() != sp.getHairColor()) {
+					continue;
+				}
+			}
+			if (sp.getPhysique() != null) {
+				if (p.getPhysique() != sp.getPhysique()) {
+					continue;
+				}
+			}
+			if (sp.getMinHeight() != 0) {
+				if (p.getHeight() < sp.getMinHeight()) {
+					continue;
+				}
+			}
+			if (sp.getMaxHeight() != 0) {
+				if (p.getHeight() > sp.getMaxHeight())
+				{
+					continue;
+				}
+			}
+			if (sp.getSmoker() != null) {
+				if (p.getSmoker()
+				!= sp.getSmoker()) {
+					continue;
+				}
+			}
+			if (sp.getEducation() != null)
+			{
+				if (p.getEducation() != sp.getEducation()) {
+					continue;
+				}
+			}
+			if (sp.getProfession() != null) {
+				if (p.getProfession() != sp.getProfession()) {
+					continue;
+				}
+			}
+			if (sp.getReligion() != null)
+			{
+				if (p.getReligion() != sp.getReligion()) {
+					continue;
+				}
+			}
+
+			results.add(p);
+		}
+
+		// ToDo: filter by information objects as well
+
+		return results;
+	}
+
+	@Override
 	public void addBlockByProfileId(int profileId) {
 		Block block = new Block();
 		block.setBlockerProfileId(user.getId());
 		block.setBlockedProfileId(profileId);
 
 		BlockMapper.blockMapper().insert(block);
-	}
-
-	@Override
-	public ArrayList<Profile> getMatchesByProfileId(int profileId) {
-		ArrayList<Profile> matches = ProfileMapper.profileMapper().findAll();
-
-		return matches;
 	}
 
 	public ArrayList<Profile> getBookmarkedProfiles() {

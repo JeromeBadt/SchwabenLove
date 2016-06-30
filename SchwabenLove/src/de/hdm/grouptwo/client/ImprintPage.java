@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ImprintPage extends ContentPage {
-	ScrollPanel sPanel = new ScrollPanel();
+	private ScrollPanel sPanel = new ScrollPanel();
 
 	public ImprintPage() {
 		super("Impressum");

@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -21,9 +23,12 @@ import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.SearchProfile;
 
 public class MatchesPage extends ContentPage {
-	LayoutPanel lPanel = new LayoutPanel();
-	LayoutPanel matchesPanel = new LayoutPanel();
-	LayoutPanel searchProfilePanel = new LayoutPanel();
+	private LayoutPanel lPanel = new LayoutPanel();
+	private LayoutPanel matchesPanel = new LayoutPanel();
+	private LayoutPanel searchProfilePanel = new LayoutPanel();
+
+	private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
+	private SearchProfile activeSearchProfile = null;
 
 	public MatchesPage() {
 		super("Partnervorschläge");
@@ -33,6 +38,24 @@ public class MatchesPage extends ContentPage {
 
 		lPanel.add(matchesPanel);
 		lPanel.add(searchProfilePanel);
+	}
+
+	@Override
+	public void updatePage() {
+		matchesPanel.clear();
+		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
+
+		administrationService
+				.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
+					public void onSuccess(ArrayList<SearchProfile> result) {
+						showSearchProfiles(result);
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
 	}
 
 	@Override
@@ -50,16 +73,20 @@ public class MatchesPage extends ContentPage {
 		}
 	}
 
-	private void loadSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
-		ListBox searchProfileDropBox = new ListBox();
-		for (SearchProfile sp : searchProfiles) {
-			// add missing search profile name to db
-			searchProfileDropBox.addItem(Integer.toString(sp.getId()));
-		}
+	private void showSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
+		this.searchProfiles = searchProfiles;
 
-		searchProfileDropBox.addItem("test");
-		searchProfileDropBox.addItem("2");
-		searchProfileDropBox.addItem("testtesttesttesttest");
+		ListBox searchProfileDropBox = new ListBox();
+		searchProfileDropBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				updateActiveSearchProfile(((ListBox) event.getSource())
+						.getSelectedItemText());
+			}
+		});
+
+		for (SearchProfile sp : searchProfiles) {
+			searchProfileDropBox.addItem(sp.getName());
+		}
 
 		Image addIcon = new Image("images/icons/add.png");
 		addIcon.setWidth("24px");
@@ -175,42 +202,32 @@ public class MatchesPage extends ContentPage {
 				.setWidgetTopHeight(vPanel, 34, Unit.PX, 288, Unit.PX);
 		searchProfilePanel.setWidgetTopHeight(saveButton, 332, Unit.PX, 24,
 				Unit.PX);
+		lPanel.setWidgetTopHeight(searchProfilePanel, 0, Unit.PX, 356, Unit.PX);
+
+		updateActiveSearchProfile(searchProfileDropBox.getSelectedItemText());
 	}
 
-	@Override
-	public void updatePage() {
-		matchesPanel.clear();
-		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
-		getMatchesByProfileId(1);
+	private void updateActiveSearchProfile(String searchProfileName) {
+		for (SearchProfile sp : searchProfiles) {
+			if (sp.getName() == searchProfileName) {
+				activeSearchProfile = sp;
+			}
+		}
 
-		administrationService
-				.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
-					public void onFailure(Throwable caught) {
-						ClientsideSettings.getLogger().log(Level.WARNING,
-								caught.getMessage());
-					}
-
-					public void onSuccess(ArrayList<SearchProfile> result) {
-						loadSearchProfiles(result);
-					}
-				});
-	}
-
-	public void getMatchesByProfileId(int profileId) {
-		administrationService.getMatchesByProfileId(profileId,
-				new AsyncCallback<ArrayList<Profile>>() {
-					public void onFailure(Throwable caught) {
-						ClientsideSettings.getLogger().log(Level.WARNING,
-								caught.getMessage());
-					}
-
+		administrationService.getMatchesBySearchProfile(
+				activeSearchProfile, new AsyncCallback<ArrayList<Profile>>() {
 					public void onSuccess(ArrayList<Profile> result) {
 						showMatches(result);
 					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
 				});
 	}
 
-	public void showMatches(ArrayList<Profile> matches) {
+	private void showMatches(ArrayList<Profile> matches) {
 		matchesPanel.clear();
 
 		int offset = 0;
