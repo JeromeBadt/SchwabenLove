@@ -54,12 +54,12 @@ public class DescriptionMapper implements DataMapper<Description> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(fk_property_id) AS maxid "
+					.executeQuery("SELECT MAX(fk_property_id) AS maxId "
 							+ "FROM description");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				d.setId(rs.getInt("maxid") + 1);
+				d.setId(rs.getInt("maxId") + 1);
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO description (fk_property_id) "

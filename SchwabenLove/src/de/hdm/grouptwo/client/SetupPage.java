@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -24,11 +23,11 @@ import de.hdm.grouptwo.shared.AdministrationServiceAsync;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 
-public class SetupPage extends ResizeComposite {
+public class SetupPage extends ContentPage {
 	private AdministrationServiceAsync administrationService = ClientsideSettings
 			.getAdministrationService();
 
-	private MainView mainView = null;
+	private Menu menu = null;
 	private LoginInfo loginInfo = null;
 
 	private ScrollPanel sPanel = new ScrollPanel();
@@ -59,10 +58,11 @@ public class SetupPage extends ResizeComposite {
 	// The profile that is being created
 	Profile p = new Profile();
 
-	public SetupPage(MainView mainView, LoginInfo loginInfo) {
+	public SetupPage(Menu menu, LoginInfo loginInfo) {
+		super("Profil");
 		initWidget(sPanel);
 
-		this.mainView = mainView;
+		this.menu = menu;
 		this.loginInfo = loginInfo;
 
 		Label title = new Label("Neues Profil erstellen");
@@ -181,11 +181,11 @@ public class SetupPage extends ResizeComposite {
 		p.setFirstName(firstNameInput.getText());
 		p.setLastName(lastNameInput.getText());
 		p.setBirthdate(getBirthdate());
-		p.setGender(genderMaleRB.getFormValue());
+		p.setGender(genderMaleRB.getValue() ? "m" : "w");
 		p.setHeight(Integer.parseInt(heightInput.getText()));
 		p.setHairColor(hairColorList.getSelectedItemText());
 		p.setPhysique(physiqueList.getSelectedItemText());
-		p.setSmoker(smokerYesRB.getFormValue().equals("Ja"));
+		p.setSmoker(Boolean.toString(smokerYesRB.getValue()));
 		p.setProfession(professionInput.getText());
 		p.setLocation(locationInput.getText());
 		p.setEducation(educationList.getSelectedItemText());
@@ -196,7 +196,7 @@ public class SetupPage extends ResizeComposite {
 				administrationService.setProfile(p.getEmail(),
 						new AsyncCallback<Profile>() {
 							public void onSuccess(Profile result) {
-								mainView.addMenu(loginInfo);
+								menu.loadFullMenu();
 							}
 
 							public void onFailure(Throwable caught) {
@@ -347,5 +347,9 @@ public class SetupPage extends ResizeComposite {
 		}
 
 		return true;
+	}
+
+	@Override
+	public void updatePage() {
 	}
 }

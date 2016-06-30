@@ -57,12 +57,12 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(similarity_degree_id) AS maxid "
+					.executeQuery("SELECT MAX(similarity_degree_id) AS maxId "
 							+ "FROM similarity_degree");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				sd.setId(rs.getInt("maxid") + 1);
+				sd.setId(rs.getInt("maxId") + 1);
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO similarity_degree "
@@ -228,7 +228,7 @@ public class SimilarityDegreeMapper implements DataMapper<SimilarityDegree> {
 
 		return result;
 	}
-	
+
 	/**
 	 * Find all <code>SimilarityDegree</code> objects with a specific comparison
 	 * profile in the DB.

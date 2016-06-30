@@ -14,20 +14,36 @@ import com.google.gwt.user.client.ui.MenuItem;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 
 public class Menu extends Composite {
+	private LoginInfo loginInfo = null;
+
 	private MenuBar menuBar = new MenuBar();
 	private DeckLayoutPanel contentPanel = null;
 
-	Map<ContentPage, MenuItem> pages = new HashMap<ContentPage, MenuItem>();
+	private ArrayList<ContentPage> contentPages = new ArrayList<ContentPage>();
+	private Map<ContentPage, MenuItem> pages = new HashMap<ContentPage, MenuItem>();
 
 	public Menu(DeckLayoutPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(menuBar);
-		this.contentPanel = contentPanel;
 
-		initMenu(loginInfo);
+		this.contentPanel = contentPanel;
+		this.loginInfo = loginInfo;
 	}
 
-	private void initMenu(LoginInfo loginInfo) {
-		ArrayList<ContentPage> contentPages = new ArrayList<ContentPage>();
+	public void loadBasicMenu() {
+		// Save setupPage to load it on login later
+		SetupPage setupPage = new SetupPage(this, loginInfo);
+		contentPages.add(setupPage);
+		contentPages.add(new LogoutPage(loginInfo));
+
+		createMenu();
+
+		// Load setupPage page on login
+		pages.get(setupPage).getScheduledCommand().execute();
+	}
+
+	public void loadFullMenu() {
+		contentPages.clear();
+
 		// Save profilePage to load it on login later
 		ProfilePage profilePage = new ProfilePage();
 		contentPages.add(profilePage);
@@ -36,6 +52,17 @@ public class Menu extends Composite {
 		contentPages.add(new BlockListPage());
 		contentPages.add(new AdminPage());
 		contentPages.add(new LogoutPage(loginInfo));
+
+		createMenu();
+
+		// Load profile page on login
+		pages.get(profilePage).getScheduledCommand().execute();
+	}
+
+	private void createMenu() {
+		pages.clear();
+		contentPanel.clear();
+		menuBar.clearItems();
 
 		for (ContentPage page : contentPages) {
 			pages.put(page, createMenuItem(page));
@@ -57,9 +84,6 @@ public class Menu extends Composite {
 
 			menuBar.addItem(item);
 		}
-
-		// Load profile page on login
-		pages.get(profilePage).getScheduledCommand().execute();
 	}
 
 	private void clearMenuItemStyles() {

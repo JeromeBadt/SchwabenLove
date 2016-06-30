@@ -58,19 +58,25 @@ public class InformationMapper implements DataMapper<Information> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(information_id) AS maxid FROM information");
+					.executeQuery("SELECT MAX(information_id) AS maxId "
+							+ "FROM information");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				i.setId(rs.getInt("maxid") + 1);
+				i.setId(rs.getInt("maxId") + 1);
+
+				// Set nullable fields
+				String inputText = i.getInputText() == null ? "NULL" : "'"
+						+ i.getInputText() + "'";
+				String searchProfileId = i.getSearchProfileId() == 0 ? "NULL"
+						: Integer.toString(i.getSearchProfileId());
 
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO information "
 						+ "(information_id, input_text, fk_profile_id, "
 						+ "fk_property_id, fk_search_profile_id) VALUES ("
-						+ i.getId() + ",'" + i.getInputText() + "',"
-						+ i.getProfileId() + "," + i.getPropertyId() + ","
-						+ i.getSearchProfileId() + ")");
+						+ i.getId() + "," + inputText + "," + i.getProfileId()
+						+ "," + i.getPropertyId() + "," + searchProfileId + ")");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

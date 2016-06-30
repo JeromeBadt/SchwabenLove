@@ -39,8 +39,8 @@ public class Information extends BusinessObject {
 		return propertyId;
 	}
 
-	public void setPropertyId(int profileId) {
-		this.profileId = profileId;
+	public void setPropertyId(int propertyId) {
+		this.propertyId = propertyId;
 	}
 
 	public int getSearchProfileId() {

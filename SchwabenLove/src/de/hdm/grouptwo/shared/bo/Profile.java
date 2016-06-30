@@ -24,7 +24,7 @@ public class Profile extends BusinessObject {
 	private int height;
 	private String physique;
 	private String hairColor;
-	private boolean smoker;
+	private String smoker;
 	private String education;
 	private String profession;
 	private String religion;
@@ -68,11 +68,11 @@ public class Profile extends BusinessObject {
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
 	}
-	
+
 	public int getAge() {
 		return age;
 	}
-	
+
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -101,11 +101,11 @@ public class Profile extends BusinessObject {
 		this.physique = physique;
 	}
 
-	public boolean getSmoker() {
+	public String getSmoker() {
 		return smoker;
 	}
 
-	public void setSmoker(boolean smoker) {
+	public void setSmoker(String smoker) {
 		this.smoker = smoker;
 	}
 

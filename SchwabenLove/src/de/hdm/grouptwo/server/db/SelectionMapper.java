@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import de.hdm.grouptwo.shared.bo.*;
+import de.hdm.grouptwo.shared.bo.Selection;
 
 /**
  * Implementation of a mapper class for Selection. <br>
@@ -54,12 +54,13 @@ public class SelectionMapper implements DataMapper<Selection> {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
 			ResultSet rs = stmt
-					.executeQuery("SELECT MAX(fk_property_id) AS maxid "
+					.executeQuery("SELECT MAX(fk_property_id) AS maxId "
 							+ "FROM selection ");
 
 			if (rs.next()) {
 				// Set id to max + 1
-				s.setId(rs.getInt("maxid") + 1);
+				s.setId(rs.getInt("maxId") + 1);
+
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO selection (fk_property_id) "
 						+ "VALUES (" + s.getId() + ")");

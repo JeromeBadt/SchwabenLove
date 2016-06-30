@@ -19,38 +19,37 @@ import de.hdm.grouptwo.shared.bo.LoginInfo;
  */
 public class MainView extends ResizeComposite {
 	private DockLayoutPanel mainView = new DockLayoutPanel(Unit.EM);
-	private FlowPanel nav = new FlowPanel();
+	private Menu menu = null;
 	private DeckLayoutPanel contentPanel = new DeckLayoutPanel();
 	private ImprintPage imprintPage = new ImprintPage();
 
-	public MainView() {
+	public MainView(LoginInfo loginInfo) {
 		initWidget(mainView);
 
 		mainView.setStyleName("wrapper");
 
+		FlowPanel nav = new FlowPanel();
 		Label logo = new Label("SchwabenLove");
 		logo.setStyleName("logo");
 		nav.add(logo);
 
 		contentPanel.setStyleName("main");
 		contentPanel.add(imprintPage);
-		// contentPanel.add(new LoginPage());
 
-		mainView.addNorth(nav, 6.50);
+		mainView.addNorth(nav, 10);
 		mainView.addSouth(createFooterPanel(), 4);
 		mainView.add(contentPanel);
-	}
 
-	public void addMenu(LoginInfo loginInfo) {
-		Menu menu = new Menu(contentPanel, loginInfo);
+		menu = new Menu(contentPanel, loginInfo);
 		nav.add(menu);
-		mainView.setWidgetSize(nav, 10);
 	}
 
-	public void showSetupPage(LoginInfo loginInfo) {
-		SetupPage setupPage = new SetupPage(this, loginInfo);
-		contentPanel.add(setupPage);
-		contentPanel.showWidget(setupPage);
+	public void loadSetup() {
+		menu.loadBasicMenu();
+	}
+
+	public void loadFull() {
+		menu.loadFullMenu();
 	}
 
 	private Anchor createFooterPanel() {

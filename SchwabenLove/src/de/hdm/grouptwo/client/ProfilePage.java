@@ -1,7 +1,6 @@
 package de.hdm.grouptwo.client;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.logging.Level;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -47,7 +46,8 @@ public class ProfilePage extends ContentPage {
 		LayoutPanel informationPanel = new LayoutPanel();
 
 		Image profilePicture = new Image("images/38.png");
-		profilePicture.getElement().getStyle().setBorderStyle(BorderStyle.SOLID);
+		profilePicture.getElement().getStyle()
+				.setBorderStyle(BorderStyle.SOLID);
 		profilePicture.getElement().getStyle().setBorderWidth(3, Unit.PX);
 		profilePicture.setWidth("256px");
 
@@ -64,13 +64,15 @@ public class ProfilePage extends ContentPage {
 
 		VerticalPanel vPanel2 = new VerticalPanel();
 
-		vPanel2.add(new Label(profile.getSmoker() ? "Raucher" : "Nichtraucher"));
+		vPanel2.add(new Label(
+				Boolean.parseBoolean(profile.getSmoker()) ? "Raucher"
+						: "Nichtraucher"));
 		vPanel2.add(new Label(profile.getReligion()));
 		vPanel2.add(new Label(new BigDecimal((float) profile.getHeight() / 100)
 				.setScale(2, BigDecimal.ROUND_HALF_UP) + " m"));
 		vPanel2.add(new Label(profile.getPhysique()));
 		vPanel2.add(new Label(profile.getHairColor()));
-		
+
 		Image deleteIcon = new Image("images/icons/trash.png");
 		deleteIcon.setWidth("24px");
 		deleteIcon.setTitle("Profil löschen");
@@ -78,11 +80,12 @@ public class ProfilePage extends ContentPage {
 		attributePanel.add(profilePicture);
 		attributePanel.add(vPanel1);
 		attributePanel.add(vPanel2);
-		attributePanel.add(deleteIcon);		
-		
+		attributePanel.add(deleteIcon);
+
 		attributePanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
 		attributePanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
-		attributePanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+		attributePanel
+				.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
 
 		lPanel.add(attributePanel);
 		lPanel.add(informationPanel);
