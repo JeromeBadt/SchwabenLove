@@ -159,6 +159,7 @@ DROP TABLE IF EXISTS `search_profile`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_profile` (
   `search_profile_id` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL,
   `gender` enum('w','m') DEFAULT NULL,
   `min_age` int(11) DEFAULT NULL,
   `max_age` int(11) DEFAULT NULL,
