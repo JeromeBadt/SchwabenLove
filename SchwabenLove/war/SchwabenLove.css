@@ -89,7 +89,7 @@ body {
 	font-family: Lora !important;
 }
 
-.matches-page, .bookmark-list-page {
+.matches-page, .list-page {
 	overflow: auto;
 }
 
