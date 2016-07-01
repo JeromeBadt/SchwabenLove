@@ -51,6 +51,10 @@ public class MainView extends ResizeComposite {
 	public void loadFull() {
 		menu.loadFullMenu();
 	}
+	
+	public void loadReport() {
+		menu.loadReportMenu();
+	}
 
 	private Anchor createFooterPanel() {
 		Anchor imprint = new Anchor("Impressum");
