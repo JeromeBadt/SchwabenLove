@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -96,37 +97,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Profile getProfileById(int id) {
-		return ProfileMapper.profileMapper().findById(id);
-	}
-
-	@Override
-	public void addBookmarkByProfileId(int profileId) {
-		Bookmark bookmark = new Bookmark();
-		bookmark.setBookmarkListId(BookmarkListMapper.bookmarkListMapper()
-				.findByProfile(user.getId()).getId());
-		bookmark.setProfileId(profileId);
-	}
-
-	public ArrayList<Information> getInformationByProfileId(int profileId) {
-		return InformationMapper.informationMapper().findByProfileId(profileId);
-	}
-
-	@Override
-	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId) {
-		SimilarityDegree similarityDegree = null;
-		for (SimilarityDegree s : SimilarityDegreeMapper
-				.similarityDegreeMapper()
-				.findByReferenceProfileId(user.getId())) {
-			if (s.getComparisonProfileId() == profileId) {
-				similarityDegree = s;
-			}
-		}
-
-		return similarityDegree;
-	}
-
-	@Override
 	public void deleteProfile() {
 		int userId = user.getId();
 		ArrayList<SearchProfile> searchProfiles = getSearchProfiles();
@@ -172,6 +142,48 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+	public void addBookmarkByProfileId(int profileId) {
+		Bookmark bookmark = new Bookmark();
+		bookmark.setBookmarkListId(BookmarkListMapper.bookmarkListMapper()
+				.findByProfile(user.getId()).getId());
+		bookmark.setProfileId(profileId);
+
+		BookmarkMapper.bookmarkMapper().insert(bookmark);
+	}
+
+	@Override
+	public void addBlockByProfileId(int profileId) {
+		Block block = new Block();
+		block.setBlockerProfileId(user.getId());
+		block.setBlockedProfileId(profileId);
+
+		BlockMapper.blockMapper().insert(block);
+	}
+
+	@Override
+	public Profile getProfileById(int id) {
+		return ProfileMapper.profileMapper().findById(id);
+	}
+
+	public ArrayList<Information> getInformationByProfileId(int profileId) {
+		return InformationMapper.informationMapper().findByProfileId(profileId);
+	}
+
+	@Override
+	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId) {
+		SimilarityDegree similarityDegree = null;
+		for (SimilarityDegree s : SimilarityDegreeMapper
+				.similarityDegreeMapper()
+				.findByReferenceProfileId(user.getId())) {
+			if (s.getComparisonProfileId() == profileId) {
+				similarityDegree = s;
+			}
+		}
+
+		return similarityDegree;
+	}
+
+	@Override
 	public ArrayList<SearchProfile> getSearchProfiles() {
 		ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
 		LinkedHashSet<Integer> searchProfileIds = new LinkedHashSet<Integer>();
@@ -211,7 +223,14 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		// ToDo: get profiles ordered by similarity degree
 
 		ArrayList<Profile> profiles = getAllProfiles();
-		ArrayList<Profile> results = new ArrayList<Profile>();
+		ArrayList<Profile> matches = new ArrayList<Profile>();
+		ArrayList<Profile> blocks = getBlockedProfiles();
+
+		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(
+				user.getId())) {
+			blocks.add(ProfileMapper.profileMapper().findById(
+					b.getBlockerProfileId()));
+		}
 
 		for (Profile p : profiles) {
 			if (sp.getGender() != null) {
@@ -275,30 +294,73 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 				}
 			}
 
-			results.add(p);
+			matches.add(p);
+		}
+
+		Iterator<Profile> it = matches.iterator();
+		while (it.hasNext()) {
+			Profile match = it.next();
+
+			for (Profile block : blocks) {
+				if (block.getId() == match.getId()) {
+					it.remove();
+					break;
+				}
+			}
 		}
 
 		// ToDo: filter by information objects as well
 
-		return results;
+		return matches;
 	}
 
 	@Override
-	public void addBlockByProfileId(int profileId) {
-		Block block = new Block();
-		block.setBlockerProfileId(user.getId());
-		block.setBlockedProfileId(profileId);
+	public ArrayList<Profile> getBookmarkedProfiles() {
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
 
-		BlockMapper.blockMapper().insert(block);
+		for (Bookmark b : getBookmarks()) {
+			profiles.add(ProfileMapper.profileMapper().findById(
+					b.getProfileId()));
+		}
+
+		return profiles;
 	}
 
-	public ArrayList<Profile> getBookmarkedProfiles() {
-		ArrayList<Profile> bookmarks = new ArrayList<Profile>();
-		// get bookmarklist
-		// get bookmarks by bookmarklist
-		// get profiles by bookmark
+	@Override
+	public ArrayList<Profile> getBlockedProfiles() {
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
 
-		return bookmarks;
+		// Loop through blocks and add their referenced blocked profile
+		// to profiles list
+		for (Block b : BlockMapper.blockMapper().findByBlockerProfileId(
+				user.getId())) {
+			profiles.add(ProfileMapper.profileMapper().findById(
+					b.getBlockedProfileId()));
+		}
+
+		return profiles;
+	}
+
+	@Override
+	public void deleteBookmark(int profileId) {
+		for (Bookmark b : getBookmarks()) {
+			if (b.getProfileId() == profileId) {
+				BookmarkMapper.bookmarkMapper().delete(b);
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void deleteBlock(int profileId) {
+		// Find the profile to delete within the users blocks
+		for (Block b : BlockMapper.blockMapper().findByBlockerProfileId(
+				user.getId())) {
+			if (b.getBlockedProfileId() == profileId) {
+				BlockMapper.blockMapper().delete(b);
+				return;
+			}
+		}
 	}
 
 	@Override
@@ -445,5 +507,14 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 
 		return true;
+	}
+
+	private ArrayList<Bookmark> getBookmarks() {
+		// Get the bookmark list ID of the current user
+		int bookmarkListId = BookmarkListMapper.bookmarkListMapper()
+				.findByProfile(user.getId()).getId();
+
+		return BookmarkMapper.bookmarkMapper().findByBookmarkListId(
+				bookmarkListId);
 	}
 }

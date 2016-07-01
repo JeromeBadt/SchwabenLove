@@ -24,14 +24,14 @@ public interface AdministrationServiceAsync {
 
 	public void setProfile(String email, AsyncCallback<Profile> callback);
 
-	public void getProfileById(int id, AsyncCallback<Profile> callback);
+	public void deleteProfile(AsyncCallback<Void> callback);
 
 	public void addBookmarkByProfileId(int profileId,
 			AsyncCallback<Void> callback);
 
 	public void addBlockByProfileId(int profileId, AsyncCallback<Void> callback);
 
-	public void deleteProfile(AsyncCallback<Void> callback);
+	public void getProfileById(int id, AsyncCallback<Profile> callback);
 
 	public void getSimilarityDegreeByProfileId(int profileId,
 			AsyncCallback<SimilarityDegree> callback);
@@ -48,9 +48,16 @@ public interface AdministrationServiceAsync {
 	public void deleteSearchProfile(SearchProfile searchProfile,
 			AsyncCallback<Void> callback);
 
-	public void getMatchesBySearchProfile(
-			SearchProfile searchProfile,
+	public void getMatchesBySearchProfile(SearchProfile searchProfile,
 			AsyncCallback<ArrayList<Profile>> callback);
+
+	public void getBookmarkedProfiles(AsyncCallback<ArrayList<Profile>> callback);
+
+	public void getBlockedProfiles(AsyncCallback<ArrayList<Profile>> callback);
+
+	public void deleteBookmark(int profileId, AsyncCallback<Void> callback);
+
+	public void deleteBlock(int profileId, AsyncCallback<Void> callback);
 
 	public void loadTableNames(AsyncCallback<ArrayList<String>> callback);
 
