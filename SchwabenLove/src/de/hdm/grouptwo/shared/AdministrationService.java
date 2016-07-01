@@ -38,7 +38,7 @@ public interface AdministrationService extends RemoteService {
 
 	public ArrayList<SearchProfile> getSearchProfiles();
 
-	public SearchProfile addSearchProfile(SearchProfile searchProfile);
+	public SearchProfile createSearchProfile(SearchProfile searchProfile);
 
 	public void updateSearchProfile(SearchProfile searchProfile);
 

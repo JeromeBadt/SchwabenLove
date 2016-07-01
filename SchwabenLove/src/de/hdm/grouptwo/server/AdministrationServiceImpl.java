@@ -44,6 +44,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		AdministrationService {
 	private static final long serialVersionUID = 1L;
 	private Profile user = null;
+	private ArrayList<Property> properties = null;
 
 	@Override
 	public void createProfile(Profile profile) {
@@ -59,8 +60,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		// Create a default search profile
 		SearchProfile sp = new SearchProfile();
 		sp.setName("Standard");
-		int searchProfileId = SearchProfileMapper.searchProfileMapper()
-				.insert(sp).getId();
+		createSearchProfile(sp);
 
 		ArrayList<Property> properties = getAllProperties();
 
@@ -69,15 +69,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			Information i = new Information();
 			i.setProfileId(profileId);
 			i.setPropertyId(p.getId());
-			InformationMapper.informationMapper().insert(i);
-		}
-
-		// Create empty Information objects for the search profile
-		for (Property p : properties) {
-			Information i = new Information();
-			i.setProfileId(profileId);
-			i.setPropertyId(p.getId());
-			i.setSearchProfileId(searchProfileId);
 			InformationMapper.informationMapper().insert(i);
 		}
 
@@ -204,8 +195,20 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public SearchProfile addSearchProfile(SearchProfile searchProfile) {
-		return SearchProfileMapper.searchProfileMapper().insert(searchProfile);
+	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
+		searchProfile = SearchProfileMapper.searchProfileMapper().insert(
+				searchProfile);
+
+		// Create empty Information objects for the search profile
+		for (Property p : getAllProperties()) {
+			Information i = new Information();
+			i.setProfileId(user.getId());
+			i.setPropertyId(p.getId());
+			i.setSearchProfileId(searchProfile.getId());
+			InformationMapper.informationMapper().insert(i);
+		}
+
+		return searchProfile;
 	}
 
 	@Override
@@ -215,6 +218,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void deleteSearchProfile(SearchProfile searchProfile) {
+		for (Information i : InformationMapper.informationMapper()
+				.findBySearchProfileId(searchProfile.getId())) {
+			InformationMapper.informationMapper().delete(i);
+		}
+
 		SearchProfileMapper.searchProfileMapper().delete(searchProfile);
 	}
 
@@ -234,7 +242,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		for (Profile p : profiles) {
 			if (sp.getGender() != null) {
-				if (p.getGender() != sp.getGender()) {
+				if (!p.getGender().equals(sp.getGender())) {
 					continue;
 				}
 			}
@@ -250,12 +258,12 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 				}
 			}
 			if (sp.getHairColor() != null) {
-				if (p.getHairColor() != sp.getHairColor()) {
+				if (!p.getHairColor().equals(sp.getHairColor())) {
 					continue;
 				}
 			}
 			if (sp.getPhysique() != null) {
-				if (p.getPhysique() != sp.getPhysique()) {
+				if (!p.getPhysique().equals(sp.getPhysique())) {
 					continue;
 				}
 			}
@@ -270,26 +278,27 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 					continue;
 				}
 			}
+
 			if (sp.getSmoker() != null) {
-				if (p.getSmoker()
-				!= sp.getSmoker()) {
+
+				if (!p.getSmoker().equals(sp.getSmoker())) {
 					continue;
 				}
 			}
 			if (sp.getEducation() != null)
 			{
-				if (p.getEducation() != sp.getEducation()) {
+				if (!p.getEducation().equals(sp.getEducation())) {
 					continue;
 				}
 			}
 			if (sp.getProfession() != null) {
-				if (p.getProfession() != sp.getProfession()) {
+				if (!p.getProfession().equals(sp.getProfession())) {
 					continue;
 				}
 			}
 			if (sp.getReligion() != null)
 			{
-				if (p.getReligion() != sp.getReligion()) {
+				if (!p.getReligion().equals(sp.getReligion())) {
 					continue;
 				}
 			}
@@ -417,7 +426,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public ArrayList<Property> getAllProperties() {
-		return PropertyMapper.propertyMapper().findAll();
+		if (properties == null) {
+			properties = PropertyMapper.propertyMapper().findAll();
+		}
+
+		return properties;
 	}
 
 	@Override

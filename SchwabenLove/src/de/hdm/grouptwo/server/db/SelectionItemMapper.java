@@ -87,8 +87,8 @@ public class SelectionItemMapper implements DataMapper<SelectionItem> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE selection_item SET name='" + si.getName()
-					+ "',fk_selection_id=" + si.getSelectionId()
+			stmt.executeUpdate("UPDATE selection_item SET name='"
+					+ si.getName() + "',fk_selection_id=" + si.getSelectionId()
 					+ " WHERE selection_item_id=" + si.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
