@@ -65,9 +65,10 @@ public class SchwabenReport implements EntryPoint {
 
 						// Check if it's a new user
 						if (result == null) {
+							// TODO display an info/error message
 							mainView.loadSetup();
 						} else {
-							mainView.loadFull();
+							mainView.loadReport();
 						}
 					}
 

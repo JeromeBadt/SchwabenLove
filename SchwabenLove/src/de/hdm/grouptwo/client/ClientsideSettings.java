@@ -8,6 +8,8 @@ import de.hdm.grouptwo.shared.AdministrationService;
 import de.hdm.grouptwo.shared.AdministrationServiceAsync;
 import de.hdm.grouptwo.shared.LoginService;
 import de.hdm.grouptwo.shared.LoginServiceAsync;
+import de.hdm.grouptwo.shared.ReportService;
+import de.hdm.grouptwo.shared.ReportServiceAsync;
 
 /**
  * Class for relevant client-side settings and services.
@@ -19,7 +21,7 @@ import de.hdm.grouptwo.shared.LoginServiceAsync;
 public class ClientsideSettings {
 	private static AdministrationServiceAsync administrationService = null;
 	private static LoginServiceAsync loginService = null;
-	// private static ReportGeneratorAsync reportGenerator = null;
+	private static ReportServiceAsync reportService = null;
 	private static final Logger log = Logger
 			.getLogger("SchwabenLove Web Client");
 
@@ -57,11 +59,20 @@ public class ClientsideSettings {
 		return administrationService;
 	}
 
-	/*
-	 * public static ReportGeneratorAsync getReportGenerator() { if
-	 * (reportGenerator == null) { reportGenerator =
-	 * GWT.create(ReportGenerator.class); } return reportGenerator; }
+	
+	/**
+	 * Creates and returns ReprotService. Ensures that only a single
+	 * instance exists
+	 * 
+	 * @return ReportService
 	 */
+	public static ReportServiceAsync getReportService() {
+		if (reportService == null) {
+			reportService = GWT.create(ReportService.class);
+		}
+		
+		return reportService;
+	}
 
 	/**
 	 * Get the application wide logger. The log is created on the client-side.
