@@ -8,7 +8,7 @@ public class UnviewedMatchesReportPage extends ContentPage{
 
 	public UnviewedMatchesReportPage() {
 		super("Nicht gesehene Partnervorschläge anzeigen");
-		// TODO Auto-generated constructor stub
+		// TODO Serverseitige Methode aufrufen
 	}
 
 	@Override
