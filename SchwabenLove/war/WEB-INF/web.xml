@@ -36,6 +36,7 @@
 	<servlet-mapping>
 	    <servlet-name>reportService</servlet-name>
 	    <url-pattern>/schwabenlove/report</url-pattern>
+	    <url-pattern>/schwabenreport/report</url-pattern>
 	</servlet-mapping>
   
   <!-- Default page to serve -->

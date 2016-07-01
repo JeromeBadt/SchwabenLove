@@ -178,8 +178,8 @@ public void process(MatchesBySearchprofileReport r) {
     result.append("<table style=\"width:400px;border:1px solid silver\"><tr>");
     result.append("<td valign=\"top\"><b>" + paragraph2HTML(r.getHeaderData())
         + "</b></td>");
-    result.append("<td valign=\"top\">" + paragraph2HTML(r.getImprint())
-        + "</td>");
+//    result.append("<td valign=\"top\">" + paragraph2HTML(r.getImprint())
+//        + "</td>");
     result.append("</tr><tr><td></td><td>" + r.getCreated().toString()
         + "</td></tr></table>");
 

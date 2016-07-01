@@ -2,20 +2,27 @@ package de.hdm.grouptwo.shared;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
+import de.hdm.grouptwo.shared.report.SimpleReport;
 import de.hdm.grouptwo.shared.report.UnviewedMatchesReport;
 
 public interface ReportServiceAsync {
 
-	void init(AsyncCallback<Void> callback);
+	public void init(AsyncCallback<Void> asyncCallback);
 
-	// void getAdministrationService(AsyncCallback<AdministrationService> callback);
+	// void getAdministrationService(AsyncCallback<AdministrationService> asyncCallback);
 
-	void getMatchesBySearchprofileReport(Profile p,
-			AsyncCallback<MatchesBySearchprofileReport> callback);
+//	void getMatchesBySearchprofileReport(LoginInfo loginInfo,
+//			AsyncCallback<MatchesBySearchprofileReport> asyncCallback);
 
-	void getUnviewedMatches(Profile p,
-			AsyncCallback<UnviewedMatchesReport> callback);
+	public void getMatchesBySearchprofileReport(
+			AsyncCallback<MatchesBySearchprofileReport> asyncCallback);
+	
+	public void getUnviewedMatches(Profile p,
+			AsyncCallback<UnviewedMatchesReport> asyncCallback);
+
+	public void testMethod(AsyncCallback<String> callback);
 
 }
