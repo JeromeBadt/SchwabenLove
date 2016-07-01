@@ -101,7 +101,7 @@ public class SearchProfileMapper implements DataMapper<SearchProfile> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeQuery("UPDATE search_profile " + "SET name='"
+			stmt.executeUpdate("UPDATE search_profile " + "SET name='"
 					+ sp.getName() + "',gender="
 					+ DataMapperHelper.checkNull(sp.getGender())
 					+ ",min_age=" + DataMapperHelper.checkNull(sp.getMinAge())
