@@ -5,14 +5,18 @@ import java.util.logging.Level;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -29,8 +33,22 @@ public class MatchesPage extends ContentPage {
 	private LayoutPanel matchesPanel = new LayoutPanel();
 	private LayoutPanel searchProfilePanel = new LayoutPanel();
 
-	private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
-	private SearchProfile activeSearchProfile = null;
+	private SearchProfileDropBox searchProfileDropBox = new SearchProfileDropBox();
+	private SearchProfilePopup inputBox = new SearchProfilePopup();
+
+	CheckBox genderMaleCB = new CheckBox("m");
+	CheckBox genderFemaleCB = new CheckBox("w");
+	TextBox minAgeTextBox = new TextBox();
+	TextBox maxAgeTextBox = new TextBox();
+	TextBox physiqueTextBox = new TextBox();
+	TextBox minHeightTextBox = new TextBox();
+	TextBox maxHeightTextBox = new TextBox();
+	TextBox hairColorTextBox = new TextBox();
+	TextBox professionTextBox = new TextBox();
+	CheckBox smokerYesCB = new CheckBox("Ja");
+	CheckBox smokerNoCB = new CheckBox("Nein");
+	TextBox educationTextBox = new TextBox();
+	TextBox religionTextBox = new TextBox();
 
 	public MatchesPage() {
 		super("Partnervorschläge");
@@ -40,6 +58,8 @@ public class MatchesPage extends ContentPage {
 
 		lPanel.add(matchesPanel);
 		lPanel.add(searchProfilePanel);
+
+		initSearchProfilePanel();
 	}
 
 	@Override
@@ -47,53 +67,46 @@ public class MatchesPage extends ContentPage {
 		matchesPanel.clear();
 		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
 
-		administrationService
-				.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
-					public void onSuccess(ArrayList<SearchProfile> result) {
-						showSearchProfiles(result);
-					}
-
-					public void onFailure(Throwable caught) {
-						ClientsideSettings.getLogger().log(Level.WARNING,
-								caught.getMessage());
-					}
-				});
+		loadMatches(searchProfileDropBox.getSelected());
 	}
 
-	@Override
-	public void onResize() {
-		if (getElement().getClientWidth() >= 920) {
-			int offset = (getElement().getClientWidth() - 910) / 2;
-			lPanel.setWidgetLeftWidth(matchesPanel, offset, Unit.PX, 590,
-					Unit.PX);
-			lPanel.setWidgetRightWidth(searchProfilePanel, offset, Unit.PX,
-					300, Unit.PX);
-		} else {
-			lPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 330, Unit.PX);
-			lPanel.setWidgetRightWidth(searchProfilePanel, 10, Unit.PX, 300,
-					Unit.PX);
-		}
-	}
-
-	private void showSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
-		this.searchProfiles = searchProfiles;
-
-		ListBox searchProfileDropBox = new ListBox();
-		searchProfileDropBox.addChangeHandler(new ChangeHandler() {
-			public void onChange(ChangeEvent event) {
-				updateActiveSearchProfile(((ListBox) event.getSource())
-						.getSelectedItemText());
+	private void initSearchProfilePanel() {
+		Image addIcon = new Image("images/icons/add.png");
+		addIcon.addStyleName("img-button");
+		addIcon.setWidth("24px");
+		addIcon.setTitle("Neues Suchprofil erstellen");
+		addIcon.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				inputBox.center();
 			}
 		});
 
-		for (SearchProfile sp : searchProfiles) {
-			searchProfileDropBox.addItem(sp.getName());
-		}
-
-		Image addIcon = new Image("images/icons/add.png");
-		addIcon.setWidth("24px");
 		Image deleteIcon = new Image("images/icons/delete.png");
+		deleteIcon.addStyleName("img-button");
 		deleteIcon.setWidth("24px");
+		deleteIcon.setTitle("Suchprofil löschen");
+		deleteIcon.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				final SearchProfile selected = searchProfileDropBox
+						.getSelected();
+
+				if (searchProfileDropBox.getItemCount() <= 1) {
+					Window.alert("Sie benötigen mindestens ein Suchprofil");
+				} else {
+					administrationService.deleteSearchProfile(selected,
+							new AsyncCallback<Void>() {
+								public void onSuccess(Void result) {
+									searchProfileDropBox.remove(selected);
+								}
+
+								public void onFailure(Throwable caught) {
+									ClientsideSettings.getLogger().log(
+											Level.WARNING, caught.getMessage());
+								}
+							});
+				}
+			}
+		});
 
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setStyleName("search-profile-panel-inner");
@@ -124,47 +137,29 @@ public class MatchesPage extends ContentPage {
 
 		HorizontalPanel genderPanel = new HorizontalPanel();
 		genderPanel.setHeight("24px");
-		CheckBox maleCheckBox = new CheckBox("m");
-		CheckBox femaleCheckBox = new CheckBox("w");
-		genderPanel.add(maleCheckBox);
-		genderPanel.add(femaleCheckBox);
+		genderPanel.add(genderMaleCB);
+		genderPanel.add(genderFemaleCB);
 
 		HorizontalPanel agePanel = new HorizontalPanel();
-		TextBox minAgeTextBox = new TextBox();
 		minAgeTextBox.setWidth("35px");
-		TextBox maxAgeTextBox = new TextBox();
 		maxAgeTextBox.setWidth("35px");
 		agePanel.add(minAgeTextBox);
 		agePanel.add(new Label("-"));
 		agePanel.add(maxAgeTextBox);
 		agePanel.add(new Label("Jahre"));
 
-		TextBox physiqueTextBox = new TextBox();
-
 		HorizontalPanel heightPanel = new HorizontalPanel();
-		TextBox minHeightTextBox = new TextBox();
 		minHeightTextBox.setWidth("35px");
-		TextBox maxHeightTextBox = new TextBox();
 		maxHeightTextBox.setWidth("35px");
 		heightPanel.add(minHeightTextBox);
 		heightPanel.add(new Label("-"));
 		heightPanel.add(maxHeightTextBox);
 		heightPanel.add(new Label("cm"));
 
-		TextBox hairColorTextBox = new TextBox();
-
-		TextBox professionTextBox = new TextBox();
-
 		HorizontalPanel smokerPanel = new HorizontalPanel();
 		smokerPanel.setHeight("24px");
-		CheckBox yesCheckBox = new CheckBox("ja");
-		CheckBox noCheckBox = new CheckBox("nein");
-		smokerPanel.add(yesCheckBox);
-		smokerPanel.add(noCheckBox);
-
-		TextBox educationTextBox = new TextBox();
-
-		TextBox religionTextBox = new TextBox();
+		smokerPanel.add(smokerYesCB);
+		smokerPanel.add(smokerNoCB);
 
 		inputPanel.add(genderPanel);
 		inputPanel.add(agePanel);
@@ -187,6 +182,11 @@ public class MatchesPage extends ContentPage {
 
 		Button saveButton = new Button("Suchprofil speichern");
 		saveButton.setStyleName("search-profile-save-button");
+		saveButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				saveSearchProfile();
+			}
+		});
 
 		searchProfilePanel.add(searchProfileDropBox);
 		searchProfilePanel.add(addIcon);
@@ -206,18 +206,25 @@ public class MatchesPage extends ContentPage {
 				Unit.PX);
 		lPanel.setWidgetTopHeight(searchProfilePanel, 0, Unit.PX, 356, Unit.PX);
 
-		updateActiveSearchProfile(searchProfileDropBox.getSelectedItemText());
+		administrationService
+				.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
+					public void onSuccess(ArrayList<SearchProfile> result) {
+						for (SearchProfile sp : result) {
+							searchProfileDropBox.add(sp);
+						}
+						loadSearchProfile(result.get(0));
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
 	}
 
-	private void updateActiveSearchProfile(String searchProfileName) {
-		for (SearchProfile sp : searchProfiles) {
-			if (sp.getName() == searchProfileName) {
-				activeSearchProfile = sp;
-			}
-		}
-
+	private void loadMatches(SearchProfile searchProfile) {
 		administrationService.getMatchesBySearchProfile(
-				activeSearchProfile, new AsyncCallback<ArrayList<Profile>>() {
+				searchProfile, new AsyncCallback<ArrayList<Profile>>() {
 					public void onSuccess(ArrayList<Profile> result) {
 						showMatches(result);
 					}
@@ -227,6 +234,113 @@ public class MatchesPage extends ContentPage {
 								caught.getMessage());
 					}
 				});
+	}
+
+	private void loadSearchProfile(SearchProfile sp) {
+		if (sp.getGender() == null) {
+			genderMaleCB.setValue(true);
+			genderFemaleCB.setValue(true);
+		} else {
+			genderMaleCB.setValue((sp.getGender().equals("m")));
+			genderFemaleCB.setValue(sp.getGender().equals("w"));
+		}
+		minAgeTextBox.setText(sp.getMinAge() == 0 ? null : Integer.toString(sp
+				.getMinAge()));
+		maxAgeTextBox.setText(sp.getMaxAge() == 0 ? null : Integer.toString(sp
+				.getMaxAge()));
+		physiqueTextBox.setText(sp.getPhysique());
+		minHeightTextBox.setText(sp.getMinHeight() == 0 ? null : Integer
+				.toString(sp.getMinHeight()));
+		maxHeightTextBox.setText(sp.getMaxHeight() == 0 ? null : Integer
+				.toString(sp.getMaxHeight()));
+		hairColorTextBox.setText(sp.getHairColor());
+		professionTextBox.setText(sp.getProfession());
+		if (sp.getSmoker() == null) {
+			smokerYesCB.setValue(true);
+			smokerNoCB.setValue(true);
+		} else {
+			smokerYesCB.setValue(sp.getSmoker().equals("TRUE"));
+			smokerNoCB.setValue(sp.getSmoker().equals("FALSE"));
+		}
+		educationTextBox.setText(sp.getEducation());
+		religionTextBox.setText(sp.getReligion());
+	}
+
+	private void saveSearchProfile() {
+		SearchProfile sp = searchProfileDropBox.getSelected();
+		StringBuilder error = new StringBuilder();
+
+		if (genderMaleCB.getValue() && genderFemaleCB.getValue()) {
+			sp.setGender(null);
+		} else if (genderMaleCB.getValue()) {
+			sp.setGender("m");
+		} else if (genderFemaleCB.getValue()) {
+			sp.setGender("w");
+		} else {
+			error.append("Sie müssen nach mindestens einem Geschlecht suchen.");
+		}
+		sp.setMinAge(getIntOrNull(minAgeTextBox.getText()));
+		sp.setMaxAge(getIntOrNull(maxAgeTextBox.getText()));
+		sp.setPhysique(getStringOrNull(physiqueTextBox.getText()));
+		sp.setMinHeight(getIntOrNull(minHeightTextBox.getText()));
+		sp.setMaxHeight(getIntOrNull(maxHeightTextBox.getText()));
+		sp.setHairColor(getStringOrNull(hairColorTextBox.getText()));
+		sp.setProfession(getStringOrNull(professionTextBox.getText()));
+		if (smokerYesCB.getValue() && smokerNoCB.getValue()) {
+			sp.setSmoker(null);
+		} else if (smokerYesCB.getValue()) {
+			sp.setSmoker("TRUE");
+		} else if (smokerNoCB.getValue()) {
+			sp.setSmoker("FALSE");
+		} else {
+			error.append("Sie müssen nach mindestens einem Rauchertyp suchen.");
+		}
+
+		ClientsideSettings.getLogger().log(Level.INFO,
+				"Smoker: " + sp.getSmoker());
+
+		sp.setEducation(getStringOrNull(educationTextBox.getText()));
+		sp.setReligion(getStringOrNull(religionTextBox.getText()));
+
+		if (error.length() != 0) {
+			Window.alert(error.toString());
+			return;
+		}
+
+		final SearchProfile cSearchProfile = sp;
+		administrationService.updateSearchProfile(sp,
+				new AsyncCallback<Void>() {
+					public void onSuccess(Void result) {
+						loadMatches(cSearchProfile);
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
+	}
+
+	/**
+	 * Check if an int is empty.
+	 * 
+	 * @param check
+	 *            the int to check
+	 * @return 0 if it's empty, otherwise the original int
+	 */
+	private int getIntOrNull(String check) {
+		return check.length() == 0 ? 0 : Integer.parseInt(check);
+	}
+
+	/**
+	 * Check if a string is empty.
+	 * 
+	 * @param check
+	 *            the string to check
+	 * @return null if it's empty, otherwise the original string
+	 */
+	private String getStringOrNull(String check) {
+		return check.length() == 0 ? null : check;
 	}
 
 	private void showMatches(ArrayList<Profile> matches) {
@@ -259,6 +373,21 @@ public class MatchesPage extends ContentPage {
 				onResize();
 			}
 		});
+	}
+
+	@Override
+	public void onResize() {
+		if (getElement().getClientWidth() >= 920) {
+			int offset = (getElement().getClientWidth() - 910) / 2;
+			lPanel.setWidgetLeftWidth(matchesPanel, offset, Unit.PX, 590,
+					Unit.PX);
+			lPanel.setWidgetRightWidth(searchProfilePanel, offset, Unit.PX,
+					300, Unit.PX);
+		} else {
+			lPanel.setWidgetLeftRight(matchesPanel, 0, Unit.PX, 330, Unit.PX);
+			lPanel.setWidgetRightWidth(searchProfilePanel, 10, Unit.PX, 300,
+					Unit.PX);
+		}
 	}
 
 	private class MatchProfileWidget extends ProfileWidget {
@@ -332,6 +461,134 @@ public class MatchesPage extends ContentPage {
 			rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
 			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
 			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
+		}
+	}
+
+	private class SearchProfileDropBox extends ListBox {
+		private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
+		private SearchProfile selected = null;
+
+		private SearchProfileDropBox() {
+			addChangeHandler(new ChangeHandler() {
+				public void onChange(ChangeEvent event) {
+					selected = searchProfiles.get(((ListBox) event.getSource())
+							.getSelectedIndex());
+					loadSearchProfile(selected);
+					loadMatches(selected);
+				}
+			});
+		}
+
+		/**
+		 * Add a search profile and the associated item.
+		 * 
+		 * @param searchProfile
+		 *            the search profile to add
+		 */
+		private void add(SearchProfile searchProfile) {
+			searchProfiles.add(searchProfile);
+			addItem(searchProfile.getName());
+		}
+
+		/**
+		 * Remove a search profile and the associated item.
+		 * 
+		 * @param searchProfile
+		 *            the searchProfile to remove
+		 */
+		private void remove(SearchProfile searchProfile) {
+			int i = searchProfiles.indexOf(searchProfile);
+			searchProfiles.remove(i);
+			removeItem(i);
+			selectItem(0);
+		}
+
+		/**
+		 * Select an item and fire a change event.
+		 * 
+		 * @param index
+		 *            the item to select
+		 */
+		private void selectItem(int index) {
+			setItemSelected(index, true);
+			DomEvent.fireNativeEvent(Document.get().createChangeEvent(), this);
+		}
+
+		/**
+		 * Get the selected searchProfile.
+		 */
+		private SearchProfile getSelected() {
+			return searchProfiles.get(getSelectedIndex());
+		}
+	}
+
+	private class SearchProfilePopup extends DialogBox {
+		private TextBox nameInput = new TextBox();
+
+		private SearchProfilePopup() {
+			setText("Neues Suchprofil erstellen");
+			setAnimationEnabled(true);
+			setGlassEnabled(true);
+			setModal(false);
+
+			LayoutPanel lPanel = new LayoutPanel();
+			Label label = new Label("Name:");
+			nameInput.setWidth("150px");
+			nameInput.setMaxLength(45);
+
+			Button cancelButton = new Button("Abbrechen");
+			cancelButton.setHeight("32px");
+			cancelButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					SearchProfilePopup.this.hide();
+				}
+			});
+
+			Button okButton = new Button("OK");
+			okButton.setHeight("32px");
+			okButton.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					String name = nameInput.getText().isEmpty() ? "Standard"
+							: nameInput.getText();
+
+					SearchProfile searchProfile = new SearchProfile();
+					searchProfile.setName(name);
+					administrationService.createSearchProfile(searchProfile,
+							new AsyncCallback<SearchProfile>() {
+								public void onSuccess(SearchProfile result) {
+									searchProfileDropBox.add(result);
+									searchProfileDropBox
+											.selectItem(searchProfileDropBox
+													.getItemCount() - 1);
+								}
+
+								public void onFailure(Throwable caught) {
+									ClientsideSettings.getLogger().log(
+											Level.WARNING,
+											caught.getMessage());
+								}
+							});
+
+					SearchProfilePopup.this.hide();
+				}
+			});
+
+			lPanel.add(label);
+			lPanel.add(nameInput);
+			lPanel.add(cancelButton);
+			lPanel.add(okButton);
+
+			lPanel.setWidgetTopHeight(label, 12, Unit.PX, 24, Unit.PX);
+			lPanel.setWidgetLeftWidth(label, 8, Unit.PX, 60, Unit.PX);
+			lPanel.setWidgetTopHeight(nameInput, 10, Unit.PX, 24, Unit.PX);
+			lPanel.setWidgetRightWidth(nameInput, 8, Unit.PX, 160, Unit.PX);
+			lPanel.setWidgetBottomHeight(cancelButton, 8, Unit.PX, 32, Unit.PX);
+			lPanel.setWidgetRightWidth(cancelButton, 57, Unit.PX, 85, Unit.PX);
+			lPanel.setWidgetBottomHeight(okButton, 8, Unit.PX, 32, Unit.PX);
+			lPanel.setWidgetRightWidth(okButton, 8, Unit.PX, 41, Unit.PX);
+			lPanel.setSize("236px", "90px");
+
+			setWidget(lPanel);
 		}
 	}
 }
