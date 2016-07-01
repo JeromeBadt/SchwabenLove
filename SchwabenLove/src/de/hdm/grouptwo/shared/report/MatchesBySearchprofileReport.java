@@ -1,5 +1,10 @@
 package de.hdm.grouptwo.shared.report;
 
-public class MatchesBySearchprofileReport extends SimpleReport {
+import java.io.Serializable;
+
+public class MatchesBySearchprofileReport extends SimpleReport
+		implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 }
