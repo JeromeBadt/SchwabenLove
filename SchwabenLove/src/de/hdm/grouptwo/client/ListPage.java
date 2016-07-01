@@ -1,21 +1,23 @@
 package de.hdm.grouptwo.client;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import de.hdm.grouptwo.shared.bo.Profile;
 
-public class ListPage extends ContentPage {
+public abstract class ListPage extends ContentPage {
 	private LayoutPanel lPanel = new LayoutPanel();
 	protected LayoutPanel listPanel = new LayoutPanel();
+
+	protected ArrayList<Profile> profileList = new ArrayList<Profile>();
 
 	public ListPage(String name) {
 		super(name);
@@ -26,23 +28,9 @@ public class ListPage extends ContentPage {
 	}
 
 	@Override
-	public void updatePage() {
-		listPanel.clear();
+	public abstract void updatePage();
 
-		administrationService
-				.getAllProfiles(new AsyncCallback<ArrayList<Profile>>() {
-					public void onFailure(Throwable caught) {
-						ClientsideSettings.getLogger().log(Level.WARNING,
-								caught.getMessage());
-					}
-
-					public void onSuccess(ArrayList<Profile> result) {
-						showList(result);
-					}
-				});
-	}
-
-	protected void showList(ArrayList<Profile> profileList) {
+	protected void showList() {
 		int offset = 0;
 		for (Profile p : profileList) {
 			ListProfileWidget profileWidget = new ListProfileWidget(p);
@@ -51,12 +39,16 @@ public class ListPage extends ContentPage {
 					118, Unit.PX);
 			offset += 128;
 		}
+
+		setPageHeight(offset);
+	}
+
+	public void setPageHeight(int offset) {
 		lPanel.setWidgetTopHeight(listPanel, 0, Unit.PX, offset, Unit.PX);
 
 		// Adjust the layout when the browser event loop returns (wait for
 		// scrollbar to render)
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
 			public void execute() {
 				onResize();
 			}
@@ -74,22 +66,46 @@ public class ListPage extends ContentPage {
 		}
 	}
 
+	protected abstract void deleteElement(int profileId);
+
 	private class ListProfileWidget extends ProfileWidget {
-		ListProfileWidget(Profile profile) {
-			super(profile);
+		ListProfileWidget(Profile p) {
+			super(p);
 
 			Image removeIcon = new Image("images/icons/cross.png");
+			removeIcon.addStyleName("img-button");
 			removeIcon.setWidth("24px");
 			removeIcon.setTitle("Profil entfernen");
-			rightPanel.add(removeIcon);
+			removeIcon.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					deleteElement(profile.getId());
+
+					profileList.remove(profile);
+					listPanel.remove(ListProfileWidget.this);
+
+					int offset = 0;
+					for (int i = 0; i < listPanel.getWidgetCount(); i++) {
+						listPanel.setWidgetTopHeight(listPanel.getWidget(i),
+								offset, Unit.PX,
+								118, Unit.PX);
+						offset += 128;
+					}
+
+					setPageHeight(offset);
+				}
+			});
+
 			LayoutPanel heartPanel = new LayoutPanel();
-			rightPanel.add(heartPanel);
 			Image heartIcon = new Image("images/icons/heart.png");
 			heartIcon.setWidth("72px");
-			heartPanel.add(heartIcon);
 			Label similarityDegreeLbl = new Label("120");
 			similarityDegreeLbl.setStyleName("similarity-degree-label");
+
+			heartPanel.add(heartIcon);
 			heartPanel.add(similarityDegreeLbl);
+
+			rightPanel.add(removeIcon);
+			rightPanel.add(heartPanel);
 
 			rightPanel
 					.setWidgetRightWidth(removeIcon, 0, Unit.PCT, 24, Unit.PX);

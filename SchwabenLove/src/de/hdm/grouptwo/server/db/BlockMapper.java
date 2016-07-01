@@ -193,7 +193,7 @@ public class BlockMapper implements DataMapper<Block> {
 			ResultSet rs = stmt
 					.executeQuery("SELECT block_id, "
 							+ "fk_blocker_profile_id, fk_blocked_profile_id "
-							+ "FROM block WHERE fk_profile_blocker="
+							+ "FROM block WHERE fk_blocker_profile_id="
 							+ blockerProfileId);
 
 			while (rs.next()) {
@@ -227,7 +227,7 @@ public class BlockMapper implements DataMapper<Block> {
 			ResultSet rs = stmt
 					.executeQuery("SELECT block_id, "
 							+ "fk_blocker_profile_id, fk_blocked_profile_id "
-							+ "FROM block WHERE fk_profile_blocked="
+							+ "FROM block WHERE fk_blocked_profile_id="
 							+ blockedProfileId);
 
 			while (rs.next()) {
