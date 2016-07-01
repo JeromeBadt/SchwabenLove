@@ -17,14 +17,29 @@ public class BlockListPage extends ListPage {
 		listPanel.clear();
 
 		administrationService
-				.getAllProfiles(new AsyncCallback<ArrayList<Profile>>() {
+				.getBlockedProfiles(new AsyncCallback<ArrayList<Profile>>() {
+					public void onSuccess(ArrayList<Profile> result) {
+						profileList = result;
+						showList();
+					}
+
 					public void onFailure(Throwable caught) {
 						ClientsideSettings.getLogger().log(Level.WARNING,
 								caught.getMessage());
 					}
+				});
+	}
 
-					public void onSuccess(ArrayList<Profile> result) {
-						showList(result);
+	@Override
+	protected void deleteElement(int profileId) {
+		administrationService.deleteBlock(profileId,
+				new AsyncCallback<Void>() {
+					public void onSuccess(Void result) {
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
 					}
 				});
 	}

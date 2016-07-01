@@ -8,6 +8,8 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -230,16 +232,24 @@ public class MatchesPage extends ContentPage {
 	private void showMatches(ArrayList<Profile> matches) {
 		matchesPanel.clear();
 
-		int offset = 0;
-		for (Profile match : matches) {
-			MatchProfileWidget profileWidget = new MatchProfileWidget(match);
+		if (matches.isEmpty()) {
+			Label emptyLabel = new Label("Keine Treffer.");
+			emptyLabel.setStyleName("info");
+			matchesPanel.add(emptyLabel);
 
-			matchesPanel.add(profileWidget);
-			matchesPanel.setWidgetTopHeight(profileWidget, offset, Unit.PX,
-					118, Unit.PX);
-			offset += 128;
+			lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 50, Unit.PX);
+		} else {
+			int offset = 0;
+			for (Profile match : matches) {
+				MatchProfileWidget profileWidget = new MatchProfileWidget(match);
+
+				matchesPanel.add(profileWidget);
+				matchesPanel.setWidgetTopHeight(profileWidget, offset, Unit.PX,
+						118, Unit.PX);
+				offset += 128;
+			}
+			lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
 		}
-		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, offset, Unit.PX);
 
 		// Adjust the layout when the browser event loop returns (wait for
 		// scrollbar to render)
@@ -255,22 +265,63 @@ public class MatchesPage extends ContentPage {
 		MatchProfileWidget(Profile profile) {
 			super(profile);
 
+			final int profileId = profile.getId();
+
 			Image bookmarkIcon = new Image("images/icons/bookmark.png");
+			bookmarkIcon.addStyleName("img-button");
 			bookmarkIcon.setWidth("24px");
 			bookmarkIcon.setTitle("Profil merken");
-			rightPanel.add(bookmarkIcon);
+			bookmarkIcon.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					administrationService.addBookmarkByProfileId(
+							profileId, new AsyncCallback<Void>() {
+								public void onSuccess(Void result) {
+									// bookmarkIcon
+									// .setUrl("images/icons/bookmark2.png");
+								}
+
+								public void onFailure(Throwable caught) {
+									ClientsideSettings.getLogger().log(
+											Level.WARNING,
+											caught.getMessage());
+								}
+							});
+				}
+			});
+
 			Image blockIcon = new Image("images/icons/block.png");
+			blockIcon.addStyleName("img-button");
 			blockIcon.setWidth("24px");
 			blockIcon.setTitle("Profil blocken");
-			rightPanel.add(blockIcon);
+			blockIcon.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					administrationService.addBlockByProfileId(profileId,
+							new AsyncCallback<Void>() {
+								public void onSuccess(Void result) {
+									// Remove from list
+								}
+
+								public void onFailure(Throwable caught) {
+									ClientsideSettings.getLogger().log(
+											Level.WARNING,
+											caught.getMessage());
+								}
+							});
+				}
+			});
+
 			LayoutPanel heartPanel = new LayoutPanel();
-			rightPanel.add(heartPanel);
 			Image heartIcon = new Image("images/icons/heart.png");
 			heartIcon.setWidth("72px");
-			heartPanel.add(heartIcon);
 			Label similarityDegreeLbl = new Label("120");
 			similarityDegreeLbl.setStyleName("similarity-degree-label");
+
+			heartPanel.add(heartIcon);
 			heartPanel.add(similarityDegreeLbl);
+
+			rightPanel.add(bookmarkIcon);
+			rightPanel.add(blockIcon);
+			rightPanel.add(heartPanel);
 
 			rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24,
 					Unit.PX);
