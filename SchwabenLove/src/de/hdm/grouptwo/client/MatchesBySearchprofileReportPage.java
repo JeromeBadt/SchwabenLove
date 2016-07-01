@@ -42,6 +42,8 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 //	private AdministrationServiceAsync administrationService = ClientsideSettings
 //			.getAdministrationService();
 	
+	
+	
 	public MatchesBySearchprofileReportPage() {	
 		super("Partnervorschläge anhand von Suchprofil");
 		// initWidget(lPanel);
@@ -51,7 +53,6 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 		
 		// lPanel.add(matchesPanel);
 		//lPanel.add(searchProfilePanel);
-		
 		initWidget(sPanel);
 		
 		

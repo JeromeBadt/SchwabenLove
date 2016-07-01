@@ -3,6 +3,7 @@ package de.hdm.grouptwo.client;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.grouptwo.shared.AdministrationService;
 import de.hdm.grouptwo.shared.AdministrationServiceAsync;
@@ -70,6 +71,22 @@ public class ClientsideSettings {
 		if (reportService == null) {
 			reportService = GWT.create(ReportService.class);
 		}
+		
+		reportService.init(new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		
 		return reportService;
 	}

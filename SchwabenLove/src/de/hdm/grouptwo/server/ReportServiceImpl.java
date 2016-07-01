@@ -1,15 +1,18 @@
 package de.hdm.grouptwo.server;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.ServletException;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.hdm.grouptwo.client.ClientsideSettings;
 import de.hdm.grouptwo.shared.AdministrationService;
 import de.hdm.grouptwo.shared.ReportService;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
+import de.hdm.grouptwo.shared.bo.SearchProfile;
 import de.hdm.grouptwo.shared.report.Column;
 import de.hdm.grouptwo.shared.report.CompositeParagraph;
 import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
@@ -21,7 +24,8 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		ReportService { 
 	
 	private static final long serialVersionUID = 1L;
-	// private AdministrationService administrationService = null;
+	private AdministrationService administrationService = null;
+	
 	
 	/**
 	 * No-Argument Constructor
@@ -36,14 +40,14 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 * Initialization Method
 	 */
 	public void init() {
-//		AdministrationServiceImpl admin = new AdministrationServiceImpl();
-//		try {
-//			admin.init();
-//		} catch (ServletException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		this.administrationService = admin;
+		AdministrationServiceImpl admin = new AdministrationServiceImpl();
+		try {
+			admin.init();
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.administrationService = admin;
 	}
 	
 	/**
@@ -51,9 +55,9 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 * 
 	 * @return AdministrationService
 	 */
-//	public AdministrationService getAdministrationService() {
-//		return this.administrationService;
-//	}
+	public AdministrationService getAdministrationService() {
+		return this.administrationService;
+	}
 	
 	/**
 	 * Method to get all matches by searchprofile, sorted by similarity degree
@@ -77,9 +81,28 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		
 		// TEST
 		Row row = new Row();
-		row.addColumn(new Column("Col1"));
-		row.addColumn(new Column("Col2"));
+		row.addColumn(new Column("ID"));
+		row.addColumn(new Column("Email"));
 		report.addRow(row);
+		
+//		ArrayList<SearchProfile> searchProfiles = this.administrationService.getSearchProfiles();
+//		SearchProfile searchProfile = searchProfiles.get(0);
+//		if (searchProfile == null) {
+//			searchProfile = searchProfiles.get(1);
+//		}
+//		if (searchProfile == null) {
+//			searchProfile = searchProfiles.get(2);
+//		}
+		SearchProfile searchProfile = new SearchProfile();
+		searchProfile.setId(2);
+		searchProfile.setName("Standard 2");
+		ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(searchProfile);
+		
+		for (Profile match : matches) {
+			Row matchRow = new Row();
+			matchRow.addColumn(new Column(String.valueOf(match.getId())));
+			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
+		}
 		
 		return report;
 	}
