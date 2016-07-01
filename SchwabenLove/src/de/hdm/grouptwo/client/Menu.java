@@ -41,6 +41,17 @@ public class Menu extends Composite {
 		// Load setupPage page on login
 		pages.get(setupPage).getScheduledCommand().execute();
 	}
+	
+	public void loadReportMenu() {
+		UnviewedMatchesReportPage unviewedPage = new UnviewedMatchesReportPage();
+		contentPages.add(unviewedPage);
+		contentPages.add(new UnviewedMatchesReportPage());
+		
+		createMenu();
+		
+		// Load unviewedPage page on login
+		pages.get(unviewedPage).getScheduledCommand().execute();
+	}
 
 	public void loadFullMenu() {
 		contentPages.clear();
