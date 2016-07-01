@@ -30,7 +30,7 @@ public class SchwabenReport implements EntryPoint {
 		ClientsideSettings.getLogger().addHandler(new ConsoleLogHandler());
 		ClientsideSettings.getLogger().setLevel(Level.INFO);
 
-		ClientsideSettings.getLoginService().login(GWT.getHostPageBaseURL(),
+		ClientsideSettings.getLoginService().login(GWT.getModuleBaseURL(),
 				new AsyncCallback<LoginInfo>() {
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;

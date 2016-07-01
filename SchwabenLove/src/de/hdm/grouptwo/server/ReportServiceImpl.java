@@ -14,7 +14,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		ReportService { 
 	
 	private static final long serialVersionUID = 1L;
-	private AdministrationService administrationService = null;
+//	private AdministrationService administrationService = null;
 	
 	/**
 	 * No-Argument Constructor
@@ -28,10 +28,15 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * Initialization Method
 	 */
-	public void init() throws ServletException {
-		AdministrationServiceImpl admin = new AdministrationServiceImpl();
-		admin.init();
-		this.administrationService = admin;
+	public void init() {
+//		AdministrationServiceImpl admin = new AdministrationServiceImpl();
+//		try {
+//			admin.init();
+//		} catch (ServletException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		this.administrationService = admin;
 	}
 	
 	/**
@@ -39,9 +44,9 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 * 
 	 * @return AdministrationService
 	 */
-	protected AdministrationService getAdministrationService() {
-		return this.administrationService;
-	}
+//	public AdministrationService getAdministrationService() {
+//		return this.administrationService;
+//	}
 	
 	/**
 	 * Method to get all matches by searchprofile, sorted by similarity degree

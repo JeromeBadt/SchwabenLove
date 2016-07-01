@@ -43,9 +43,10 @@ public class Menu extends Composite {
 	}
 	
 	public void loadReportMenu() {
-		UnviewedMatchesReportPage unviewedPage = new UnviewedMatchesReportPage();
+		UnviewedMatchesReportPage unviewedPage = new UnviewedMatchesReportPage(this);
 		contentPages.add(unviewedPage);
-		contentPages.add(new UnviewedMatchesReportPage());
+		contentPages.add(new MatchesBySearchprofileReportPage());
+		contentPages.add(new LogoutPage(loginInfo));
 		
 		createMenu();
 		
