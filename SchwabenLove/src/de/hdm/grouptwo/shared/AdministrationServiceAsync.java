@@ -39,7 +39,7 @@ public interface AdministrationServiceAsync {
 	public void getSearchProfiles(
 			AsyncCallback<ArrayList<SearchProfile>> callback);
 
-	public void addSearchProfile(SearchProfile searchProfile,
+	public void createSearchProfile(SearchProfile searchProfile,
 			AsyncCallback<SearchProfile> callback);
 
 	public void updateSearchProfile(SearchProfile searchProfile,

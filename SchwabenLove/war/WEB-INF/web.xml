@@ -14,6 +14,7 @@
 	<servlet-mapping>
 		<servlet-name>loginService</servlet-name>
 		<url-pattern>/schwabenlove/login</url-pattern>
+		<url-pattern>/schwabenreport/login</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -24,6 +25,7 @@
 	<servlet-mapping>
 		<servlet-name>administrationServiceServlet</servlet-name>
 		<url-pattern>/schwabenlove/administration</url-pattern>
+		<url-pattern>/schwabenreport/administration</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
