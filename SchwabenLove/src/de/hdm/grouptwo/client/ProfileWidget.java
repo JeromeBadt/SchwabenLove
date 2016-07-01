@@ -13,9 +13,13 @@ public class ProfileWidget extends ResizeComposite {
 	protected LayoutPanel lPanel = new LayoutPanel();
 	protected LayoutPanel rightPanel = new LayoutPanel();
 
-	public ProfileWidget(Profile profile) {
+	protected Profile profile = null;
+
+	public ProfileWidget(Profile p) {
 		initWidget(lPanel);
 		lPanel.setStyleName("profile-widget");
+
+		profile = p;
 
 		LayoutPanel innerPanel = new LayoutPanel();
 

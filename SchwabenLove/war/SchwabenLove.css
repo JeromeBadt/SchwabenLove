@@ -159,9 +159,17 @@ input.gwt-TextBox {
 	height: 12px;
 }
 
+.img-button {
+	cursor: pointer;
+}
+
 .title {
 	font-size: 28px;
 	text-align: center;
+}
+
+.info {
+	font-size: 26px;
 }
 
 .error {

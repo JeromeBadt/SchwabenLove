@@ -194,9 +194,9 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 							+ "FROM bookmark_list WHERE fk_profile_id="
 							+ profileId);
 
-			while (rs.next()) {
+			if (rs.next()) {
 				BookmarkList bl = new BookmarkList();
-				bl.setId(rs.getInt("bookmark_list"));
+				bl.setId(rs.getInt("bookmark_list_id"));
 				bl.setProfileId(rs.getInt("fk_profile_id"));
 
 				return bl;
