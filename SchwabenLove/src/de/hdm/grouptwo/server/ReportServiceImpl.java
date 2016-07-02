@@ -128,7 +128,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 * Method to get a <code>Report</code> Object of all unviewed Matches
 	 * 
 	 * @param Profile
-	 * @return
+	 * @return UnviewedMatchesReport
 	 */
 	public UnviewedMatchesReport getUnviewedMatches(Profile p) {
 		UnviewedMatchesReport report = new UnviewedMatchesReport();
@@ -163,7 +163,26 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		report.addRow(row);
 		
 		// Get unviewed matches
-		// ArrayList<Profile> matches = this.administrationService.
+		ArrayList<Profile> matches = this.administrationService.getUnvisitedProfiles(p);
+		
+		for (Profile match : matches) {
+			Row matchRow = new Row();
+			matchRow.addColumn(new Column(String.valueOf(match.getId())));
+			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
+			matchRow.addColumn(new Column(String.valueOf(match.getFirstName())));
+			matchRow.addColumn(new Column(String.valueOf(match.getLastName())));
+			matchRow.addColumn(new Column(String.valueOf(match.getGender())));
+			matchRow.addColumn(new Column(String.valueOf(match.getBirthdate())));
+			matchRow.addColumn(new Column(String.valueOf(match.getLocation())));
+			matchRow.addColumn(new Column(String.valueOf(match.getHeight())));
+			matchRow.addColumn(new Column(String.valueOf(match.getPhysique())));
+			matchRow.addColumn(new Column(String.valueOf(match.getHairColor())));
+			matchRow.addColumn(new Column(String.valueOf(match.getSmoker())));
+			matchRow.addColumn(new Column(String.valueOf(match.getEducation())));
+			matchRow.addColumn(new Column(String.valueOf(match.getProfession())));
+			matchRow.addColumn(new Column(String.valueOf(match.getReligion())));
+			report.addRow(matchRow);
+		}
 		return report;
 	}
 	
