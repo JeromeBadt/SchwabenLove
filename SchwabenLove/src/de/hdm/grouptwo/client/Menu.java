@@ -47,7 +47,7 @@ public class Menu extends Composite {
 				this, loginInfo);
 		contentPages.add(unviewedPage);
 		// contentPages.add(new MatchesBySearchprofileReportPage(loginInfo));
-		contentPages.add(new MatchesBySearchprofileReportPage());
+		contentPages.add(new MatchesBySearchprofileReportPage(loginInfo));
 		contentPages.add(new LogoutPage(loginInfo));
 
 		createMenu();
