@@ -44,6 +44,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		AdministrationService {
 	private static final long serialVersionUID = 1L;
 	private Profile user = null;
+
 	private ArrayList<Property> properties = null;
 
 	@Override
@@ -60,12 +61,10 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		// Create a default search profile
 		SearchProfile sp = new SearchProfile();
 		sp.setName("Standard");
-		createSearchProfile(sp);
-
-		ArrayList<Property> properties = getAllProperties();
+		createSearchProfile(sp, profileId);
 
 		// Create empty Information objects for the profile
-		for (Property p : properties) {
+		for (Property p : getAllProperties()) {
 			Information i = new Information();
 			i.setProfileId(profileId);
 			i.setPropertyId(p.getId());
@@ -93,42 +92,66 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		ArrayList<SearchProfile> searchProfiles = getSearchProfiles();
 		BookmarkList bookmarkList = BookmarkListMapper.bookmarkListMapper()
 				.findByProfile(userId);
-		ArrayList<Bookmark> bookmarks = BookmarkMapper.bookmarkMapper()
-				.findByBookmarkListId(bookmarkList.getId());
 
+		// Delete all Information objects that reference the profile
 		for (Information i : InformationMapper.informationMapper()
 				.findByProfileId(userId)) {
 			InformationMapper.informationMapper().delete(i);
 		}
 
+		// Delete all search profiles off that profile
 		for (SearchProfile sp : searchProfiles) {
 			SearchProfileMapper.searchProfileMapper().delete(sp);
 		}
 
+		// Delete all blocks from that profile
 		for (Block b : BlockMapper.blockMapper().findByBlockerProfileId(userId)) {
 			BlockMapper.blockMapper().delete(b);
 		}
 
+		// Delete all blocks to that profile
 		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(userId)) {
 			BlockMapper.blockMapper().delete(b);
 		}
 
-		BookmarkListMapper.bookmarkListMapper().delete(bookmarkList);
-
-		for (Bookmark b : bookmarks) {
+		// Delete all bookmarks from that profile
+		for (Bookmark b : BookmarkMapper.bookmarkMapper()
+				.findByBookmarkListId(bookmarkList.getId())) {
 			BookmarkMapper.bookmarkMapper().delete(b);
 		}
 
+		// Delete all bookmarks to that profile
+		for (Bookmark b : BookmarkMapper.bookmarkMapper()
+				.findByProfileId(userId)) {
+			BookmarkMapper.bookmarkMapper().delete(b);
+		}
+
+		// Delete the bookmark list of that profile
+		BookmarkListMapper.bookmarkListMapper().delete(bookmarkList);
+
+		// Delete all similarity degrees from that profile
 		for (SimilarityDegree sd : SimilarityDegreeMapper
 				.similarityDegreeMapper().findByReferenceProfileId(userId)) {
 			SimilarityDegreeMapper.similarityDegreeMapper().delete(sd);
 		}
 
+		// Delete all similarity degrees to that profile
 		for (SimilarityDegree sd : SimilarityDegreeMapper
 				.similarityDegreeMapper().findByComparisonProfileId(userId)) {
 			SimilarityDegreeMapper.similarityDegreeMapper().delete(sd);
 		}
 
+		// Delete all visits from that profile
+		for (Visit v : VisitMapper.visitMapper().findByVisitorProfileId(userId)) {
+			VisitMapper.visitMapper().delete(v);
+		}
+
+		// Delete all visits to that profile
+		for (Visit v : VisitMapper.visitMapper().findByVisitedProfileId(userId)) {
+			VisitMapper.visitMapper().delete(v);
+		}
+
+		// Finally, delete the profile itself
 		ProfileMapper.profileMapper().delete(user);
 	}
 
@@ -194,21 +217,26 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return searchProfiles;
 	}
 
-	@Override
-	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
+	private SearchProfile createSearchProfile(SearchProfile searchProfile,
+			int profileId) {
 		searchProfile = SearchProfileMapper.searchProfileMapper().insert(
 				searchProfile);
 
 		// Create empty Information objects for the search profile
 		for (Property p : getAllProperties()) {
 			Information i = new Information();
-			i.setProfileId(user.getId());
+			i.setProfileId(profileId);
 			i.setPropertyId(p.getId());
 			i.setSearchProfileId(searchProfile.getId());
 			InformationMapper.informationMapper().insert(i);
 		}
 
 		return searchProfile;
+	}
+
+	@Override
+	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
+		return createSearchProfile(searchProfile, user.getId());
 	}
 
 	@Override
