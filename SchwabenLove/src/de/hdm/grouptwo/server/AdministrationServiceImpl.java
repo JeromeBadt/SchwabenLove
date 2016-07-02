@@ -83,8 +83,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		ArrayList<Property> properties = getAllProperties();
 
-		System.out.println("After getAllProperties");
-
 		// Create empty Information objects for the profile
 		for (Property p : properties) {
 			Information i = new Information();
@@ -767,9 +765,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	private int calculateSimilarityDegreeScore(Profile ref,
 			Profile comp) {
-		System.out.println("calculateSimilarityDegree()");
-		System.out.println("Ref: " + ref + " Comp: " + comp);
-
 		int score = 0;
 
 		if (ref.getLocation().equals(comp.getLocation())) {
@@ -798,8 +793,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			score += 26;
 		}
 
-		System.out.println("Score before Information: " + score);
-
 		ArrayList<Information> refInformation = getInformationByProfileId(
 				ref.getId());
 		ArrayList<Information> compInformation = getInformationByProfileId(
@@ -820,8 +813,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 				}
 			}
 		}
-
-		System.out.println("Final score: " + score);
 
 		return score;
 	}
