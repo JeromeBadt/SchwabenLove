@@ -23,7 +23,7 @@ public class ProfileWidget extends ResizeComposite {
 
 		LayoutPanel innerPanel = new LayoutPanel();
 
-		Image profilePicture = new Image("images/38.png");
+		Image profilePicture = new Image("images/default.png");
 		profilePicture.setWidth("96px");
 
 		VerticalPanel vPanel1 = new VerticalPanel();

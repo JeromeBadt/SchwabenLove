@@ -105,7 +105,7 @@ public class ProfilePage extends ContentPage {
 	}
 
 	public void showProfile() {
-		Image profilePicture = new Image("images/38.png");
+		Image profilePicture = new Image("images/default.png");
 		profilePicture.addStyleName("profile-picture");
 		profilePicture.setWidth("256px");
 
