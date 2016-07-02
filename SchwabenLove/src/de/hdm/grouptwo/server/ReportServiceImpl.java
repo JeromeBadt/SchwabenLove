@@ -25,6 +25,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	
 	private static final long serialVersionUID = 1L;
 	private AdministrationService administrationService = null;
+	private Profile user = null;
 	
 	
 	/**
@@ -76,7 +77,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		CompositeParagraph header = new CompositeParagraph();
 		
 		// TODO für Name etc wird Profil benötigt
-		header.addSubParagraph(new SimpleParagraph("Report for User: " ));	
+		header.addSubParagraph(new SimpleParagraph("Report for User: " + user.getFirstName() + " " + user.getLastName()));	
 		report.setHeaderData(header);
 		
 		// New Row for headline
@@ -111,6 +112,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 			matchRow.addColumn(new Column(String.valueOf(match.getGender())));
 			matchRow.addColumn(new Column(String.valueOf(match.getBirthdate())));
 			matchRow.addColumn(new Column(String.valueOf(match.getLocation())));
+			matchRow.addColumn(new Column(String.valueOf(match.getHeight())));
 			matchRow.addColumn(new Column(String.valueOf(match.getPhysique())));
 			matchRow.addColumn(new Column(String.valueOf(match.getHairColor())));
 			matchRow.addColumn(new Column(String.valueOf(match.getSmoker())));
@@ -141,6 +143,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	
 	public void setupAdministration(String email) {
 		this.administrationService.setProfile(email);
+		this.user = this.administrationService.getProfile();
 	}
 	
 	
