@@ -1,31 +1,22 @@
 package de.hdm.grouptwo.client;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.grouptwo.shared.AdministrationServiceAsync;
 import de.hdm.grouptwo.shared.ReportServiceAsync;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.SearchProfile;
 import de.hdm.grouptwo.shared.report.HTMLReportWriter;
 import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
-import de.hdm.grouptwo.shared.report.SimpleReport;
 
 public class MatchesBySearchprofileReportPage extends ContentPage {
 	private VerticalPanel vPanel = new VerticalPanel();
@@ -82,7 +73,7 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 			
 		});	
 		
-		// loadReport(activeSearchProfile);
+		loadReport(activeSearchProfile);
 		
 		sPanel.add(vPanel);
 		
@@ -99,6 +90,8 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 		for(SearchProfile sp : searchProfiles) {
 			lb.addItem(sp.getName());
 		}
+		
+		activeSearchProfile = searchProfilesFinal.get(0);
 		
 		// Add Functionality to ListBox
 		lb.addChangeHandler(new ChangeHandler() {

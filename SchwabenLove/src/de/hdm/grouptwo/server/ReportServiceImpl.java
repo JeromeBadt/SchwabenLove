@@ -5,14 +5,10 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.grouptwo.client.ClientsideSettings;
 import de.hdm.grouptwo.shared.AdministrationService;
 import de.hdm.grouptwo.shared.ReportService;
-import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.SearchProfile;
 import de.hdm.grouptwo.shared.report.Column;
@@ -121,10 +117,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	
 		return report;
 	}
-	
-	public String testMethod() {
-		return "RPC worked";
-	}
+
 	
 	/**
 	 * Method to get a <code>Report</code> Object of all unviewed Matches
