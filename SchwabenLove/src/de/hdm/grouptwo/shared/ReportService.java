@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
+import de.hdm.grouptwo.shared.bo.SearchProfile;
 import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
 import de.hdm.grouptwo.shared.report.SimpleReport;
 import de.hdm.grouptwo.shared.report.UnviewedMatchesReport;
@@ -23,6 +24,8 @@ public interface ReportService extends RemoteService {
 	public UnviewedMatchesReport getUnviewedMatches(Profile p);
 	
 	public String testMethod();
+	
+	public void setupAdministration(String email);
 
 
 

@@ -34,20 +34,35 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 	
 	private ScrollPanel sPanel = new ScrollPanel();
 	
-//	private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
+	private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
 //	private SearchProfile activeSearchProfile = null;
 //	private LoginInfo loginInfo = null;
 	
 	private ReportServiceAsync reportService = ClientsideSettings.getReportService();
-//	private AdministrationServiceAsync administrationService = ClientsideSettings
-//			.getAdministrationService();
+	private AdministrationServiceAsync administrationService = ClientsideSettings
+			.getAdministrationService();
 	
 	
 	
-	public MatchesBySearchprofileReportPage() {	
+	public MatchesBySearchprofileReportPage(LoginInfo loginInfo) {	
 		super("Partnervorschläge anhand von Suchprofil");
 		// initWidget(lPanel);
 		// this.loginInfo = loginInfo;
+		reportService.setupAdministration(loginInfo.getEmailAddress(), new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		// lPanel.setStyleName("matches-page");
 		// matchesPanel.setStyleName("matches");
 		
@@ -64,7 +79,22 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 		
 		final VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("90%");
-		sPanel.add(vPanel);
+		
+//		administrationService.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void onSuccess(ArrayList<SearchProfile> result) {
+//				// TODO Auto-generated method stub
+//				searchProfiles = result;
+//			}
+//			
+//		});
 		
 		reportService.getMatchesBySearchprofileReport(new AsyncCallback<MatchesBySearchprofileReport>() {
 
@@ -81,6 +111,7 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 				final MatchesBySearchprofileReport report = result;
 				writer.process(result);
 				vPanel.add(new HTML(writer.getReportText()));
+				sPanel.add(vPanel);
 			}
 			
 		});

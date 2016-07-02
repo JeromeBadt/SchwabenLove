@@ -41,12 +41,12 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 */
 	public void init() {
 		AdministrationServiceImpl admin = new AdministrationServiceImpl();
-		try {
-			admin.init();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			admin.init();
+//		} catch (ServletException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		this.administrationService = admin;
 	}
 	
@@ -85,25 +85,18 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		row.addColumn(new Column("Email"));
 		report.addRow(row);
 		
-//		ArrayList<SearchProfile> searchProfiles = this.administrationService.getSearchProfiles();
-//		SearchProfile searchProfile = searchProfiles.get(0);
-//		if (searchProfile == null) {
-//			searchProfile = searchProfiles.get(1);
-//		}
-//		if (searchProfile == null) {
-//			searchProfile = searchProfiles.get(2);
-//		}
-		SearchProfile searchProfile = new SearchProfile();
-		searchProfile.setId(2);
-		searchProfile.setName("Standard 2");
-		ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(searchProfile);
-		
-		for (Profile match : matches) {
-			Row matchRow = new Row();
-			matchRow.addColumn(new Column(String.valueOf(match.getId())));
-			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
+		ArrayList<SearchProfile> searchProfiles = this.administrationService.getSearchProfiles();
+		for (SearchProfile sp : searchProfiles) {
+			ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(sp);
+			
+			for (Profile match : matches) {
+				Row matchRow = new Row();
+				matchRow.addColumn(new Column(String.valueOf(match.getId())));
+				matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
+				report.addRow(matchRow);
+			}
 		}
-		
+	
 		return report;
 	}
 	
@@ -121,6 +114,10 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		UnviewedMatchesReport report = new UnviewedMatchesReport();
 		// Do something
 		return report;
+	}
+	
+	public void setupAdministration(String email) {
+		this.administrationService.setProfile(email);
 	}
 	
 	
