@@ -40,12 +40,28 @@ import de.hdm.grouptwo.shared.bo.SelectionItem;
 import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.bo.Visit;
 
+/**
+ * Implementation class of the Interface AdministrationService.
+ * This class aggregates, besides the ReportServiceImpl class, the whole application logic.
+ * The application logic is defined in the methods of this class,
+ * also it includes the objects of Mapper classes, which are necessary for 
+ * the Database access.
+ * @author manuelruss
+ *
+ */
+
 public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		AdministrationService {
 	private static final long serialVersionUID = 1L;
 	private Profile user = null;
 	private ArrayList<Property> properties = null;
 
+	/**
+	 * This method creates a new profile, which is also saved in the database,
+	 * at the same time. In addition to the profile, which was created, also a bookmark list,
+	 * a search profile and information objects for this profile are created.
+	 */
+	
 	@Override
 	public void createProfile(Profile profile) {
 		profile = ProfileMapper.profileMapper().insert(profile);
@@ -75,11 +91,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		// ToDo: Calculate similarity degrees
 	}
 
+	/**
+	 * This method returns a users profile.
+	 */
 	@Override
 	public Profile getProfile() {
 		return user;
 	}
 
+	/**
+	 * Sets an email adress to a profile.
+	 */
 	@Override
 	public Profile setProfile(String email) {
 		user = ProfileMapper.profileMapper().findByEmail(email);
@@ -102,6 +124,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return ProfileMapper.profileMapper().findById(profile.getId());
 	}
 
+	/**
+	 * Delete the users profile.
+	 */
 	@Override
 	public void deleteProfile() {
 		int userId = user.getId();
@@ -147,6 +172,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		ProfileMapper.profileMapper().delete(user);
 	}
 
+	/**
+	 * Adds a bookmark  based on the profile id.
+	 */
 	@Override
 	public void addBookmarkByProfileId(int profileId) {
 		Bookmark bookmark = new Bookmark();
@@ -157,6 +185,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		BookmarkMapper.bookmarkMapper().insert(bookmark);
 	}
 
+	/**
+	 * Adds a block to a profile of another user, based on the profile id.
+	 */
 	@Override
 	public void addBlockByProfileId(int profileId) {
 		Block block = new Block();
@@ -166,11 +197,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		BlockMapper.blockMapper().insert(block);
 	}
 
+	/**
+	 * Returns the profile id.
+	 */
 	@Override
 	public Profile getProfileById(int id) {
 		return ProfileMapper.profileMapper().findById(id);
 	}
 
+	/**
+	 * Returns the information of the profile.
+	 */
 	@Override
 	public ArrayList<Information> getInformationByProfileId(int profileId) {
 		ArrayList<Information> information = InformationMapper
@@ -188,6 +225,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return information;
 	}
 
+	/**
+	 * Returns the similarity degree of the profile.
+	 */
 	@Override
 	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId) {
 		SimilarityDegree similarityDegree = null;
@@ -202,6 +242,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return similarityDegree;
 	}
 
+	/**
+	 * Returns the existing searchprofiles.
+	 */
 	@Override
 	public ArrayList<SearchProfile> getSearchProfiles() {
 		ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
@@ -222,6 +265,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return searchProfiles;
 	}
 
+	/**
+	 * Create a new searchprofile.
+	 */
 	@Override
 	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
 		searchProfile = SearchProfileMapper.searchProfileMapper().insert(
@@ -239,11 +285,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return searchProfile;
 	}
 
+	/**
+	 * Update the attributes of an existing searchprofile of the current user.
+	 */
 	@Override
 	public void updateSearchProfile(SearchProfile searchProfile) {
 		SearchProfileMapper.searchProfileMapper().update(searchProfile);
 	}
 
+	/**
+	 * Delete a existing searchprofile of the current user.
+	 */
 	@Override
 	public void deleteSearchProfile(SearchProfile searchProfile) {
 		for (Information i : InformationMapper.informationMapper()
@@ -254,6 +306,10 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		SearchProfileMapper.searchProfileMapper().delete(searchProfile);
 	}
 
+	/**
+	 * Return the matches by the selected searchprofile,
+	 * depending on the selected attributes.
+	 */
 	@Override
 	public ArrayList<Profile> getMatchesBySearchProfile(SearchProfile sp) {
 		// ToDo: get profiles ordered by similarity degree
@@ -351,6 +407,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return matches;
 	}
 
+	/**
+	 * Return the bookmarked profiles of the current user.
+	 */
 	@Override
 	public ArrayList<Profile> getBookmarkedProfiles() {
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
@@ -363,6 +422,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return profiles;
 	}
 
+	/**
+	 * Check if the profile is bookmarked already.
+	 */
 	@Override
 	public boolean checkBookmarked(int profileId) {
 		for (Bookmark b : getBookmarks()) {
@@ -374,6 +436,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return false;
 	}
 
+	/**
+	 * Returns the blocked profiles of the current user.
+	 */
 	@Override
 	public ArrayList<Profile> getBlockedProfiles() {
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
@@ -389,6 +454,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return profiles;
 	}
 
+	/**
+	 * Delete an existing bookmark of the current user.
+	 */
 	@Override
 	public void deleteBookmark(int profileId) {
 		for (Bookmark b : getBookmarks()) {
@@ -399,6 +467,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	/**
+	 * Delete an existing block of the current user.
+	 */
 	@Override
 	public void deleteBlock(int profileId) {
 		// Find the profile to delete within the users blocks
@@ -411,6 +482,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	
 	@Override
 	public ArrayList<String> loadTableNames() {
 		ArrayList<String> tableNames = new ArrayList<String>();
@@ -433,36 +505,57 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return tableNames;
 	}
 
+	/**
+	 * Show all existing blocks.
+	 */
 	@Override
 	public ArrayList<Block> getAllBlocks() {
 		return BlockMapper.blockMapper().findAll();
 	}
 
+	/**
+	 * Return all bookmarklists.
+	 */
 	@Override
 	public ArrayList<BookmarkList> getAllBookmarkLists() {
 		return BookmarkListMapper.bookmarkListMapper().findAll();
 	}
 
+	/**
+	 * Return all bookmarks.
+	 */
 	@Override
 	public ArrayList<Bookmark> getAllBookmarks() {
 		return BookmarkMapper.bookmarkMapper().findAll();
 	}
 
+	/**
+	 * Return all descriptions.
+	 */
 	@Override
 	public ArrayList<Description> getAllDescriptions() {
 		return DescriptionMapper.descriptionMapper().findAll();
 	}
 
+	/**
+	 * Return all information.
+	 */
 	@Override
 	public ArrayList<Information> getAllInformation() {
 		return InformationMapper.informationMapper().findAll();
 	}
 
+	/**
+	 * Return all profiles.
+	 */
 	@Override
 	public ArrayList<Profile> getAllProfiles() {
 		return ProfileMapper.profileMapper().findAll();
 	}
 
+	/**
+	 * Return all properties.
+	 */
 	@Override
 	public ArrayList<Property> getAllProperties() {
 		if (properties == null) {
@@ -472,26 +565,41 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return properties;
 	}
 
+	/**
+	 * Return all searchprofiles.
+	 */
 	@Override
 	public ArrayList<SearchProfile> getAllSearchProfiles() {
 		return SearchProfileMapper.searchProfileMapper().findAll();
 	}
 
+	/**
+	 * Return all selectionitems.
+	 */
 	@Override
 	public ArrayList<SelectionItem> getAllSelectionItems() {
 		return SelectionItemMapper.selectionItemMapper().findAll();
 	}
 
+	/**
+	 * Return all selections.
+	 */
 	@Override
 	public ArrayList<Selection> getAllSelections() {
 		return SelectionMapper.selectionMapper().findAll();
 	}
 
+	/**
+	 * Return all similaritydegrees.
+	 */
 	@Override
 	public ArrayList<SimilarityDegree> getAllSimilarityDegrees() {
 		return SimilarityDegreeMapper.similarityDegreeMapper().findAll();
 	}
 
+	/**
+	 * Return all visits.
+	 */
 	@Override
 	public ArrayList<Visit> getAllVisits() {
 		return VisitMapper.visitMapper().findAll();
@@ -561,6 +669,10 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return true;
 	}
 
+	/**
+	 * Get the bookmark list ID of the current user.
+	 * @return
+	 */
 	private ArrayList<Bookmark> getBookmarks() {
 		// Get the bookmark list ID of the current user
 		int bookmarkListId = BookmarkListMapper.bookmarkListMapper()
