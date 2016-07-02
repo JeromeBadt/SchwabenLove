@@ -28,26 +28,21 @@ import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
 import de.hdm.grouptwo.shared.report.SimpleReport;
 
 public class MatchesBySearchprofileReportPage extends ContentPage {
-//	private LayoutPanel lPanel = new LayoutPanel();
-//	private LayoutPanel matchesPanel = new LayoutPanel();
-//	private LayoutPanel searchProfilePanel = new LayoutPanel();
+	private VerticalPanel vPanel = new VerticalPanel();
+	// private HorizontalPanel hTop = new HorizontalPanel();
+	// private HorizontalPanel hMain = new HorizontalPanel();
 	
 	private ScrollPanel sPanel = new ScrollPanel();
 	
 	private ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
-//	private SearchProfile activeSearchProfile = null;
-//	private LoginInfo loginInfo = null;
+	private SearchProfile activeSearchProfile = new SearchProfile();
 	
 	private ReportServiceAsync reportService = ClientsideSettings.getReportService();
-	private AdministrationServiceAsync administrationService = ClientsideSettings
-			.getAdministrationService();
-	
 	
 	
 	public MatchesBySearchprofileReportPage(LoginInfo loginInfo) {	
 		super("Partnervorschläge anhand von Suchprofil");
-		// initWidget(lPanel);
-		// this.loginInfo = loginInfo;
+	
 		reportService.setupAdministration(loginInfo.getEmailAddress(), new AsyncCallback<Void>() {
 
 			@Override
@@ -63,13 +58,60 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 			}
 			
 		});
-		// lPanel.setStyleName("matches-page");
-		// matchesPanel.setStyleName("matches");
 		
-		// lPanel.add(matchesPanel);
-		//lPanel.add(searchProfilePanel);
+		// Initialize root panel for content
 		initWidget(sPanel);
 		
+		// Get all SearchProfiles for logged in User
+		administrationService.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ArrayList<SearchProfile> result) {
+				// TODO Auto-generated method stub
+				searchProfiles = result;
+				loadSearchProfilePicker(searchProfiles);
+				
+			}
+			
+		});	
+		
+		loadReport();
+		
+		sPanel.add(vPanel);
+		
+
+	}
+	
+	public void loadSearchProfilePicker(ArrayList<SearchProfile> searchProfiles) {
+		ListBox lb = new ListBox();
+		lb.setVisibleItemCount(1);
+		
+		final ArrayList<SearchProfile> searchProfilesFinal = searchProfiles;
+		
+		// populate ListBox with SearchProfiles
+		for(SearchProfile sp : searchProfiles) {
+			lb.addItem(sp.getName());
+		}
+		
+		// Add Functionality to ListBox
+		lb.addChangeHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				activeSearchProfile = searchProfilesFinal.get(((ListBox) event.getSource()).getSelectedIndex());
+				
+			}
+			
+		});
+		
+		// Add ListBox to vPanel
+		vPanel.add(lb);
 		
 		
 	}
@@ -77,25 +119,17 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 	@Override
 	public void updatePage() {
 		
-		final VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setWidth("90%");
+//		hTop.setWidth("90%");
+//		hMain.setWidth("90%");
+		// final VerticalPanel vPanel = new VerticalPanel();
+		// vPanel.setWidth("90%");
 		
-//		administrationService.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(ArrayList<SearchProfile> result) {
-//				// TODO Auto-generated method stub
-//				searchProfiles = result;
-//			}
-//			
-//		});
 		
+		
+		
+	}
+	
+	public void loadReport() {
 		reportService.getMatchesBySearchprofileReport(new AsyncCallback<MatchesBySearchprofileReport>() {
 
 			@Override
@@ -111,227 +145,12 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 				final MatchesBySearchprofileReport report = result;
 				writer.process(result);
 				vPanel.add(new HTML(writer.getReportText()));
-				sPanel.add(vPanel);
+				// hMain.add(sPanel);
+				// rootP.add(hMain);
 			}
 			
 		});
-		
-		
-		// TODO Auto-generated method stub
-//		matchesPanel.clear();
-//		lPanel.setWidgetTopHeight(matchesPanel, 0, Unit.PX, 0, Unit.PX);
-//		reportService.getMatchesBySearchprofileReport(loginInfo, new AsyncCallback<MatchesBySearchprofileReport>(){
-//		reportService.getMatchesBySearchprofileReport(new AsyncCallback<MatchesBySearchprofileReport>(){
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//				Label lbl = new Label();
-//				lbl.setText("TEST FAILURE");
-//				matchesPanel.add(lbl);
-//			}
-//
-//			@Override
-//			public void onSuccess(MatchesBySearchprofileReport result) {
-//				// TODO Auto-generated method stub
-//				HTMLReportWriter writer = new HTMLReportWriter();
-//				final MatchesBySearchprofileReport report = result;
-//				writer.process(result);
-//				Label lbl = new Label();
-//				lbl.setText("TEST");
-//				matchesPanel.add(lbl);
-//				matchesPanel.add(new HTML(writer.getReportText()));
-//			}
-//			
-//		});
-		
-//		reportService.testMethod(new AsyncCallback<String>() {
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//				Label lbl = new Label();
-//				lbl.setText("RPC FAILURE");
-//				VerticalPanel vpanel = new VerticalPanel();
-//				HorizontalPanel hpanel = new HorizontalPanel();
-//				
-//				hpanel.add(lbl);
-//				vpanel.add(hpanel);
-//				matchesPanel.add(vpanel);
-//			}
-//
-//			@Override
-//			public void onSuccess(String result) {
-//				// TODO Auto-generated method stub
-//				Label lbl = new Label();
-//				lbl.setText(result);
-//				VerticalPanel vpanel = new VerticalPanel();
-//				HorizontalPanel hpanel = new HorizontalPanel();
-//				
-//				hpanel.add(lbl);
-//				vpanel.add(hpanel);
-//				matchesPanel.add(vpanel);
-//			}
-//			
-//		});
-		
-		
-//		administrationService
-//		.getSearchProfiles(new AsyncCallback<ArrayList<SearchProfile>>() {
-//			public void onSuccess(ArrayList<SearchProfile> result) {
-//				showSearchProfiles(result);
-//			}
-//
-//			public void onFailure(Throwable caught) {
-//				ClientsideSettings.getLogger().log(Level.WARNING,
-//						caught.getMessage());
-//			}
-//		});
-		
 	}
-	
-//	private void showSearchProfiles(ArrayList<SearchProfile> searchProfiles) {
-//		this.searchProfiles = searchProfiles;
-//
-//		ListBox searchProfileDropBox = new ListBox();
-//		searchProfileDropBox.addChangeHandler(new ChangeHandler() {
-//			public void onChange(ChangeEvent event) {
-////				updateActiveSearchProfile(((ListBox) event.getSource())
-////						.getSelectedItemText());
-//			}
-//		});
-//		
-//		for (SearchProfile sp : searchProfiles) {
-//			searchProfileDropBox.addItem(sp.getName());
-//		}
-//		
-//		Image addIcon = new Image("images/icons/add.png");
-//		addIcon.setWidth("24px");
-//		Image deleteIcon = new Image("images/icons/delete.png");
-//		deleteIcon.setWidth("24px");
-//
-//		VerticalPanel vPanel = new VerticalPanel();
-//		vPanel.setStyleName("search-profile-panel-inner");
-//		Label attributeLabel = new Label("Attribute");
-//		attributeLabel.addStyleName("search-profile-header");
-//		attributeLabel.addStyleName("attribute-label");
-//		vPanel.add(attributeLabel);
-//
-//		HorizontalPanel hPanel = new HorizontalPanel();
-//		hPanel.setStyleName("search-profile-panel-h");
-//
-//		VerticalPanel labelPanel = new VerticalPanel();
-//		labelPanel.setWidth("119px");
-//
-//		labelPanel.add(new Label("Geschlecht:"));
-//		labelPanel.add(new Label("Alter:"));
-//		labelPanel.add(new Label("Körperbau:"));
-//		labelPanel.add(new Label("Größe:"));
-//		labelPanel.add(new Label("Haarfarbe:"));
-//		labelPanel.add(new Label("Beruf:"));
-//		labelPanel.add(new Label("Raucher:"));
-//		labelPanel.add(new Label("Bildung:"));
-//		labelPanel.add(new Label("Religion:"));
-//
-//		VerticalPanel inputPanel = new VerticalPanel();
-//		inputPanel.setWidth("159px");
-//		inputPanel.setStyleName("search-profile-input-panel");
-//
-//		HorizontalPanel genderPanel = new HorizontalPanel();
-//		genderPanel.setHeight("24px");
-//		CheckBox maleCheckBox = new CheckBox("m");
-//		CheckBox femaleCheckBox = new CheckBox("w");
-//		genderPanel.add(maleCheckBox);
-//		genderPanel.add(femaleCheckBox);
-//
-//		HorizontalPanel agePanel = new HorizontalPanel();
-//		TextBox minAgeTextBox = new TextBox();
-//		minAgeTextBox.setWidth("35px");
-//		TextBox maxAgeTextBox = new TextBox();
-//		maxAgeTextBox.setWidth("35px");
-//		agePanel.add(minAgeTextBox);
-//		agePanel.add(new Label("-"));
-//		agePanel.add(maxAgeTextBox);
-//		agePanel.add(new Label("Jahre"));
-//
-//		TextBox physiqueTextBox = new TextBox();
-//
-//		HorizontalPanel heightPanel = new HorizontalPanel();
-//		TextBox minHeightTextBox = new TextBox();
-//		minHeightTextBox.setWidth("35px");
-//		TextBox maxHeightTextBox = new TextBox();
-//		maxHeightTextBox.setWidth("35px");
-//		heightPanel.add(minHeightTextBox);
-//		heightPanel.add(new Label("-"));
-//		heightPanel.add(maxHeightTextBox);
-//		heightPanel.add(new Label("cm"));
-//
-//		TextBox hairColorTextBox = new TextBox();
-//
-//		TextBox professionTextBox = new TextBox();
-//
-//		HorizontalPanel smokerPanel = new HorizontalPanel();
-//		smokerPanel.setHeight("24px");
-//		CheckBox yesCheckBox = new CheckBox("ja");
-//		CheckBox noCheckBox = new CheckBox("nein");
-//		smokerPanel.add(yesCheckBox);
-//		smokerPanel.add(noCheckBox);
-//
-//		TextBox educationTextBox = new TextBox();
-//
-//		TextBox religionTextBox = new TextBox();
-//
-//		inputPanel.add(genderPanel);
-//		inputPanel.add(agePanel);
-//		inputPanel.add(physiqueTextBox);
-//		inputPanel.add(heightPanel);
-//		inputPanel.add(hairColorTextBox);
-//		inputPanel.add(professionTextBox);
-//		inputPanel.add(smokerPanel);
-//		inputPanel.add(educationTextBox);
-//		inputPanel.add(religionTextBox);
-//
-//		Label infoObjectsLabel = new Label("Info Objekte");
-//		infoObjectsLabel.addStyleName("search-profile-header");
-//		infoObjectsLabel.addStyleName("info-object-label");
-//
-//		hPanel.add(labelPanel);
-//		hPanel.add(inputPanel);
-//		vPanel.add(hPanel);
-//		vPanel.add(infoObjectsLabel);
-//
-//		Button saveButton = new Button("Suchprofil speichern");
-//		saveButton.setStyleName("search-profile-save-button");
-//
-//		searchProfilePanel.add(searchProfileDropBox);
-//		searchProfilePanel.add(addIcon);
-//		searchProfilePanel.add(deleteIcon);
-//		searchProfilePanel.add(vPanel);
-//		searchProfilePanel.add(saveButton);
-//
-//		searchProfileDropBox.setStyleName("search-profile-dropbox");
-//
-//		searchProfilePanel.setWidgetRightWidth(addIcon, 34, Unit.PX, 24,
-//				Unit.PX);
-//		searchProfilePanel.setWidgetRightWidth(deleteIcon, 0, Unit.PX, 24,
-//				Unit.PX);
-//		searchProfilePanel
-//				.setWidgetTopHeight(vPanel, 34, Unit.PX, 288, Unit.PX);
-//		searchProfilePanel.setWidgetTopHeight(saveButton, 332, Unit.PX, 24,
-//				Unit.PX);
-//		lPanel.setWidgetTopHeight(searchProfilePanel, 0, Unit.PX, 356, Unit.PX);
-//		
-//		// updateActiveSearchProfile(searchProfileDropBox.getSelectedItemText());
-//	}
-		
-		
-//		private void updateActiveSearchProfile(String searchProfileName) {
-//			for (SearchProfile sp : searchProfiles) {
-//				if (sp.getName() == searchProfileName) {
-//					activeSearchProfile = sp;
-//				}
-//			}
-//		}
 	
 	
 
