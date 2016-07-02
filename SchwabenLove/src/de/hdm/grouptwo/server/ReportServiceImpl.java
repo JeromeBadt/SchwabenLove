@@ -25,6 +25,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	
 	private static final long serialVersionUID = 1L;
 	private AdministrationService administrationService = null;
+	private Profile user = null;
 	
 	
 	/**
@@ -41,17 +42,11 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 */
 	public void init() {
 		AdministrationServiceImpl admin = new AdministrationServiceImpl();
-//		try {
-//			admin.init();
-//		} catch (ServletException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		this.administrationService = admin;
 	}
 	
 	/**
-	 * Method to get the AdministrationService Object
+	 * Method to get the <code>AdministrationService</code> Object
 	 * 
 	 * @return AdministrationService
 	 */
@@ -60,41 +55,66 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	/**
-	 * Method to get all matches by searchprofile, sorted by similarity degree
+	 * Method to get a <code>Report</code> Object of all matches by searchprofile, 
+	 * sorted by similarity degree
 	 * 
 	 * @param Profile
 	 * @return MatchesBySearchprofileReport
 	 */
 	//public MatchesBySearchprofileReport getMatchesBySearchprofileReport(LoginInfo loginInfo) {
-	public MatchesBySearchprofileReport getMatchesBySearchprofileReport() {
+	public MatchesBySearchprofileReport getMatchesBySearchprofileReport(SearchProfile searchProfile) {
 		MatchesBySearchprofileReport report = new MatchesBySearchprofileReport();
 	
-		// TODO Namen von Searchprofile hinzufügen
-		report.setTitle("Matches for Searchprofile");
+		// Set Title
+		report.setTitle("Matches for Searchprofile " + searchProfile.getName());
 		report.setCreated(new Date());
 		
 		CompositeParagraph header = new CompositeParagraph();
 		
-		// TODO für Name etc wird Profil benötigt
-		header.addSubParagraph(new SimpleParagraph("Report for User: "));	
+		// Set User Name
+		header.addSubParagraph(new SimpleParagraph("Report for User: " + user.getFirstName() + " " + user.getLastName()));	
 		report.setHeaderData(header);
 		
-		// TEST
+		// New Row for headline
 		Row row = new Row();
 		row.addColumn(new Column("ID"));
 		row.addColumn(new Column("Email"));
+		row.addColumn(new Column("First Name"));
+		row.addColumn(new Column("Last Name"));
+		row.addColumn(new Column("Gender"));
+		row.addColumn(new Column("Birthdate"));
+		row.addColumn(new Column("Location"));
+		row.addColumn(new Column("Height"));
+		row.addColumn(new Column("Physique"));
+		row.addColumn(new Column("Hair Color"));
+		row.addColumn(new Column("Smoker"));
+		row.addColumn(new Column("Education"));
+		row.addColumn(new Column("Profession"));
+		row.addColumn(new Column("Religion"));
+		
+		// Add headline row
 		report.addRow(row);
 		
-		ArrayList<SearchProfile> searchProfiles = this.administrationService.getSearchProfiles();
-		for (SearchProfile sp : searchProfiles) {
-			ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(sp);
+		// Get Matches by SearchProfile
+		ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(searchProfile);
 			
-			for (Profile match : matches) {
-				Row matchRow = new Row();
-				matchRow.addColumn(new Column(String.valueOf(match.getId())));
-				matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
-				report.addRow(matchRow);
-			}
+		for (Profile match : matches) {
+			Row matchRow = new Row();
+			matchRow.addColumn(new Column(String.valueOf(match.getId())));
+			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
+			matchRow.addColumn(new Column(String.valueOf(match.getFirstName())));
+			matchRow.addColumn(new Column(String.valueOf(match.getLastName())));
+			matchRow.addColumn(new Column(String.valueOf(match.getGender())));
+			matchRow.addColumn(new Column(String.valueOf(match.getBirthdate())));
+			matchRow.addColumn(new Column(String.valueOf(match.getLocation())));
+			matchRow.addColumn(new Column(String.valueOf(match.getHeight())));
+			matchRow.addColumn(new Column(String.valueOf(match.getPhysique())));
+			matchRow.addColumn(new Column(String.valueOf(match.getHairColor())));
+			matchRow.addColumn(new Column(String.valueOf(match.getSmoker())));
+			matchRow.addColumn(new Column(String.valueOf(match.getEducation())));
+			matchRow.addColumn(new Column(String.valueOf(match.getProfession())));
+			matchRow.addColumn(new Column(String.valueOf(match.getReligion())));
+			report.addRow(matchRow);
 		}
 	
 		return report;
@@ -105,19 +125,56 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	}
 	
 	/**
-	 * Method to get alle unviewed Matches
+	 * Method to get a <code>Report</code> Object of all unviewed Matches
 	 * 
 	 * @param Profile
 	 * @return
 	 */
 	public UnviewedMatchesReport getUnviewedMatches(Profile p) {
 		UnviewedMatchesReport report = new UnviewedMatchesReport();
-		// Do something
+		
+		// Set Title
+		report.setTitle("Unviewed Matches");
+		report.setCreated(new Date());
+		
+		CompositeParagraph header = new CompositeParagraph();
+		
+		// Set User Name
+		header.addSubParagraph(new SimpleParagraph("Report for User: " + user.getFirstName() + " " + user.getLastName()));
+		
+		// New Row for headline
+		Row row = new Row();
+		row.addColumn(new Column("ID"));
+		row.addColumn(new Column("Email"));
+		row.addColumn(new Column("First Name"));
+		row.addColumn(new Column("Last Name"));
+		row.addColumn(new Column("Gender"));
+		row.addColumn(new Column("Birthdate"));
+		row.addColumn(new Column("Location"));
+		row.addColumn(new Column("Height"));
+		row.addColumn(new Column("Physique"));
+		row.addColumn(new Column("Hair Color"));
+		row.addColumn(new Column("Smoker"));
+		row.addColumn(new Column("Education"));
+		row.addColumn(new Column("Profession"));
+		row.addColumn(new Column("Religion"));
+		
+		// Add headline row
+		report.addRow(row);
+		
+		// Get unviewed matches
+		// ArrayList<Profile> matches = this.administrationService.
 		return report;
 	}
 	
+	/**
+	 * Method to set the correct user for <code>AdministrationService</code> Object
+	 * 
+	 * @param Email
+	 */
 	public void setupAdministration(String email) {
 		this.administrationService.setProfile(email);
+		this.user = this.administrationService.getProfile();
 	}
 	
 	
