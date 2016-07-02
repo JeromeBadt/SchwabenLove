@@ -180,6 +180,40 @@ public class BookmarkMapper implements DataMapper<Bookmark> {
 	}
 
 	/**
+	 * Find all <code>Bookmark</code> objects which reference a specific profile
+	 * in the DB.
+	 * 
+	 * @param profileId
+	 *            The profile id by which to find the objects
+	 * @return ArrayList of found <code>Bookmark</code> objects
+	 */
+	public ArrayList<Bookmark> findByProfileId(int profileId) {
+		Connection con = DBConnection.connection();
+
+		ArrayList<Bookmark> result = new ArrayList<Bookmark>();
+
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT bookmark_id, "
+					+ "fk_profile_id, fk_bookmark_list_id FROM bookmark WHERE "
+					+ "fk_profile_id=" + profileId);
+
+			while (rs.next()) {
+				Bookmark b = new Bookmark();
+				b.setId(rs.getInt("bookmark_id"));
+				b.setProfileId(rs.getInt("fk_profile_id"));
+				b.setBookmarkListId(rs.getInt("fk_bookmark_list_id"));
+
+				result.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
 	 * Find all <code>Bookmark</code> objects which belong to a specific
 	 * bookmark list in the DB.
 	 * 

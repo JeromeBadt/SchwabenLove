@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import de.hdm.grouptwo.shared.bo.Profile;
@@ -86,8 +85,7 @@ public abstract class ListPage extends ContentPage {
 					int offset = 0;
 					for (int i = 0; i < listPanel.getWidgetCount(); i++) {
 						listPanel.setWidgetTopHeight(listPanel.getWidget(i),
-								offset, Unit.PX,
-								118, Unit.PX);
+								offset, Unit.PX, 118, Unit.PX);
 						offset += 128;
 					}
 
@@ -95,23 +93,13 @@ public abstract class ListPage extends ContentPage {
 				}
 			});
 
-			LayoutPanel heartPanel = new LayoutPanel();
-			Image heartIcon = new Image("images/icons/heart.png");
-			heartIcon.setWidth("72px");
-			Label similarityDegreeLbl = new Label("120");
-			similarityDegreeLbl.setStyleName("similarity-degree-label");
-
-			heartPanel.add(heartIcon);
-			heartPanel.add(similarityDegreeLbl);
-
 			rightPanel.add(removeIcon);
-			rightPanel.add(heartPanel);
 
 			rightPanel
 					.setWidgetRightWidth(removeIcon, 0, Unit.PCT, 24, Unit.PX);
 			rightPanel.setWidgetTopHeight(removeIcon, 0, Unit.PCT, 24, Unit.PX);
-			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
-			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
+
 		}
+
 	}
 }
