@@ -364,6 +364,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+	public boolean checkBookmarked(int profileId) {
+		for (Bookmark b : getBookmarks()) {
+			if (b.getProfileId() == profileId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public ArrayList<Profile> getBlockedProfiles() {
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
 

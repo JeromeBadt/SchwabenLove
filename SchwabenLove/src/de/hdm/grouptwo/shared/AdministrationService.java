@@ -49,6 +49,8 @@ public interface AdministrationService extends RemoteService {
 
 	public ArrayList<Profile> getBookmarkedProfiles();
 
+	public boolean checkBookmarked(int profileId);
+
 	public ArrayList<Profile> getBlockedProfiles();
 
 	public void deleteBookmark(int profileId);

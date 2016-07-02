@@ -53,6 +53,8 @@ public interface AdministrationServiceAsync {
 
 	public void getBookmarkedProfiles(AsyncCallback<ArrayList<Profile>> callback);
 
+	public void checkBookmarked(int profileId, AsyncCallback<Boolean> callback);
+
 	public void getBlockedProfiles(AsyncCallback<ArrayList<Profile>> callback);
 
 	public void deleteBookmark(int profileId, AsyncCallback<Void> callback);
