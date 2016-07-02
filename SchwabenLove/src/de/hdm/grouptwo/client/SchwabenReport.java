@@ -9,6 +9,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
+import de.hdm.grouptwo.shared.ReportService;
+import de.hdm.grouptwo.shared.ReportServiceAsync;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 
@@ -77,5 +79,6 @@ public class SchwabenReport implements EntryPoint {
 								"Set profile failed: " + caught.getMessage());
 					}
 				});
+	
 	}
 }

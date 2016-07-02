@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -571,25 +573,39 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 	
 public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
-		
+		Logger logger = Logger.getLogger("NameOfYourLogger");
+		logger.log(Level.SEVERE, "EMAIL DEEP = " + profile.getEmail());
+		logger.log(Level.SEVERE, "ID DEEP = " + profile.getId());
+		setProfile(profile.getEmail());
 		// Get all Visits
 		ArrayList<Visit> allVisits = new ArrayList<Visit>();
 		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(profile.getId());
-		
+		logger.log(Level.SEVERE, "Methode läuft nach allVisits noch");
 		// Get all Matches
 		SearchProfile dummyProfile = new SearchProfile();
 		ArrayList<Profile> allMatches = new ArrayList<Profile>();
 		allMatches = getMatchesBySearchProfile(dummyProfile);
+		logger.log(Level.SEVERE, "Methode läuft nach allMatches noch");
+		if(!allMatches.isEmpty()) {
+			logger.log(Level.SEVERE, "allMatches not empty!");
+		}
 		
 		// Remove visited matches von ArrayList
-		for (Visit visit : allVisits) {
-			for (Profile match : allMatches) {
-				if (visit.getVisitedProfileId() == match.getId()) {
-					int index = allMatches.indexOf(match);
-					allMatches.remove(index);
+		if (!allVisits.isEmpty()) {
+			logger.log(Level.SEVERE, "allVisits not empty!");
+			for (Visit visit : allVisits) {
+				if(!allMatches.isEmpty()) {
+					logger.log(Level.SEVERE, "allMatches not empty!");
+					for (Profile match : allMatches) {
+						if (visit.getVisitedProfileId() == match.getId()) {
+							int index = allMatches.indexOf(match);
+							allMatches.remove(index);
+						}
+					}
 				}
 			}
 		}
+		
 		return allMatches;
 	}
 }

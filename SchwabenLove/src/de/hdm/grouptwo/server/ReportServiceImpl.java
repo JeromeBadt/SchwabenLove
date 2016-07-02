@@ -2,6 +2,8 @@ package de.hdm.grouptwo.server;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 
@@ -131,7 +133,14 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	 * @return UnviewedMatchesReport
 	 */
 	public UnviewedMatchesReport getUnviewedMatches(Profile p) {
+		Logger logger = Logger.getLogger("NameOfYourLogger");
+		// logger.log(Level.SEVERE, "USER EMAIL = " + user.getEmail());
+		logger.log(Level.SEVERE, "Profile EMAIL = " + p.getEmail());
+		
+		
 		UnviewedMatchesReport report = new UnviewedMatchesReport();
+		
+		
 		
 		// Set Title
 		report.setTitle("Unviewed Matches");
@@ -140,7 +149,10 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		CompositeParagraph header = new CompositeParagraph();
 		
 		// Set User Name
-		header.addSubParagraph(new SimpleParagraph("Report for User: " + user.getFirstName() + " " + user.getLastName()));
+		header.addSubParagraph(new SimpleParagraph("Report for User: " + p.getFirstName() + " " + p.getLastName()));
+		// header.addSubParagraph(new SimpleParagraph("Report for User: "));
+		report.setHeaderData(header);
+		
 		
 		// New Row for headline
 		Row row = new Row();
@@ -165,6 +177,8 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		// Get unviewed matches
 		ArrayList<Profile> matches = this.administrationService.getUnvisitedProfiles(p);
 		
+		logger.log(Level.SEVERE, "Methode läuft nach getUnvisited noch!");
+		
 		for (Profile match : matches) {
 			Row matchRow = new Row();
 			matchRow.addColumn(new Column(String.valueOf(match.getId())));
@@ -182,6 +196,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 			matchRow.addColumn(new Column(String.valueOf(match.getProfession())));
 			matchRow.addColumn(new Column(String.valueOf(match.getReligion())));
 			report.addRow(matchRow);
+			logger.log(Level.SEVERE, "MATCH EMAIL: " + match.getEmail());
 		}
 		return report;
 	}
