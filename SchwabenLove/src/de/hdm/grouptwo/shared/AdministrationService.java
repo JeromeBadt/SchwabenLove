@@ -20,17 +20,18 @@ import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
  * Synchronous interface for a RPC-enabled class to manage dating sites.
+ * 
  * @author jeromebadt
  *
  */
 @RemoteServiceRelativePath("administration")
 public interface AdministrationService extends RemoteService {
-	
+
 	/**
 	 * Create a new profile.
 	 */
 	public void createProfile(Profile profile);
-	
+
 	/**
 	 * This method returns a users profile.
 	 */
@@ -50,17 +51,19 @@ public interface AdministrationService extends RemoteService {
 	 *         recalculate the age
 	 */
 	public Profile updateProfile(Profile profile);
-	
+
 	/**
 	 * Delete the users profile.
 	 */
 	public void deleteProfile();
-	
+
+	public void updateInformation(Information information);
+
 	/**
-	 * Add a bookmark  based on the profile id.
+	 * Add a bookmark based on the profile id.
 	 */
 	public void addBookmarkByProfileId(int profileId);
-	
+
 	/**
 	 * Add a block to a profile of another user, based on the profile id.
 	 */
@@ -70,17 +73,17 @@ public interface AdministrationService extends RemoteService {
 	 * Return the profile id.
 	 */
 	public Profile getProfileById(int id);
-	
+
 	/**
 	 * Return the information of the profile.
 	 */
 	public ArrayList<Information> getInformationByProfileId(int profileId);
-	
+
 	/**
 	 * Return the similarity degree of the profile.
 	 */
 	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId);
-	
+
 	/**
 	 * Return the existing searchprofiles.
 	 */
@@ -102,8 +105,8 @@ public interface AdministrationService extends RemoteService {
 	public void deleteSearchProfile(SearchProfile searchProfile);
 
 	/**
-	 * Return the matches by the selected searchprofile,
-	 * depending on the selected attributes.
+	 * Return the matches by the selected searchprofile, depending on the
+	 * selected attributes.
 	 */
 	public ArrayList<Profile> getMatchesBySearchProfile(
 			SearchProfile searchProfile);
@@ -144,7 +147,7 @@ public interface AdministrationService extends RemoteService {
 	 * Return all bookmarklists.
 	 */
 	public ArrayList<BookmarkList> getAllBookmarkLists();
-	
+
 	/**
 	 * Return all bookmarks.
 	 */
@@ -212,6 +215,6 @@ public interface AdministrationService extends RemoteService {
 	 *         isn't
 	 */
 	public boolean validateDate(int year, int month, int day);
-	
+
 	ArrayList<Profile> getUnvisitedProfiles(Profile profile);
 }

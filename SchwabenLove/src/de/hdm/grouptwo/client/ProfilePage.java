@@ -516,13 +516,20 @@ public class ProfilePage extends ContentPage {
 					profile.setGender(genderMaleRB.getValue() ? "m" : "w");
 					updateProfile();
 				} else if (i == 3) {
-					// ToDo: Check empty
-					profile.setProfession(professionInput.getText());
-					updateProfile();
+					if (professionInput.getText().isEmpty()) {
+						errorPopup.showError("Bitte geben Sie einen Beruf an.");
+					} else {
+						profile.setProfession(professionInput.getText());
+						updateProfile();
+					}
 				} else if (i == 4) {
-					// ToDo: Check empty
-					profile.setLocation(locationInput.getText());
-					updateProfile();
+					if (locationInput.getText().isEmpty()) {
+						errorPopup
+								.showError("Bitte geben Sie einen Wohnort an.");
+					} else {
+						profile.setLocation(locationInput.getText());
+						updateProfile();
+					}
 				} else if (i == 5) {
 					profile.setEducation(educationList.getSelectedItemText());
 					updateProfile();
@@ -530,9 +537,13 @@ public class ProfilePage extends ContentPage {
 					profile.setSmoker(Boolean.toString(smokerYesRB.getValue()));
 					updateProfile();
 				} else if (i == 7) {
-					// ToDo: Check empty
-					profile.setReligion(religionInput.getText());
-					updateProfile();
+					if (religionInput.getText().isEmpty()) {
+						errorPopup
+								.showError("Bitte geben Sie eine Religion an.");
+					} else {
+						profile.setReligion(religionInput.getText());
+						updateProfile();
+					}
 				} else if (i == 8) {
 					// Validate height
 					if (heightInput.getText().length() == 0) {

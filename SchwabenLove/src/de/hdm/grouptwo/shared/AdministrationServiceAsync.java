@@ -19,11 +19,12 @@ import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
  * Asynchronous interface for a RPC-enabled class to manage dating sites.
+ * 
  * @author jeromebadt
  *
  */
 public interface AdministrationServiceAsync {
-	
+
 	/**
 	 * Create a new profile.
 	 */
@@ -53,6 +54,9 @@ public interface AdministrationServiceAsync {
 	 * Delete the users profile.
 	 */
 	public void deleteProfile(AsyncCallback<Void> callback);
+
+	public void updateInformation(Information information,
+			AsyncCallback<Void> callback);
 
 	/**
 	 * Add a bookmark based on the profile id.
@@ -107,8 +111,8 @@ public interface AdministrationServiceAsync {
 			AsyncCallback<Void> callback);
 
 	/**
-	 * Return the matches by the selected searchprofile,
-	 * depending on the selected attributes.
+	 * Return the matches by the selected searchprofile, depending on the
+	 * selected attributes.
 	 */
 	public void getMatchesBySearchProfile(SearchProfile searchProfile,
 			AsyncCallback<ArrayList<Profile>> callback);
@@ -127,7 +131,7 @@ public interface AdministrationServiceAsync {
 	 * Returns the blocked profiles of the current user.
 	 */
 	public void getBlockedProfiles(AsyncCallback<ArrayList<Profile>> callback);
-	
+
 	/**
 	 * Delete an existing bookmark of the current user.
 	 */
@@ -223,7 +227,7 @@ public interface AdministrationServiceAsync {
 	 */
 	public void validateDate(int year, int month, int day,
 			AsyncCallback<Boolean> callback);
-	
+
 	void getUnvisitedProfiles(Profile profile,
 			AsyncCallback<ArrayList<Profile>> callback);
 }

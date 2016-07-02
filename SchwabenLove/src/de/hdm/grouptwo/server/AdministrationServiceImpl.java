@@ -41,11 +41,12 @@ import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.bo.Visit;
 
 /**
- * Implementation class of the Interface AdministrationService.
- * This class aggregates, besides the ReportServiceImpl class, the whole application logic.
- * The application logic is defined in the methods of this class,
- * also it includes the objects of Mapper classes, which are necessary for 
- * the Database access.
+ * Implementation class of the Interface AdministrationService. This class
+ * aggregates, besides the ReportServiceImpl class, the whole application logic.
+ * The application logic is defined in the methods of this class, also it
+ * includes the objects of Mapper classes, which are necessary for the Database
+ * access.
+ * 
  * @author manuelruss
  *
  */
@@ -58,10 +59,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	/**
 	 * This method creates a new profile, which is also saved in the database,
-	 * at the same time. In addition to the profile, which was created, also a bookmark list,
-	 * a search profile and information objects for this profile are created.
+	 * at the same time. In addition to the profile, which was created, also a
+	 * bookmark list, a search profile and information objects for this profile
+	 * are created.
 	 */
-	
+
 	@Override
 	public void createProfile(Profile profile) {
 		profile = ProfileMapper.profileMapper().insert(profile);
@@ -88,7 +90,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			InformationMapper.informationMapper().insert(i);
 		}
 
-		// ToDo: Calculate similarity degrees
+		recalculateSimilarityDegrees();
 	}
 
 	/**
@@ -110,7 +112,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Update the users profile.
+	 * Update the user's profile and recalculate similarity degrees.
 	 * 
 	 * @param profile
 	 *            The <code>Profile</code> to update to
@@ -120,6 +122,8 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Profile updateProfile(Profile profile) {
 		ProfileMapper.profileMapper().update(profile);
+
+		recalculateSimilarityDegrees();
 
 		return ProfileMapper.profileMapper().findById(profile.getId());
 	}
@@ -172,8 +176,14 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		ProfileMapper.profileMapper().delete(user);
 	}
 
+	@Override
+	public void updateInformation(Information information) {
+		InformationMapper.informationMapper().update(information);
+		recalculateSimilarityDegrees();
+	}
+
 	/**
-	 * Adds a bookmark  based on the profile id.
+	 * Adds a bookmark based on the profile id.
 	 */
 	@Override
 	public void addBookmarkByProfileId(int profileId) {
@@ -307,8 +317,8 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Return the matches by the selected searchprofile,
-	 * depending on the selected attributes.
+	 * Return the matches by the selected searchprofile, depending on the
+	 * selected attributes.
 	 */
 	@Override
 	public ArrayList<Profile> getMatchesBySearchProfile(SearchProfile sp) {
@@ -482,7 +492,6 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	
 	@Override
 	public ArrayList<String> loadTableNames() {
 		ArrayList<String> tableNames = new ArrayList<String>();
@@ -671,6 +680,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 	/**
 	 * Get the bookmark list ID of the current user.
+	 * 
 	 * @return
 	 */
 	private ArrayList<Bookmark> getBookmarks() {
@@ -681,18 +691,91 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return BookmarkMapper.bookmarkMapper().findByBookmarkListId(
 				bookmarkListId);
 	}
-	
-public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
-		
+
+	private void recalculateSimilarityDegrees() {
+		ArrayList<Profile> referenceProfiles = getAllProfiles();
+		ArrayList<Profile> comparisonProfiles = getAllProfiles();
+
+		for (Profile ref : referenceProfiles) {
+			for (Profile comp : comparisonProfiles) {
+				if (!ref.equals(comp)) {
+					calculateSimilarityDegree(ref, comp);
+				}
+			}
+		}
+	}
+
+	private void calculateSimilarityDegree(Profile ref,
+			Profile comp) {
+		int score = 0;
+
+		if (ref.getLocation().equals(comp.getLocation())) {
+			score += 18;
+		}
+
+		score += Math.max(0, 10 - Math.abs(ref.getHeight() - comp.getHeight()));
+
+		if (ref.getPhysique().equals(comp.getPhysique())) {
+			score += 12;
+		}
+
+		if (ref.getSmoker().equals(comp.getSmoker())) {
+			score += 26;
+		}
+
+		if (ref.getEducation().equals(comp.getEducation())) {
+			score += 18;
+		}
+
+		if (ref.getProfession().equals(comp.getProfession())) {
+			score += 22;
+		}
+
+		if (ref.getReligion().equals(comp.getReligion())) {
+			score += 26;
+		}
+
+		ArrayList<Information> refInformation = getInformationByProfileId(
+				ref.getId());
+		ArrayList<Information> compInformation = getInformationByProfileId(
+				comp.getId());
+
+		for (Information refInfo : refInformation) {
+			for (Information compInfo : compInformation) {
+				if (refInfo.getPropertyId() == compInfo.getPropertyId()) {
+					if (refInfo.getInputText() != null
+							&& !refInfo.getInputText().isEmpty()
+							&& compInfo.getInputText() != null
+							&& !compInfo.getInputText().isEmpty()) {
+						if (refInfo.getInputText().equals(
+								compInfo.getInputText())) {
+							score += 12;
+						}
+					}
+				}
+			}
+		}
+
+		SimilarityDegree sd = new SimilarityDegree();
+		sd.setScore(score);
+		sd.setReferenceProfileId(ref.getId());
+		sd.setComparisonProfileId(comp.getId());
+
+		SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
+	}
+
+	public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
+
 		// Get all Visits
 		ArrayList<Visit> allVisits = new ArrayList<Visit>();
-		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(profile.getId());
-		
+		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(
+				profile.getId());
+
 		// Get all Matches
 		SearchProfile dummyProfile = new SearchProfile();
 		ArrayList<Profile> allMatches = new ArrayList<Profile>();
 		allMatches = getMatchesBySearchProfile(dummyProfile);
-		
+
 		// Remove visited matches von ArrayList
 		for (Visit visit : allVisits) {
 			for (Profile match : allMatches) {
