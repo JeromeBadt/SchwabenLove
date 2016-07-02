@@ -26,6 +26,6 @@ public interface ReportServiceAsync {
 
 	public void testMethod(AsyncCallback<String> callback);
 
-	void setupAdministration(String email, AsyncCallback<Void> callback);
+	public void setupAdministration(String email, AsyncCallback<Void> callback);
 
 }
