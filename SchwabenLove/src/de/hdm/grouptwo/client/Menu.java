@@ -41,16 +41,17 @@ public class Menu extends Composite {
 		// Load setupPage page on login
 		pages.get(setupPage).getScheduledCommand().execute();
 	}
-	
+
 	public void loadReportMenu() {
-		UnviewedMatchesReportPage unviewedPage = new UnviewedMatchesReportPage(this, loginInfo);
+		UnviewedMatchesReportPage unviewedPage = new UnviewedMatchesReportPage(
+				this, loginInfo);
 		contentPages.add(unviewedPage);
 		// contentPages.add(new MatchesBySearchprofileReportPage(loginInfo));
 		contentPages.add(new MatchesBySearchprofileReportPage());
 		contentPages.add(new LogoutPage(loginInfo));
-		
+
 		createMenu();
-		
+
 		// Load unviewedPage page on login
 		pages.get(unviewedPage).getScheduledCommand().execute();
 	}
@@ -62,7 +63,7 @@ public class Menu extends Composite {
 		}
 
 		// Save profilePage to load it on login later
-		ProfilePage profilePage = new ProfilePage();
+		ProfilePage profilePage = new ProfilePage(loginInfo);
 		contentPages.add(profilePage);
 		contentPages.add(new MatchesPage());
 		contentPages.add(new BookmarkListPage());
