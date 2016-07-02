@@ -26,6 +26,8 @@ public interface AdministrationService extends RemoteService {
 
 	public Profile setProfile(String email);
 
+	public Profile updateProfile(Profile profile);
+
 	public void deleteProfile();
 
 	public void addBookmarkByProfileId(int profileId);
@@ -33,6 +35,8 @@ public interface AdministrationService extends RemoteService {
 	public void addBlockByProfileId(int profileId);
 
 	public Profile getProfileById(int id);
+
+	public ArrayList<Information> getInformationByProfileId(int profileId);
 
 	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId);
 

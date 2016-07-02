@@ -24,6 +24,8 @@ public interface AdministrationServiceAsync {
 
 	public void setProfile(String email, AsyncCallback<Profile> callback);
 
+	public void updateProfile(Profile profile, AsyncCallback<Profile> callback);
+
 	public void deleteProfile(AsyncCallback<Void> callback);
 
 	public void addBookmarkByProfileId(int profileId,
@@ -32,6 +34,9 @@ public interface AdministrationServiceAsync {
 	public void addBlockByProfileId(int profileId, AsyncCallback<Void> callback);
 
 	public void getProfileById(int id, AsyncCallback<Profile> callback);
+
+	public void getInformationByProfileId(int profileId,
+			AsyncCallback<ArrayList<Information>> callback);
 
 	public void getSimilarityDegreeByProfileId(int profileId,
 			AsyncCallback<SimilarityDegree> callback);
