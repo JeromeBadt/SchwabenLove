@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -57,12 +58,14 @@ public class ProfilePage extends ContentPage {
 	private RadioButton genderFemaleRB = new RadioButton("gender", "w");
 	private TextBox professionInput = new TextBox();
 	private TextBox locationInput = new TextBox();
-	private TextBox educationInput = new TextBox();
-	private TextBox smokerInput = new TextBox();
+	private ListBox educationList = new ListBox();
+	private LayoutPanel smokerPanel = new LayoutPanel();
+	private RadioButton smokerYesRB = new RadioButton("smoker", "Ja");
+	private RadioButton smokerNoRB = new RadioButton("smoker", "Nein");
 	private TextBox religionInput = new TextBox();
 	private TextBox heightInput = new TextBox();
-	private TextBox physiqueInput = new TextBox();
-	private TextBox hairColorInput = new TextBox();
+	private ListBox physiqueList = new ListBox();
+	private ListBox hairColorList = new ListBox();
 
 	private Image attrEditIcon[] = new Image[11];
 
@@ -135,7 +138,7 @@ public class ProfilePage extends ContentPage {
 		genderPanel.add(genderMaleRB);
 		genderPanel.add(genderFemaleRB);
 		genderPanel
-				.setWidgetLeftWidth(genderFemaleRB, 70, Unit.PX, 70, Unit.PX);
+				.setWidgetLeftWidth(genderFemaleRB, 60, Unit.PX, 80, Unit.PX);
 		genderPanel.setVisible(false);
 
 		professionInput.setWidth("140px");
@@ -148,15 +151,24 @@ public class ProfilePage extends ContentPage {
 		locationInput.setText(locationLabel.getText());
 		locationInput.setVisible(false);
 
-		educationInput.setWidth("140px");
-		educationInput.setMaxLength(45);
-		educationInput.setText(educationLabel.getText());
-		educationInput.setVisible(false);
+		educationList.setWidth("140px");
+		// set selected
+		educationList.addItem("Studium");
+		educationList.addItem("Fachschule");
+		educationList.addItem("Berufsausbildung");
+		educationList.addItem("Hochschulreife");
+		educationList.addItem("Mittlere Reife");
+		educationList.addItem("Hauptschulabschluss");
+		educationList.setVisible(false);
 
-		smokerInput.setWidth("140px");
-		smokerInput.setMaxLength(45);
-		smokerInput.setText(profile.getSmoker());
-		smokerInput.setVisible(false);
+		smokerPanel.setWidth("140px");
+		smokerYesRB.setValue(smokerLabel.getText().equals("Raucher"));
+		smokerNoRB.setValue(smokerLabel.getText().equals("Nichtraucher"));
+		smokerPanel.add(smokerYesRB);
+		smokerPanel.add(smokerNoRB);
+		smokerPanel
+				.setWidgetLeftWidth(smokerNoRB, 60, Unit.PX, 80, Unit.PX);
+		smokerPanel.setVisible(false);
 
 		religionInput.setWidth("140px");
 		religionInput.setMaxLength(45);
@@ -168,15 +180,28 @@ public class ProfilePage extends ContentPage {
 		heightInput.setText(Integer.toString(profile.getHeight()));
 		heightInput.setVisible(false);
 
-		physiqueInput.setWidth("140px");
-		physiqueInput.setMaxLength(45);
-		physiqueInput.setText(physiqueLabel.getText());
-		physiqueInput.setVisible(false);
+		physiqueList.setWidth("140px");
+		// set selected
+		physiqueList.addItem("Dünn");
+		physiqueList.addItem("Fit");
+		physiqueList.addItem("Muskulös");
+		physiqueList.addItem("Normal");
+		physiqueList.addItem("Kurvig");
+		physiqueList.addItem("Vollschlank");
+		physiqueList.setVisible(false);
 
-		hairColorInput.setWidth("140px");
-		hairColorInput.setMaxLength(45);
-		hairColorInput.setText(hairColorLabel.getText());
-		hairColorInput.setVisible(false);
+		hairColorList.setWidth("140px");
+		// set selected
+		hairColorList.addItem("Blond");
+		hairColorList.addItem("Dunkelblond");
+		hairColorList.addItem("Rot");
+		hairColorList.addItem("Rotbraun");
+		hairColorList.addItem("Hellbraun");
+		hairColorList.addItem("Braun");
+		hairColorList.addItem("Dunkelbraun");
+		hairColorList.addItem("Schwarz");
+		hairColorList.addItem("Grau");
+		hairColorList.setVisible(false);
 
 		attrPanel.add(profilePicture);
 
@@ -197,12 +222,12 @@ public class ProfilePage extends ContentPage {
 		attrPanel.add(genderPanel);
 		attrPanel.add(professionInput);
 		attrPanel.add(locationInput);
-		attrPanel.add(educationInput);
-		attrPanel.add(smokerInput);
+		attrPanel.add(educationList);
+		attrPanel.add(smokerPanel);
 		attrPanel.add(religionInput);
 		attrPanel.add(heightInput);
-		attrPanel.add(physiqueInput);
-		attrPanel.add(hairColorInput);
+		attrPanel.add(physiqueList);
+		attrPanel.add(hairColorList);
 
 		attrPanel.setWidgetLeftWidth(nameLabel, 279, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetTopHeight(nameLabel, 0, Unit.PX, 24, Unit.PX);
@@ -258,12 +283,12 @@ public class ProfilePage extends ContentPage {
 		attrPanel.setWidgetTopHeight(locationInput, 96, Unit.PX, 24,
 				Unit.PX);
 		attrPanel
-				.setWidgetLeftWidth(educationInput, 279, Unit.PX, 150, Unit.PX);
-		attrPanel.setWidgetTopHeight(educationInput, 120, Unit.PX, 24,
+				.setWidgetLeftWidth(educationList, 279, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopHeight(educationList, 120, Unit.PX, 24,
 				Unit.PX);
-		attrPanel.setWidgetLeftWidth(smokerInput, 490, Unit.PX, 150,
+		attrPanel.setWidgetLeftWidth(smokerPanel, 490, Unit.PX, 150,
 				Unit.PX);
-		attrPanel.setWidgetTopHeight(smokerInput, 0, Unit.PX, 24, Unit.PX);
+		attrPanel.setWidgetTopHeight(smokerPanel, 0, Unit.PX, 24, Unit.PX);
 		attrPanel.setWidgetLeftWidth(religionInput, 490, Unit.PX, 150,
 				Unit.PX);
 		attrPanel.setWidgetTopHeight(religionInput, 24, Unit.PX, 24,
@@ -271,13 +296,13 @@ public class ProfilePage extends ContentPage {
 		attrPanel.setWidgetLeftWidth(heightInput, 490, Unit.PX, 150,
 				Unit.PX);
 		attrPanel.setWidgetTopHeight(heightInput, 48, Unit.PX, 24, Unit.PX);
-		attrPanel.setWidgetLeftWidth(physiqueInput, 490, Unit.PX, 150,
+		attrPanel.setWidgetLeftWidth(physiqueList, 490, Unit.PX, 150,
 				Unit.PX);
-		attrPanel.setWidgetTopHeight(physiqueInput, 72, Unit.PX, 24,
+		attrPanel.setWidgetTopHeight(physiqueList, 72, Unit.PX, 24,
 				Unit.PX);
 		attrPanel
-				.setWidgetLeftWidth(hairColorInput, 490, Unit.PX, 150, Unit.PX);
-		attrPanel.setWidgetTopHeight(hairColorInput, 96, Unit.PX, 24,
+				.setWidgetLeftWidth(hairColorList, 490, Unit.PX, 150, Unit.PX);
+		attrPanel.setWidgetTopHeight(hairColorList, 96, Unit.PX, 24,
 				Unit.PX);
 
 		lPanel.setWidgetLeftRight(infoPanel, 0, Unit.PX, 10, Unit.PX);
@@ -393,17 +418,17 @@ public class ProfilePage extends ContentPage {
 		attrEditIcon[4].addClickHandler(new EditClickHandler(locationLabel,
 				locationInput, 4));
 		attrEditIcon[5].addClickHandler(new EditClickHandler(educationLabel,
-				educationInput, 5));
+				educationList, 5));
 		attrEditIcon[6].addClickHandler(new EditClickHandler(smokerLabel,
-				smokerInput, 6));
+				smokerPanel, 6));
 		attrEditIcon[7].addClickHandler(new EditClickHandler(religionLabel,
 				religionInput, 7));
 		attrEditIcon[8].addClickHandler(new EditClickHandler(heightLabel,
 				heightInput, 8));
 		attrEditIcon[9].addClickHandler(new EditClickHandler(physiqueLabel,
-				physiqueInput, 9));
+				physiqueList, 9));
 		attrEditIcon[10].addClickHandler(new EditClickHandler(hairColorLabel,
-				hairColorInput, 10));
+				hairColorList, 10));
 
 		for (int i = 0; i < properties.size(); i++) {
 			Image img = new Image("images/icons/edit.png");
@@ -440,8 +465,8 @@ public class ProfilePage extends ContentPage {
 		public void onClick(ClickEvent event) {
 			if (state) {
 				if (i == 0) {
-					RegExp regExp = RegExp.compile("(.* )(.*)");
-					MatchResult m = regExp.exec(((TextBox) input).getText());
+					RegExp regExp = RegExp.compile("(.*) (.*)");
+					MatchResult m = regExp.exec(nameInput.getText());
 					if (m != null && m.getGroupCount() == 3) {
 						profile.setFirstName(m.getGroup(1));
 						profile.setLastName(m.getGroup(2));
@@ -453,7 +478,7 @@ public class ProfilePage extends ContentPage {
 				} else if (i == 1) {
 					RegExp regExp = RegExp
 							.compile("(\\d{1,2}).(\\d{1,2}).(\\d{4})$");
-					MatchResult m = regExp.exec(((TextBox) input).getText());
+					MatchResult m = regExp.exec(ageInput.getText());
 					if (m != null && m.getGroupCount() == 4) {
 						final int day = Integer.parseInt(m.getGroup(1));
 						final int month = Integer.parseInt(m.getGroup(2));
@@ -488,9 +513,52 @@ public class ProfilePage extends ContentPage {
 								+ "Geburtsdatum an.");
 					}
 				} else if (i == 2) {
-					String gender = ((RadioButton) ((LayoutPanel) input)
-							.getWidget(0)).getValue() ? "m" : "w";
-					profile.setGender(gender);
+					profile.setGender(genderMaleRB.getValue() ? "m" : "w");
+					updateProfile();
+				} else if (i == 3) {
+					// ToDo: Check empty
+					profile.setProfession(professionInput.getText());
+					updateProfile();
+				} else if (i == 4) {
+					// ToDo: Check empty
+					profile.setLocation(locationInput.getText());
+					updateProfile();
+				} else if (i == 5) {
+					profile.setEducation(educationList.getSelectedItemText());
+					updateProfile();
+				} else if (i == 6) {
+					profile.setSmoker(Boolean.toString(smokerYesRB.getValue()));
+					updateProfile();
+				} else if (i == 7) {
+					// ToDo: Check empty
+					profile.setReligion(religionInput.getText());
+					updateProfile();
+				} else if (i == 8) {
+					// Validate height
+					if (heightInput.getText().length() == 0) {
+						errorPopup.showError("Bitte Größe angeben.");
+					} else {
+						try {
+							int height = Integer
+									.parseInt(heightInput.getText());
+
+							if (height < 50 || height > 275) {
+								errorPopup
+										.showError("Bitte eine gültige Größe angeben.");
+							}
+
+							profile.setHeight(height);
+							updateProfile();
+						} catch (NumberFormatException e) {
+							errorPopup
+									.showError("Bitte eine gültige Größe in cm angeben.");
+						}
+					}
+				} else if (i == 9) {
+					profile.setPhysique(physiqueList.getSelectedItemText());
+					updateProfile();
+				} else if (i == 10) {
+					profile.setHairColor(hairColorList.getSelectedItemText());
 					updateProfile();
 				}
 			} else {
@@ -525,6 +593,22 @@ public class ProfilePage extends ContentPage {
 				label.setText(Integer.toString(profile.getAge()));
 			} else if (i == 2) {
 				label.setText(profile.getGender());
+			} else if (i == 3) {
+				label.setText(profile.getProfession());
+			} else if (i == 4) {
+				label.setText(profile.getLocation());
+			} else if (i == 5) {
+				label.setText(profile.getEducation());
+			} else if (i == 6) {
+				label.setText(formatSmoker());
+			} else if (i == 7) {
+				label.setText(profile.getReligion());
+			} else if (i == 8) {
+				label.setText(formatHeight());
+			} else if (i == 9) {
+				label.setText(profile.getPhysique());
+			} else if (i == 10) {
+				label.setText(profile.getHairColor());
 			}
 
 			label.setVisible(state);
