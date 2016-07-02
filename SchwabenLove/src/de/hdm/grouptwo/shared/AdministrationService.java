@@ -33,8 +33,10 @@ public interface AdministrationService extends RemoteService {
 	public void addBlockByProfileId(int profileId);
 
 	public Profile getProfileById(int id);
+	
+	Profile updateProfile(Profile profile);
 
-	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId);
+	SimilarityDegree getSimilarityDegreeByProfileId(int profileId);
 
 	public ArrayList<SearchProfile> getSearchProfiles();
 
@@ -84,4 +86,9 @@ public interface AdministrationService extends RemoteService {
 	public ArrayList<Visit> getAllVisits();
 
 	public boolean validateDate(int year, int month, int day);
+
+	public ArrayList<Information> getInformationByProfileId(int profileId);
+	
+	ArrayList<Profile> getUnvisitedProfiles(Profile profile);
+
 }

@@ -496,6 +496,31 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	public ArrayList<Visit> getAllVisits() {
 		return VisitMapper.visitMapper().findAll();
 	}
+	
+	@Override
+	public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
+		
+		// Get all Visits
+		ArrayList<Visit> allVisits = new ArrayList<Visit>();
+		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(profile.getId());
+		
+		// Get all Matches
+		SearchProfile dummyProfile = new SearchProfile();
+		ArrayList<Profile> allMatches = new ArrayList<Profile>();
+		allMatches = getMatchesBySearchProfile(dummyProfile);
+		
+		// Remove visited matches von ArrayList
+		for (Visit visit : allVisits) {
+			for (Profile match : allMatches) {
+				if (visit.getVisitedProfileId() == match.getId()) {
+					int index = allMatches.indexOf(match);
+					allMatches.remove(index);
+				}
+			}
+		}
+		
+		return allMatches;
+	}
 
 	/**
 	 * Method to validate a birthdate. Checks if the day and month are valid and
