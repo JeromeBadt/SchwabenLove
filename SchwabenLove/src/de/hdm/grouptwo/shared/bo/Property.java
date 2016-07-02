@@ -14,10 +14,18 @@ public class Property extends BusinessObject {
 
 	private String explanation;
 
+	/**
+	 * Get explanation.
+	 * @return
+	 */
 	public String getExplanation() {
 		return explanation;
 	}
 
+	/**
+	 * Set explanation.
+	 * @param explanation
+	 */
 	public void setExplanation(String explanation) {
 		this.explanation = explanation;
 	}
