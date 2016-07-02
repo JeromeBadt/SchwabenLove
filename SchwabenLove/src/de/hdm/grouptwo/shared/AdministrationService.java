@@ -30,6 +30,8 @@ public interface AdministrationService extends RemoteService {
 
 	public void deleteProfile();
 
+	public void updateInformation(Information information);
+
 	public void addBookmarkByProfileId(int profileId);
 
 	public void addBlockByProfileId(int profileId);

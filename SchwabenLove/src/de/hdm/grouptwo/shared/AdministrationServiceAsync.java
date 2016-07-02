@@ -28,6 +28,9 @@ public interface AdministrationServiceAsync {
 
 	public void deleteProfile(AsyncCallback<Void> callback);
 
+	public void updateInformation(Information information,
+			AsyncCallback<Void> callback);
+
 	public void addBookmarkByProfileId(int profileId,
 			AsyncCallback<Void> callback);
 

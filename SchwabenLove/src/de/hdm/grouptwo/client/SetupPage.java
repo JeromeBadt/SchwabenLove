@@ -236,12 +236,12 @@ public class SetupPage extends ContentPage {
 		error.setLength(0);
 
 		// Validate first name
-		if (firstNameInput.getText().length() == 0) {
+		if (firstNameInput.getText().isEmpty()) {
 			error.append("Bitte einen Vornamen angeben.<br>");
 		}
 
 		// Validate last name
-		if (lastNameInput.getText().length() == 0) {
+		if (lastNameInput.getText().isEmpty()) {
 			error.append("Bitte einen Nachnamen angeben.<br>");
 		}
 
@@ -251,7 +251,7 @@ public class SetupPage extends ContentPage {
 		}
 
 		// Validate height
-		if (heightInput.getText().length() == 0) {
+		if (heightInput.getText().isEmpty()) {
 			error.append("Bitte Größe angeben.<br>");
 		} else {
 			try {
@@ -271,17 +271,17 @@ public class SetupPage extends ContentPage {
 		}
 
 		// Validate profession
-		if (professionInput.getText().length() == 0) {
+		if (professionInput.getText().isEmpty()) {
 			error.append("Bitte einen Beruf angeben.<br>");
 		}
 
 		// Validate location
-		if (locationInput.getText().length() == 0) {
+		if (locationInput.getText().isEmpty()) {
 			error.append("Bitte einen Wohnort angeben.<br>");
 		}
 
 		// Validate religion
-		if (religionInput.getText().length() == 0) {
+		if (religionInput.getText().isEmpty()) {
 			error.append("Bitte eine Religion angeben.<br>");
 		}
 

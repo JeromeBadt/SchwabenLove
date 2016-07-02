@@ -72,7 +72,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			InformationMapper.informationMapper().insert(i);
 		}
 
-		// ToDo: Calculate similarity degrees
+		recalculateSimilarityDegrees();
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Update the users profile.
+	 * Update the user's profile and recalculate similarity degrees.
 	 * 
 	 * @param profile
 	 *            The <code>Profile</code> to update to
@@ -98,6 +98,8 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Profile updateProfile(Profile profile) {
 		ProfileMapper.profileMapper().update(profile);
+
+		recalculateSimilarityDegrees();
 
 		return ProfileMapper.profileMapper().findById(profile.getId());
 	}
@@ -145,6 +147,12 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 
 		ProfileMapper.profileMapper().delete(user);
+	}
+
+	@Override
+	public void updateInformation(Information information) {
+		InformationMapper.informationMapper().update(information);
+		recalculateSimilarityDegrees();
 	}
 
 	@Override
@@ -568,5 +576,77 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		return BookmarkMapper.bookmarkMapper().findByBookmarkListId(
 				bookmarkListId);
+	}
+
+	private void recalculateSimilarityDegrees() {
+		ArrayList<Profile> referenceProfiles = getAllProfiles();
+		ArrayList<Profile> comparisonProfiles = getAllProfiles();
+
+		for (Profile ref : referenceProfiles) {
+			for (Profile comp : comparisonProfiles) {
+				if (!ref.equals(comp)) {
+					calculateSimilarityDegree(ref, comp);
+				}
+			}
+		}
+	}
+
+	private void calculateSimilarityDegree(Profile ref,
+			Profile comp) {
+		int score = 0;
+
+		if (ref.getLocation().equals(comp.getLocation())) {
+			score += 18;
+		}
+
+		score += Math.max(0, 10 - Math.abs(ref.getHeight() - comp.getHeight()));
+
+		if (ref.getPhysique().equals(comp.getPhysique())) {
+			score += 12;
+		}
+
+		if (ref.getSmoker().equals(comp.getSmoker())) {
+			score += 26;
+		}
+
+		if (ref.getEducation().equals(comp.getEducation())) {
+			score += 18;
+		}
+
+		if (ref.getProfession().equals(comp.getProfession())) {
+			score += 22;
+		}
+
+		if (ref.getReligion().equals(comp.getReligion())) {
+			score += 26;
+		}
+
+		ArrayList<Information> refInformation = getInformationByProfileId(
+				ref.getId());
+		ArrayList<Information> compInformation = getInformationByProfileId(
+				comp.getId());
+
+		for (Information refInfo : refInformation) {
+			for (Information compInfo : compInformation) {
+				if (refInfo.getPropertyId() == compInfo.getPropertyId()) {
+					if (refInfo.getInputText() != null
+							&& !refInfo.getInputText().isEmpty()
+							&& compInfo.getInputText() != null
+							&& !compInfo.getInputText().isEmpty()) {
+						if (refInfo.getInputText().equals(
+								compInfo.getInputText())) {
+							score += 12;
+						}
+					}
+				}
+			}
+		}
+
+		SimilarityDegree sd = new SimilarityDegree();
+		sd.setScore(score);
+		sd.setReferenceProfileId(ref.getId());
+		sd.setComparisonProfileId(comp.getId());
+
+		SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
 	}
 }
