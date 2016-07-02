@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -58,12 +60,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	private ArrayList<Property> properties = null;
 
 	/**
-	 * This method creates a new profile, which is also saved in the database,
-	 * at the same time. In addition to the profile, which was created, also a
-	 * bookmark list, a search profile and information objects for this profile
-	 * are created.
+	 * This method creates a new profile, which is also saved to the database.
+	 * In addition to the profile a bookmark list, search profile and
+	 * information objects for this profile are created. Then, finally the
+	 * similarity degrees to other profiles are calculated.
 	 */
-
 	@Override
 	public void createProfile(Profile profile) {
 		profile = ProfileMapper.profileMapper().insert(profile);
@@ -338,16 +339,21 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public ArrayList<Profile> getMatchesBySearchProfile(SearchProfile sp) {
-		// ToDo: get profiles ordered by similarity degree
-
-		ArrayList<Profile> profiles = getAllProfiles();
 		ArrayList<Profile> matches = new ArrayList<Profile>();
-		ArrayList<Profile> blocks = getBlockedProfiles();
 
-		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(
-				user.getId())) {
-			blocks.add(ProfileMapper.profileMapper().findById(
-					b.getBlockerProfileId()));
+		// Get profiles ordered by similarity degree
+		ArrayList<SimilarityDegree> similarityDegrees = getSimilarityDegrees();
+
+		Collections.sort(similarityDegrees, new Comparator<SimilarityDegree>() {
+			public int compare(SimilarityDegree o1, SimilarityDegree o2) {
+				return o1.getScore() - o2.getScore();
+			}
+		});
+
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
+		for (SimilarityDegree sd : similarityDegrees) {
+			profiles.add(ProfileMapper.profileMapper().findById(
+					sd.getComparisonProfileId()));
 		}
 
 		for (Profile p : profiles) {
@@ -414,6 +420,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			}
 
 			matches.add(p);
+		}
+
+		// Remove profiles that we blocked or that have blocked us
+		ArrayList<Profile> blocks = getBlockedProfiles();
+
+		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(
+				user.getId())) {
+			blocks.add(ProfileMapper.profileMapper().findById(
+					b.getBlockerProfileId()));
 		}
 
 		Iterator<Profile> it = matches.iterator();
@@ -809,6 +824,16 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		System.out.println("Final score: " + score);
 
 		return score;
+	}
+
+	/**
+	 * Get all similarity degrees from off the user.
+	 * 
+	 * @return The similarity degrees
+	 */
+	private ArrayList<SimilarityDegree> getSimilarityDegrees() {
+		return SimilarityDegreeMapper.similarityDegreeMapper()
+				.findByReferenceProfileId(user.getId());
 	}
 
 	public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
