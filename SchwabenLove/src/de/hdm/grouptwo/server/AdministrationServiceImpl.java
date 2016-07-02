@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -42,12 +42,29 @@ import de.hdm.grouptwo.shared.bo.SelectionItem;
 import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.bo.Visit;
 
+/**
+ * Implementation class of the Interface AdministrationService. This class
+ * aggregates, besides the ReportServiceImpl class, the whole application logic.
+ * The application logic is defined in the methods of this class, also it
+ * includes the objects of Mapper classes, which are necessary for the Database
+ * access.
+ * 
+ * @author manuelruss
+ *
+ */
+
 public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		AdministrationService {
 	private static final long serialVersionUID = 1L;
 	private Profile user = null;
 	private ArrayList<Property> properties = null;
 
+	/**
+	 * This method creates a new profile, which is also saved to the database.
+	 * In addition to the profile a bookmark list, search profile and
+	 * information objects for this profile are created. Then, finally the
+	 * similarity degrees to other profiles are calculated.
+	 */
 	@Override
 	public void createProfile(Profile profile) {
 		profile = ProfileMapper.profileMapper().insert(profile);
@@ -62,7 +79,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		// Create a default search profile
 		SearchProfile sp = new SearchProfile();
 		sp.setName("Standard");
-		createSearchProfile(sp);
+		createSearchProfile(sp, profileId);
 
 		ArrayList<Property> properties = getAllProperties();
 
@@ -74,14 +91,20 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			InformationMapper.informationMapper().insert(i);
 		}
 
-		// ToDo: Calculate similarity degrees
+		createSimilarityDegrees(profile);
 	}
 
+	/**
+	 * This method returns a users profile.
+	 */
 	@Override
 	public Profile getProfile() {
 		return user;
 	}
 
+	/**
+	 * Sets an email adress to a profile.
+	 */
 	@Override
 	public Profile setProfile(String email) {
 		user = ProfileMapper.profileMapper().findByEmail(email);
@@ -90,7 +113,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Update the users profile.
+	 * Update the user's profile and recalculate similarity degrees.
 	 * 
 	 * @param profile
 	 *            The <code>Profile</code> to update to
@@ -101,9 +124,14 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	public Profile updateProfile(Profile profile) {
 		ProfileMapper.profileMapper().update(profile);
 
+		updateSimilarityDegrees();
+
 		return ProfileMapper.profileMapper().findById(profile.getId());
 	}
 
+	/**
+	 * Delete the users profile.
+	 */
 	@Override
 	public void deleteProfile() {
 		int userId = user.getId();
@@ -150,6 +178,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
+	public void updateInformation(Information information) {
+		InformationMapper.informationMapper().update(information);
+		updateSimilarityDegrees();
+	}
+
+	/**
+	 * Adds a bookmark based on the profile id.
+	 */
+	@Override
 	public void addBookmarkByProfileId(int profileId) {
 		Bookmark bookmark = new Bookmark();
 		bookmark.setBookmarkListId(BookmarkListMapper.bookmarkListMapper()
@@ -159,6 +196,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		BookmarkMapper.bookmarkMapper().insert(bookmark);
 	}
 
+	/**
+	 * Adds a block to a profile of another user, based on the profile id.
+	 */
 	@Override
 	public void addBlockByProfileId(int profileId) {
 		Block block = new Block();
@@ -168,11 +208,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		BlockMapper.blockMapper().insert(block);
 	}
 
+	/**
+	 * Returns the profile id.
+	 */
 	@Override
 	public Profile getProfileById(int id) {
 		return ProfileMapper.profileMapper().findById(id);
 	}
 
+	/**
+	 * Returns the information of the profile.
+	 */
 	@Override
 	public ArrayList<Information> getInformationByProfileId(int profileId) {
 		ArrayList<Information> information = InformationMapper
@@ -190,6 +236,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return information;
 	}
 
+	/**
+	 * Returns the similarity degree of the profile.
+	 */
 	@Override
 	public SimilarityDegree getSimilarityDegreeByProfileId(int profileId) {
 		SimilarityDegree similarityDegree = null;
@@ -204,6 +253,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return similarityDegree;
 	}
 
+	/**
+	 * Returns the existing searchprofiles.
+	 */
 	@Override
 	public ArrayList<SearchProfile> getSearchProfiles() {
 		ArrayList<SearchProfile> searchProfiles = new ArrayList<SearchProfile>();
@@ -224,15 +276,24 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return searchProfiles;
 	}
 
-	@Override
-	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
+	/**
+	 * Create a new search profile and the associated information objects.
+	 * 
+	 * @param searchProfile
+	 *            The search profile to create
+	 * @param profileId
+	 *            The profileId for which profile it will be created
+	 * @return The created <code>SearchProfile</code> object
+	 */
+	private SearchProfile createSearchProfile(SearchProfile searchProfile,
+			int profileId) {
 		searchProfile = SearchProfileMapper.searchProfileMapper().insert(
 				searchProfile);
 
 		// Create empty Information objects for the search profile
 		for (Property p : getAllProperties()) {
 			Information i = new Information();
-			i.setProfileId(user.getId());
+			i.setProfileId(profileId);
 			i.setPropertyId(p.getId());
 			i.setSearchProfileId(searchProfile.getId());
 			InformationMapper.informationMapper().insert(i);
@@ -241,11 +302,25 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return searchProfile;
 	}
 
+	/**
+	 * Create a new searchprofile.
+	 */
+	@Override
+	public SearchProfile createSearchProfile(SearchProfile searchProfile) {
+		return createSearchProfile(searchProfile, user.getId());
+	}
+
+	/**
+	 * Update the attributes of an existing searchprofile of the current user.
+	 */
 	@Override
 	public void updateSearchProfile(SearchProfile searchProfile) {
 		SearchProfileMapper.searchProfileMapper().update(searchProfile);
 	}
 
+	/**
+	 * Delete a existing searchprofile of the current user.
+	 */
 	@Override
 	public void deleteSearchProfile(SearchProfile searchProfile) {
 		for (Information i : InformationMapper.informationMapper()
@@ -256,18 +331,27 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		SearchProfileMapper.searchProfileMapper().delete(searchProfile);
 	}
 
+	/**
+	 * Return the matches by the selected searchprofile, depending on the
+	 * selected attributes.
+	 */
 	@Override
 	public ArrayList<Profile> getMatchesBySearchProfile(SearchProfile sp) {
-		// ToDo: get profiles ordered by similarity degree
-
-		ArrayList<Profile> profiles = getAllProfiles();
 		ArrayList<Profile> matches = new ArrayList<Profile>();
-		ArrayList<Profile> blocks = getBlockedProfiles();
 
-		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(
-				user.getId())) {
-			blocks.add(ProfileMapper.profileMapper().findById(
-					b.getBlockerProfileId()));
+		// Get profiles ordered by similarity degree
+		ArrayList<SimilarityDegree> similarityDegrees = getSimilarityDegrees();
+
+		Collections.sort(similarityDegrees, new Comparator<SimilarityDegree>() {
+			public int compare(SimilarityDegree o1, SimilarityDegree o2) {
+				return o1.getScore() - o2.getScore();
+			}
+		});
+
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
+		for (SimilarityDegree sd : similarityDegrees) {
+			profiles.add(ProfileMapper.profileMapper().findById(
+					sd.getComparisonProfileId()));
 		}
 
 		for (Profile p : profiles) {
@@ -336,6 +420,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 			matches.add(p);
 		}
 
+		// Remove profiles that we blocked or that have blocked us
+		ArrayList<Profile> blocks = getBlockedProfiles();
+
+		for (Block b : BlockMapper.blockMapper().findByBlockedProfileId(
+				user.getId())) {
+			blocks.add(ProfileMapper.profileMapper().findById(
+					b.getBlockerProfileId()));
+		}
+
 		Iterator<Profile> it = matches.iterator();
 		while (it.hasNext()) {
 			Profile match = it.next();
@@ -353,6 +446,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return matches;
 	}
 
+	/**
+	 * Return the bookmarked profiles of the current user.
+	 */
 	@Override
 	public ArrayList<Profile> getBookmarkedProfiles() {
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
@@ -365,6 +461,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return profiles;
 	}
 
+	/**
+	 * Check if the profile is bookmarked already.
+	 */
 	@Override
 	public boolean checkBookmarked(int profileId) {
 		for (Bookmark b : getBookmarks()) {
@@ -376,6 +475,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return false;
 	}
 
+	/**
+	 * Returns the blocked profiles of the current user.
+	 */
 	@Override
 	public ArrayList<Profile> getBlockedProfiles() {
 		ArrayList<Profile> profiles = new ArrayList<Profile>();
@@ -391,6 +493,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return profiles;
 	}
 
+	/**
+	 * Delete an existing bookmark of the current user.
+	 */
 	@Override
 	public void deleteBookmark(int profileId) {
 		for (Bookmark b : getBookmarks()) {
@@ -401,6 +506,9 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
+	/**
+	 * Delete an existing block of the current user.
+	 */
 	@Override
 	public void deleteBlock(int profileId) {
 		// Find the profile to delete within the users blocks
@@ -435,36 +543,57 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return tableNames;
 	}
 
+	/**
+	 * Show all existing blocks.
+	 */
 	@Override
 	public ArrayList<Block> getAllBlocks() {
 		return BlockMapper.blockMapper().findAll();
 	}
 
+	/**
+	 * Return all bookmarklists.
+	 */
 	@Override
 	public ArrayList<BookmarkList> getAllBookmarkLists() {
 		return BookmarkListMapper.bookmarkListMapper().findAll();
 	}
 
+	/**
+	 * Return all bookmarks.
+	 */
 	@Override
 	public ArrayList<Bookmark> getAllBookmarks() {
 		return BookmarkMapper.bookmarkMapper().findAll();
 	}
 
+	/**
+	 * Return all descriptions.
+	 */
 	@Override
 	public ArrayList<Description> getAllDescriptions() {
 		return DescriptionMapper.descriptionMapper().findAll();
 	}
 
+	/**
+	 * Return all information.
+	 */
 	@Override
 	public ArrayList<Information> getAllInformation() {
 		return InformationMapper.informationMapper().findAll();
 	}
 
+	/**
+	 * Return all profiles.
+	 */
 	@Override
 	public ArrayList<Profile> getAllProfiles() {
 		return ProfileMapper.profileMapper().findAll();
 	}
 
+	/**
+	 * Return all properties.
+	 */
 	@Override
 	public ArrayList<Property> getAllProperties() {
 		if (properties == null) {
@@ -474,26 +603,41 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return properties;
 	}
 
+	/**
+	 * Return all searchprofiles.
+	 */
 	@Override
 	public ArrayList<SearchProfile> getAllSearchProfiles() {
 		return SearchProfileMapper.searchProfileMapper().findAll();
 	}
 
+	/**
+	 * Return all selectionitems.
+	 */
 	@Override
 	public ArrayList<SelectionItem> getAllSelectionItems() {
 		return SelectionItemMapper.selectionItemMapper().findAll();
 	}
 
+	/**
+	 * Return all selections.
+	 */
 	@Override
 	public ArrayList<Selection> getAllSelections() {
 		return SelectionMapper.selectionMapper().findAll();
 	}
 
+	/**
+	 * Return all similaritydegrees.
+	 */
 	@Override
 	public ArrayList<SimilarityDegree> getAllSimilarityDegrees() {
 		return SimilarityDegreeMapper.similarityDegreeMapper().findAll();
 	}
 
+	/**
+	 * Return all visits.
+	 */
 	@Override
 	public ArrayList<Visit> getAllVisits() {
 		return VisitMapper.visitMapper().findAll();
@@ -563,6 +707,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return true;
 	}
 
+	/**
+	 * Get the bookmark list ID of the current user.
+	 * 
+	 * @return
+	 */
 	private ArrayList<Bookmark> getBookmarks() {
 		// Get the bookmark list ID of the current user
 		int bookmarkListId = BookmarkListMapper.bookmarkListMapper()
@@ -571,41 +720,134 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return BookmarkMapper.bookmarkMapper().findByBookmarkListId(
 				bookmarkListId);
 	}
-	
-public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
-		Logger logger = Logger.getLogger("NameOfYourLogger");
-		logger.log(Level.SEVERE, "EMAIL DEEP = " + profile.getEmail());
-		logger.log(Level.SEVERE, "ID DEEP = " + profile.getId());
-		setProfile(profile.getEmail());
-		// Get all Visits
-		ArrayList<Visit> allVisits = new ArrayList<Visit>();
-		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(profile.getId());
-		logger.log(Level.SEVERE, "Methode läuft nach allVisits noch");
-		// Get all Matches
-		SearchProfile dummyProfile = new SearchProfile();
-		ArrayList<Profile> allMatches = new ArrayList<Profile>();
-		allMatches = getMatchesBySearchProfile(dummyProfile);
-		logger.log(Level.SEVERE, "Methode läuft nach allMatches noch");
-		if(!allMatches.isEmpty()) {
-			logger.log(Level.SEVERE, "allMatches not empty!");
+
+	private void updateSimilarityDegrees() {
+		ArrayList<Profile> comparisonProfiles = getAllProfiles();
+		final int userId = user.getId();
+
+		// Update similarity degrees to and from everyone
+		SimilarityDegree sd = new SimilarityDegree();
+		for (Profile p : comparisonProfiles) {
+			if (!user.equals(p)) {
+				sd.setScore(calculateSimilarityDegreeScore(user, p));
+
+				sd.setReferenceProfileId(userId);
+				sd.setComparisonProfileId(p.getId());
+				SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
+
+				sd.setReferenceProfileId(p.getId());
+				sd.setComparisonProfileId(userId);
+				SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
+			}
 		}
-		
-		// Remove visited matches von ArrayList
-		if (!allVisits.isEmpty()) {
-			logger.log(Level.SEVERE, "allVisits not empty!");
-			for (Visit visit : allVisits) {
-				if(!allMatches.isEmpty()) {
-					logger.log(Level.SEVERE, "allMatches not empty!");
-					for (Profile match : allMatches) {
-						if (visit.getVisitedProfileId() == match.getId()) {
-							int index = allMatches.indexOf(match);
-							allMatches.remove(index);
+	}
+
+	private void createSimilarityDegrees(Profile profile) {
+		ArrayList<Profile> comparisonProfiles = getAllProfiles();
+		final int userId = profile.getId();
+
+		// Create similarity degrees to and from everyone
+		SimilarityDegree sd = new SimilarityDegree();
+		for (Profile p : comparisonProfiles) {
+			if (!profile.equals(p)) {
+				sd.setScore(calculateSimilarityDegreeScore(profile, p));
+
+				sd.setReferenceProfileId(userId);
+				sd.setComparisonProfileId(p.getId());
+				SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
+
+				sd.setReferenceProfileId(p.getId());
+				sd.setComparisonProfileId(userId);
+				SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
+			}
+		}
+	}
+
+	private int calculateSimilarityDegreeScore(Profile ref,
+			Profile comp) {
+		int score = 0;
+
+		if (ref.getLocation().equals(comp.getLocation())) {
+			score += 18;
+		}
+
+		score += Math.max(0, 10 - Math.abs(ref.getHeight() - comp.getHeight()));
+
+		if (ref.getPhysique().equals(comp.getPhysique())) {
+			score += 12;
+		}
+
+		if (ref.getSmoker().equals(comp.getSmoker())) {
+			score += 26;
+		}
+
+		if (ref.getEducation().equals(comp.getEducation())) {
+			score += 18;
+		}
+
+		if (ref.getProfession().equals(comp.getProfession())) {
+			score += 22;
+		}
+
+		if (ref.getReligion().equals(comp.getReligion())) {
+			score += 26;
+		}
+
+		ArrayList<Information> refInformation = getInformationByProfileId(
+				ref.getId());
+		ArrayList<Information> compInformation = getInformationByProfileId(
+				comp.getId());
+
+		for (Information refInfo : refInformation) {
+			for (Information compInfo : compInformation) {
+				if (refInfo.getPropertyId() == compInfo.getPropertyId()) {
+					if (refInfo.getInputText() != null
+							&& !refInfo.getInputText().isEmpty()
+							&& compInfo.getInputText() != null
+							&& !compInfo.getInputText().isEmpty()) {
+						if (refInfo.getInputText().equals(
+								compInfo.getInputText())) {
+							score += 12;
 						}
 					}
 				}
 			}
 		}
-		
+
+		return score;
+	}
+
+	/**
+	 * Get all similarity degrees from off the user.
+	 * 
+	 * @return The similarity degrees
+	 */
+	private ArrayList<SimilarityDegree> getSimilarityDegrees() {
+		return SimilarityDegreeMapper.similarityDegreeMapper()
+				.findByReferenceProfileId(user.getId());
+	}
+
+	public ArrayList<Profile> getUnvisitedProfiles(Profile profile) {
+
+		// Get all Visits
+		ArrayList<Visit> allVisits = new ArrayList<Visit>();
+		allVisits = VisitMapper.visitMapper().findByVisitorProfileId(
+				profile.getId());
+
+		// Get all Matches
+		SearchProfile dummyProfile = new SearchProfile();
+		ArrayList<Profile> allMatches = new ArrayList<Profile>();
+		allMatches = getMatchesBySearchProfile(dummyProfile);
+
+		// Remove visited matches von ArrayList
+		for (Visit visit : allVisits) {
+			for (Profile match : allMatches) {
+				if (visit.getVisitedProfileId() == match.getId()) {
+					int index = allMatches.indexOf(match);
+					allMatches.remove(index);
+				}
+			}
+		}
 		return allMatches;
 	}
 }

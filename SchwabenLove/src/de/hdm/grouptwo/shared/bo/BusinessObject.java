@@ -16,19 +16,33 @@ public abstract class BusinessObject implements Serializable {
 
 	private int id = 0;
 
+	/**
+	 * Return the id.
+	 * @return
+	 */
 	public int getId() {
 		return id;
 	}
-
+	
+	/**
+	 * Set the id.
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Convert the instance to a String.
+	 */
 	@Override
 	public String toString() {
 		return this.getClass().getName() + " #" + id;
 	}
 
+	/**
+	 * Check if object is unequal null.
+	 */
 	@Override
 	public boolean equals(Object o) {
 
