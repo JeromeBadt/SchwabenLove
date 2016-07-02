@@ -81,6 +81,18 @@ body {
 	height: 19px;
 }
 
+.profile-picture {
+	border: 3px solid black;
+}
+
+.info-panel {
+	border: 1px solid black;
+}
+
+.info-panel * {
+	margin: 3px;
+}
+
 .profile-widget {
 	border: 1px solid black;
 }
@@ -89,7 +101,7 @@ body {
 	font-family: Lora !important;
 }
 
-.matches-page, .list-page {
+.profile-page, .matches-page, .list-page {
 	overflow: auto;
 }
 

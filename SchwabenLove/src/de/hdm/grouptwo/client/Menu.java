@@ -3,15 +3,18 @@ package de.hdm.grouptwo.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import de.hdm.grouptwo.shared.bo.LoginInfo;
+import de.hdm.grouptwo.shared.bo.Property;
 
 public class Menu extends Composite {
 	private LoginInfo loginInfo = null;
@@ -62,19 +65,30 @@ public class Menu extends Composite {
 			contentPanel.remove(setupPage);
 		}
 
-		// Save profilePage to load it on login later
-		ProfilePage profilePage = new ProfilePage(loginInfo);
-		contentPages.add(profilePage);
-		contentPages.add(new MatchesPage());
-		contentPages.add(new BookmarkListPage());
-		contentPages.add(new BlockListPage());
-		// contentPages.add(new AdminPage());
-		contentPages.add(new LogoutPage(loginInfo));
+		ClientsideSettings.getAdministrationService().getAllProperties(
+				new AsyncCallback<ArrayList<Property>>() {
+					public void onSuccess(ArrayList<Property> result) {
+						// Save profilePage to load it on login later
+						ProfilePage profilePage = new ProfilePage(loginInfo,
+								result);
+						contentPages.add(profilePage);
+						contentPages.add(new MatchesPage());
+						contentPages.add(new BookmarkListPage());
+						contentPages.add(new BlockListPage());
+						// contentPages.add(new AdminPage());
+						contentPages.add(new LogoutPage(loginInfo));
 
-		createMenu();
+						createMenu();
 
-		// Load profile page on login
-		pages.get(profilePage).getScheduledCommand().execute();
+						// Load profile page on login
+						pages.get(profilePage).getScheduledCommand().execute();
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
 	}
 
 	private void createMenu() {
