@@ -29,8 +29,8 @@ import de.hdm.grouptwo.shared.report.SimpleReport;
 
 public class MatchesBySearchprofileReportPage extends ContentPage {
 	private VerticalPanel vPanel = new VerticalPanel();
-	// private HorizontalPanel hTop = new HorizontalPanel();
-	// private HorizontalPanel hMain = new HorizontalPanel();
+	private HorizontalPanel hTop = new HorizontalPanel();
+	private HorizontalPanel hMain = new HorizontalPanel();
 	
 	private ScrollPanel sPanel = new ScrollPanel();
 	
@@ -43,6 +43,7 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 	public MatchesBySearchprofileReportPage(LoginInfo loginInfo) {	
 		super("Partnervorschläge anhand von Suchprofil");
 	
+		// set loginInfo for reportService
 		reportService.setupAdministration(loginInfo.getEmailAddress(), new AsyncCallback<Void>() {
 
 			@Override
@@ -81,7 +82,7 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 			
 		});	
 		
-		loadReport();
+		// loadReport(activeSearchProfile);
 		
 		sPanel.add(vPanel);
 		
@@ -105,13 +106,18 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 			@Override
 			public void onChange(ChangeEvent event) {
 				activeSearchProfile = searchProfilesFinal.get(((ListBox) event.getSource()).getSelectedIndex());
+				loadReport(activeSearchProfile);
 				
 			}
 			
 		});
 		
+		Label lbl = new Label();
+		lbl.setText("Suchprofil auswählen");
+		hTop.add(lbl);
 		// Add ListBox to vPanel
-		vPanel.add(lb);
+		hTop.add(lb);
+		vPanel.add(hTop);
 		
 		
 	}
@@ -129,8 +135,8 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 		
 	}
 	
-	public void loadReport() {
-		reportService.getMatchesBySearchprofileReport(new AsyncCallback<MatchesBySearchprofileReport>() {
+	public void loadReport(SearchProfile activeSearchProfile) {
+		reportService.getMatchesBySearchprofileReport(activeSearchProfile, new AsyncCallback<MatchesBySearchprofileReport>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -140,12 +146,13 @@ public class MatchesBySearchprofileReportPage extends ContentPage {
 
 			@Override
 			public void onSuccess(MatchesBySearchprofileReport result) {
+				hMain.clear();
 				// TODO Auto-generated method stub
 				HTMLReportWriter writer = new HTMLReportWriter();
 				final MatchesBySearchprofileReport report = result;
 				writer.process(result);
-				vPanel.add(new HTML(writer.getReportText()));
-				// hMain.add(sPanel);
+				hMain.add(new HTML(writer.getReportText()));
+				vPanel.add(hMain);
 				// rootP.add(hMain);
 			}
 			

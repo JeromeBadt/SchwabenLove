@@ -18,7 +18,7 @@ public interface ReportServiceAsync {
 //	void getMatchesBySearchprofileReport(LoginInfo loginInfo,
 //			AsyncCallback<MatchesBySearchprofileReport> asyncCallback);
 
-	public void getMatchesBySearchprofileReport(
+	public void getMatchesBySearchprofileReport(SearchProfile searchProfile,
 			AsyncCallback<MatchesBySearchprofileReport> asyncCallback);
 	
 	public void getUnviewedMatches(Profile p,

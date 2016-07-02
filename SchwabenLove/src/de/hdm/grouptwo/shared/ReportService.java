@@ -19,7 +19,7 @@ public interface ReportService extends RemoteService {
 	
 	// public abstract MatchesBySearchprofileReport getMatchesBySearchprofileReport(LoginInfo loginInfo);
 	
-	public MatchesBySearchprofileReport getMatchesBySearchprofileReport();
+	public MatchesBySearchprofileReport getMatchesBySearchprofileReport(SearchProfile searchProfile);
 	
 	public UnviewedMatchesReport getUnviewedMatches(Profile p);
 	
