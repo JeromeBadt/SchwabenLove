@@ -115,12 +115,14 @@ public class DescriptionMapper implements DataMapper<Description> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT fk_property_id "
-					+ "FROM description");
+			ResultSet rs = stmt.executeQuery("SELECT fk_property_id, "
+					+ "explanation FROM description, property WHERE "
+					+ "fk_property_id=property_id");
 
 			while (rs.next()) {
 				Description d = new Description();
 				d.setId(rs.getInt("fk_property_id"));
+				d.setExplanation(rs.getString("explanation"));
 
 				result.add(d);
 			}
@@ -146,11 +148,13 @@ public class DescriptionMapper implements DataMapper<Description> {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT fk_property_id, "
-					+ "FROM description WHERE fk_property_id=" + id);
+					+ "explanation FROM description, property WHERE "
+					+ "fk_property_id=property_id AND fk_property_id=" + id);
 
 			if (rs.next()) {
 				Description d = new Description();
 				d.setId(rs.getInt("fk_property_id"));
+				d.setExplanation(rs.getString("explanation"));
 
 				return d;
 			}

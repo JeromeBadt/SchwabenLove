@@ -20,15 +20,19 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.SimpleLayoutPanel;
+import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import de.hdm.grouptwo.shared.bo.Description;
 import de.hdm.grouptwo.shared.bo.Information;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.Property;
+import de.hdm.grouptwo.shared.bo.Selection;
+import de.hdm.grouptwo.shared.bo.SelectionItem;
 
 public class ProfilePage extends ContentPage {
 	private LayoutPanel lPanel = new LayoutPanel();
@@ -344,26 +348,15 @@ public class ProfilePage extends ContentPage {
 	private void showInformation(ArrayList<Information> information) {
 		int offset = 0;
 		for (Property p : properties) {
-			Label propertyLabel = new Label(p.getExplanation());
-			infoPanel.add(propertyLabel);
-			infoPanel.setWidgetTopHeight(propertyLabel, offset, Unit.PX, 24,
-					Unit.PX);
-			infoPanel
-					.setWidgetLeftRight(propertyLabel, 0, Unit.PX, 30, Unit.PX);
-			offset += 24;
-
 			for (Information info : information) {
 				if (info.getPropertyId() == p.getId()) {
-					SimpleLayoutPanel sPanel = new SimpleLayoutPanel();
-					sPanel.addStyleName("info-panel");
-					Label infoLabel = new Label("Information: " + info.getId());
+					InformationWidget infoWidget = new InformationWidget(info,
+							p);
 
-					sPanel.add(infoLabel);
-					infoPanel.add(sPanel);
-
-					infoPanel.setWidgetTopHeight(sPanel, offset, Unit.PX,
-							72, Unit.PX);
-					offset += 86;
+					infoPanel.add(infoWidget);
+					infoPanel.setWidgetTopHeight(infoWidget, offset, Unit.PX,
+							96, Unit.PX);
+					offset += 110;
 				}
 			}
 		}
@@ -430,20 +423,139 @@ public class ProfilePage extends ContentPage {
 		attrEditIcon[10].addClickHandler(new EditClickHandler(hairColorLabel,
 				hairColorList, 10));
 
-		for (int i = 0; i < properties.size(); i++) {
-			Image img = new Image("images/icons/edit.png");
-			img.addStyleName("img-button");
-			img.setWidth("16px");
-			img.setTitle("Attribut editieren");
+		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+	}
 
-			infoPanel.add(img);
-			infoPanel.setWidgetRightWidth(img, 10, Unit.PX, 16, Unit.PX);
-			infoPanel
-					.setWidgetTopHeight(img, i * 110 + 4, Unit.PX, 16, Unit.PX);
+	private class InformationWidget extends ResizeComposite {
+		private LayoutPanel lPanel = new LayoutPanel();
+		private LayoutPanel infoPanel = new LayoutPanel();
+
+		private Information information = null;
+		private int type = 0;
+
+		private Label label = new Label();
+		private Widget input = null;
+		private Image icon = new Image("images/icons/edit.png");
+
+		private InformationWidget(Information i, Property p) {
+			information = i;
+
+			initWidget(lPanel);
+
+			Label explanationLabel = new Label(p.getExplanation());
+			label.setText(i.getInputText());
+
+			LayoutPanel sPanel = new LayoutPanel();
+			sPanel.addStyleName("info-panel");
+			sPanel.add(infoPanel);
+			sPanel.setWidgetLeftRight(infoPanel, 0, Unit.PX, 1, Unit.PX);
+
+			lPanel.add(explanationLabel);
+			lPanel.add(sPanel);
+
+			lPanel.setWidgetLeftRight(explanationLabel, 0, Unit.PX, 30,
+					Unit.PX);
+			lPanel.setWidgetTopHeight(sPanel, 24, Unit.PX, 72, Unit.PX);
+
+			if (p instanceof Description) {
+				input = new TextArea();
+				((TextArea) input).setText(label.getText());
+				input.setHeight("56px");
+				input.setWidth("100%");
+				input.addStyleName("no-resize");
+
+				type = 0;
+				loadClickHandler();
+			} else if (p instanceof Selection) {
+				type = 1;
+				input = new ListBox();
+
+				administrationService.getSelectionItems(p.getId(),
+						new AsyncCallback<ArrayList<SelectionItem>>() {
+							public void onSuccess(
+									ArrayList<SelectionItem> result) {
+								addListItems(result);
+								loadClickHandler();
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING, caught.getMessage());
+							}
+						});
+			}
 		}
 
-		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
-		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+		private void addListItems(ArrayList<SelectionItem> selectionItems) {
+			for (SelectionItem si : selectionItems) {
+				((ListBox) input).addItem(si.getName());
+			}
+		}
+
+		private void loadClickHandler() {
+			input.setVisible(false);
+
+			icon.addStyleName("img-button");
+			icon.setWidth("16px");
+			icon.setTitle("Attribut editieren");
+
+			infoPanel.add(label);
+			infoPanel.add(input);
+
+			infoPanel.setWidgetLeftRight(label, 6, Unit.PX, 6, Unit.PX);
+			infoPanel.setWidgetTopBottom(label, 6, Unit.PX, 6, Unit.PX);
+
+			if (type == 0) {
+				infoPanel.setWidgetLeftRight(input, 1, Unit.PX, 1, Unit.PX);
+				infoPanel.setWidgetTopBottom(input, 1, Unit.PX, 1, Unit.PX);
+			} else if (type == 1) {
+				infoPanel.setWidgetLeftRight(input, 1, Unit.PX, 1, Unit.PX);
+				infoPanel.setWidgetTopHeight(input, 1, Unit.PX, 24, Unit.PX);
+			}
+
+			lPanel.add(icon);
+			lPanel.setWidgetRightWidth(icon, 10, Unit.PX, 16, Unit.PX);
+			lPanel.setWidgetTopHeight(icon, 0, Unit.PX, 16, Unit.PX);
+
+			icon.addClickHandler(new ClickHandler() {
+				private boolean state = false;
+
+				public void onClick(ClickEvent event) {
+					if (state) {
+						String inputText = "";
+						if (type == 0) {
+							inputText = ((TextArea) input).getText();
+						} else {
+							inputText = ((ListBox) input).getSelectedItemText();
+						}
+						information.setInputText(inputText);
+
+						administrationService.updateInformation(information,
+								new AsyncCallback<Void>() {
+									public void onSuccess(Void result) {
+										label.setText(information
+												.getInputText());
+									}
+
+									public void onFailure(Throwable caught) {
+										ClientsideSettings.getLogger().log(
+												Level.WARNING,
+												caught.getMessage());
+									}
+								});
+						icon.setUrl("images/icons/edit.png");
+					} else {
+						icon.setUrl("images/icons/checkmark.png");
+					}
+
+					label.setVisible(state);
+					input.setVisible(!state);
+
+					state = !state;
+				}
+			});
+		}
 	}
 
 	private class EditClickHandler implements ClickHandler {
