@@ -88,4 +88,6 @@ public interface AdministrationService extends RemoteService {
 	public ArrayList<Visit> getAllVisits();
 
 	public boolean validateDate(int year, int month, int day);
+	
+	ArrayList<Profile> getUnvisitedProfiles(Profile profile);
 }

@@ -99,4 +99,7 @@ public interface AdministrationServiceAsync {
 
 	public void validateDate(int year, int month, int day,
 			AsyncCallback<Boolean> callback);
+	
+	void getUnvisitedProfiles(Profile profile,
+			AsyncCallback<ArrayList<Profile>> callback);
 }
