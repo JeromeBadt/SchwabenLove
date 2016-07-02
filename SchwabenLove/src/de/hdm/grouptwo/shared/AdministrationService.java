@@ -199,6 +199,11 @@ public interface AdministrationService extends RemoteService {
 	public ArrayList<Visit> getAllVisits();
 
 	/**
+	 * Return all selection items from a specific selection.
+	 */
+	public ArrayList<SelectionItem> getSelectionItems(int selectionId);
+
+	/**
 	 * Method to validate a birthdate. Checks if the day and month are valid and
 	 * if the user is within the permissible age range.<br>
 	 * This check is performed on the server side because GWT does not support

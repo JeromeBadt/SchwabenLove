@@ -13,8 +13,10 @@ import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import de.hdm.grouptwo.shared.bo.Description;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Property;
+import de.hdm.grouptwo.shared.bo.Selection;
 
 public class Menu extends Composite {
 	private LoginInfo loginInfo = null;
@@ -26,6 +28,8 @@ public class Menu extends Composite {
 	private Map<ContentPage, MenuItem> pages = new HashMap<ContentPage, MenuItem>();
 
 	private SetupPage setupPage = null;
+
+	private ArrayList<Property> properties = new ArrayList<Property>();
 
 	public Menu(DeckLayoutPanel contentPanel, LoginInfo loginInfo) {
 		initWidget(menuBar);
@@ -64,12 +68,29 @@ public class Menu extends Composite {
 			contentPanel.remove(setupPage);
 		}
 
-		ClientsideSettings.getAdministrationService().getAllProperties(
-				new AsyncCallback<ArrayList<Property>>() {
-					public void onSuccess(ArrayList<Property> result) {
+		ClientsideSettings.getAdministrationService().getAllDescriptions(
+				new AsyncCallback<ArrayList<Description>>() {
+					public void onSuccess(ArrayList<Description> result) {
+						properties.addAll(result);
+						loadSelections();
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
+	}
+
+	private void loadSelections() {
+		ClientsideSettings.getAdministrationService().getAllSelections(
+				new AsyncCallback<ArrayList<Selection>>() {
+					public void onSuccess(ArrayList<Selection> result) {
+						properties.addAll(result);
+
 						// Save profilePage to load it on login later
 						ProfilePage profilePage = new ProfilePage(loginInfo,
-								result);
+								properties);
 						contentPages.add(profilePage);
 						contentPages.add(new MatchesPage());
 						contentPages.add(new BookmarkListPage());

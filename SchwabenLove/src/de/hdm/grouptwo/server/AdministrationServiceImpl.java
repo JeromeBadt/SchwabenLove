@@ -644,6 +644,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
+	 * Return all selection items from a specific selection.
+	 */
+	@Override
+	public ArrayList<SelectionItem> getSelectionItems(int selectionId) {
+		return SelectionItemMapper.selectionItemMapper().findBySelection(
+				selectionId);
+	}
+
+	/**
 	 * Method to validate a birthdate. Checks if the day and month are valid and
 	 * if the user is within the permissible age range.<br>
 	 * This check is performed on the server side because GWT does not support

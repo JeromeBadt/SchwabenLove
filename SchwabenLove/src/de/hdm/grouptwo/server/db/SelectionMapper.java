@@ -115,12 +115,14 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT fk_property_id "
-					+ "FROM selection");
+			ResultSet rs = stmt.executeQuery("SELECT fk_property_id, "
+					+ "explanation FROM selection, property WHERE "
+					+ "fk_property_id=property_id");
 
 			while (rs.next()) {
 				Selection s = new Selection();
 				s.setId(rs.getInt("fk_property_id"));
+				s.setExplanation(rs.getString("explanation"));
 
 				result.add(s);
 			}
@@ -144,12 +146,14 @@ public class SelectionMapper implements DataMapper<Selection> {
 
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT fk_property_id "
-					+ "FROM selection WHERE fk_property_id=" + id);
+			ResultSet rs = stmt.executeQuery("SELECT fk_property_id, "
+					+ "explanation FROM selection, property WHERE "
+					+ "fk_property_id=property_id AND fk_property_id=" + id);
 
 			if (rs.next()) {
 				Selection s = new Selection();
 				s.setId(rs.getInt("fk_property_id"));
+				s.setExplanation(rs.getString("explanation"));
 
 				return s;
 			}
