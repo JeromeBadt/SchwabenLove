@@ -391,30 +391,40 @@ public class MatchesPage extends ContentPage {
 	}
 
 	private class MatchProfileWidget extends ProfileWidget {
-		MatchProfileWidget(Profile profile) {
+		private int profileId = 0;
+		private boolean state = false;
+
+		private Image bookmarkIcon = new Image();
+
+		private MatchProfileWidget(Profile profile) {
 			super(profile);
+			profileId = profile.getId();
 
-			final int profileId = profile.getId();
+			administrationService.checkBookmarked(profileId,
+					new AsyncCallback<Boolean>() {
+						public void onSuccess(Boolean result) {
+							state = result;
+							if (state) {
+								bookmarkIcon
+										.setUrl("images/icons/bookmark2.png");
+							} else {
+								bookmarkIcon
+										.setUrl("images/icons/bookmark.png");
+							}
+						}
 
-			Image bookmarkIcon = new Image("images/icons/bookmark.png");
+						public void onFailure(Throwable caught) {
+							ClientsideSettings.getLogger().log(Level.WARNING,
+									caught.getMessage());
+						}
+					});
+
 			bookmarkIcon.addStyleName("img-button");
 			bookmarkIcon.setWidth("24px");
 			bookmarkIcon.setTitle("Profil merken");
 			bookmarkIcon.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					administrationService.addBookmarkByProfileId(
-							profileId, new AsyncCallback<Void>() {
-								public void onSuccess(Void result) {
-									// bookmarkIcon
-									// .setUrl("images/icons/bookmark2.png");
-								}
-
-								public void onFailure(Throwable caught) {
-									ClientsideSettings.getLogger().log(
-											Level.WARNING,
-											caught.getMessage());
-								}
-							});
+					bookmarkChange();
 				}
 			});
 
@@ -427,7 +437,7 @@ public class MatchesPage extends ContentPage {
 					administrationService.addBlockByProfileId(profileId,
 							new AsyncCallback<Void>() {
 								public void onSuccess(Void result) {
-									// Remove from list
+									updatePage();
 								}
 
 								public void onFailure(Throwable caught) {
@@ -461,6 +471,38 @@ public class MatchesPage extends ContentPage {
 			rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
 			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
 			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
+		}
+
+		private void bookmarkChange() {
+			if (state) {
+				administrationService.deleteBookmark(profileId,
+						new AsyncCallback<Void>() {
+							public void onSuccess(Void result) {
+								bookmarkIcon
+										.setUrl("images/icons/bookmark.png");
+								state = !state;
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING, caught.getMessage());
+							}
+						});
+			} else {
+				administrationService.addBookmarkByProfileId(
+						profileId, new AsyncCallback<Void>() {
+							public void onSuccess(Void result) {
+								bookmarkIcon
+										.setUrl("images/icons/bookmark2.png");
+								state = !state;
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING, caught.getMessage());
+							}
+						});
+			}
 		}
 	}
 

@@ -87,6 +87,21 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return user;
 	}
 
+	/**
+	 * Update the users profile.
+	 * 
+	 * @param profile
+	 *            The <code>Profile</code> to update to
+	 * @return The updated profile (needs to be read from the database again to
+	 *         recalculate the age
+	 */
+	@Override
+	public Profile updateProfile(Profile profile) {
+		ProfileMapper.profileMapper().update(profile);
+
+		return ProfileMapper.profileMapper().findById(profile.getId());
+	}
+
 	@Override
 	public void deleteProfile() {
 		int userId = user.getId();
@@ -156,8 +171,21 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		return ProfileMapper.profileMapper().findById(id);
 	}
 
+	@Override
 	public ArrayList<Information> getInformationByProfileId(int profileId) {
-		return InformationMapper.informationMapper().findByProfileId(profileId);
+		ArrayList<Information> information = InformationMapper
+				.informationMapper().findByProfileId(profileId);
+
+		Iterator<Information> it = information.iterator();
+		while (it.hasNext()) {
+			Information i = it.next();
+
+			if (i.getSearchProfileId() != 0) {
+				it.remove();
+			}
+		}
+
+		return information;
 	}
 
 	@Override
@@ -333,6 +361,17 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		}
 
 		return profiles;
+	}
+
+	@Override
+	public boolean checkBookmarked(int profileId) {
+		for (Bookmark b : getBookmarks()) {
+			if (b.getProfileId() == profileId) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
