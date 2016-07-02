@@ -498,7 +498,7 @@ public class ProfilePage extends ContentPage {
 
 			icon.addStyleName("img-button");
 			icon.setWidth("16px");
-			icon.setTitle("Attribut editieren");
+			icon.setTitle("Information editieren");
 
 			infoPanel.add(label);
 			infoPanel.add(input);

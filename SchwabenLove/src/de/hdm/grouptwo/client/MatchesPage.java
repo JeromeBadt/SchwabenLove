@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.SearchProfile;
-import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 
 public class MatchesPage extends ContentPage {
 	private LayoutPanel lPanel = new LayoutPanel();
@@ -395,24 +394,11 @@ public class MatchesPage extends ContentPage {
 		private int profileId = 0;
 		private boolean state = false;
 
-		private Label similarityDegreeLbl = new Label();
 		private Image bookmarkIcon = new Image();
 
 		private MatchProfileWidget(Profile profile) {
 			super(profile);
 			profileId = profile.getId();
-
-			administrationService.getSimilarityDegreeByProfileId(profileId,
-					new AsyncCallback<SimilarityDegree>() {
-						public void onSuccess(SimilarityDegree result) {
-							showSimilarityDegree(result);
-						}
-
-						public void onFailure(Throwable caught) {
-							ClientsideSettings.getLogger().log(Level.WARNING,
-									caught.getMessage());
-						}
-					});
 
 			administrationService.checkBookmarked(profileId,
 					new AsyncCallback<Boolean>() {
@@ -456,24 +442,14 @@ public class MatchesPage extends ContentPage {
 
 								public void onFailure(Throwable caught) {
 									ClientsideSettings.getLogger().log(
-											Level.WARNING,
-											caught.getMessage());
+											Level.WARNING, caught.getMessage());
 								}
 							});
 				}
 			});
 
-			LayoutPanel heartPanel = new LayoutPanel();
-			Image heartIcon = new Image("images/icons/heart.png");
-			heartIcon.setWidth("72px");
-			similarityDegreeLbl.setStyleName("similarity-degree-label");
-
-			heartPanel.add(heartIcon);
-			heartPanel.add(similarityDegreeLbl);
-
 			rightPanel.add(bookmarkIcon);
 			rightPanel.add(blockIcon);
-			rightPanel.add(heartPanel);
 
 			rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24,
 					Unit.PX);
@@ -482,13 +458,6 @@ public class MatchesPage extends ContentPage {
 			rightPanel.setWidgetTopHeight(bookmarkIcon, 0, Unit.PCT, 24,
 					Unit.PX);
 			rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
-			rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
-			heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
-		}
-
-		private void showSimilarityDegree(SimilarityDegree similarityDegree) {
-			similarityDegreeLbl.setText(Integer.toString(similarityDegree
-					.getScore()));
 		}
 
 		private void bookmarkChange() {
