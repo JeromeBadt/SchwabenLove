@@ -45,24 +45,27 @@ public class UnviewedMatchesReportPage extends ContentPage{
 		
 		final VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("90%");
-		sPanel.add(vPanel);
-		
+	
 		reportService.testMethod(new AsyncCallback<String>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
+				vPanel.clear();
 				Label lbl = new Label();
 				lbl.setText("RPC FAILURE");
 				vPanel.add(lbl);
+				sPanel.add(vPanel);
 			}
 
 			@Override
 			public void onSuccess(String result) {
 				// TODO Auto-generated method stub
+				vPanel.clear();
 				Label lbl = new Label();
 				lbl.setText(result);
 				vPanel.add(lbl);
+				sPanel.add(vPanel);
 			}
 			
 		});

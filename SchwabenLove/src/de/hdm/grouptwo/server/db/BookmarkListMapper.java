@@ -106,7 +106,7 @@ public class BookmarkListMapper implements DataMapper<BookmarkList> {
 
 		try {
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM bookmark_list WHERE "
+			stmt.executeUpdate("DELETE FROM bookmarklist WHERE "
 					+ "bookmark_list_id=" + bl.getId());
 		} catch (SQLException e) {
 			e.printStackTrace();

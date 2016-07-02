@@ -537,6 +537,7 @@ public class MatchesPage extends ContentPage {
 			nameInput.setMaxLength(45);
 
 			Button cancelButton = new Button("Abbrechen");
+			cancelButton.setHeight("32px");
 			cancelButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					SearchProfilePopup.this.hide();
@@ -544,6 +545,7 @@ public class MatchesPage extends ContentPage {
 			});
 
 			Button okButton = new Button("OK");
+			okButton.setHeight("32px");
 			okButton.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
 					String name = nameInput.getText().isEmpty() ? "Standard"
@@ -581,9 +583,9 @@ public class MatchesPage extends ContentPage {
 			lPanel.setWidgetTopHeight(nameInput, 10, Unit.PX, 24, Unit.PX);
 			lPanel.setWidgetRightWidth(nameInput, 8, Unit.PX, 160, Unit.PX);
 			lPanel.setWidgetBottomHeight(cancelButton, 8, Unit.PX, 32, Unit.PX);
-			lPanel.setWidgetRightWidth(cancelButton, 8, Unit.PX, 85, Unit.PX);
+			lPanel.setWidgetRightWidth(cancelButton, 57, Unit.PX, 85, Unit.PX);
 			lPanel.setWidgetBottomHeight(okButton, 8, Unit.PX, 32, Unit.PX);
-			lPanel.setWidgetRightWidth(okButton, 101, Unit.PX, 41, Unit.PX);
+			lPanel.setWidgetRightWidth(okButton, 8, Unit.PX, 41, Unit.PX);
 			lPanel.setSize("236px", "90px");
 
 			setWidget(lPanel);

@@ -7,39 +7,44 @@ import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 
 public class ProfilePage extends ContentPage {
 	private LayoutPanel lPanel = new LayoutPanel();
 
-	private LoginInfo loginInfo = null;
-
-	public ProfilePage(LoginInfo loginInfo) {
+	public ProfilePage() {
 		super("Profil");
 		initWidget(lPanel);
-
-		this.loginInfo = loginInfo;
 	}
 
 	public ProfilePage(int id) {
 		super("Profil");
 		initWidget(lPanel);
+
+		administrationService.getProfileById(id, new AsyncCallback<Profile>() {
+			public void onSuccess(Profile result) {
+				showProfile(result);
+			}
+
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().log(Level.WARNING,
+						caught.getMessage());
+			}
+		});
+
 	}
 
 	@Override
 	public void updatePage() {
 		lPanel.clear();
 
+		// change to getProfile()
 		administrationService.getProfile(new AsyncCallback<Profile>() {
 			public void onSuccess(Profile result) {
 				showProfile(result);
@@ -60,8 +65,7 @@ public class ProfilePage extends ContentPage {
 		Image[] images = new Image[11];
 		for (int i = 0; i < images.length; i++) {
 			images[i] = new Image("images/icons/edit.png");
-			images[i].addStyleName("img-button");
-			images[i].setWidth("16px");
+			images[i].setWidth("1em");
 			images[i].setTitle("Attribut editieren");
 		}
 
@@ -93,14 +97,27 @@ public class ProfilePage extends ContentPage {
 		vPanel2.add(new Label(profile.getPhysique()));
 		vPanel2.add(new Label(profile.getHairColor()));
 
+		// Funktioniert noch nicht
 		Image deleteIcon = new Image("images/icons/trash.png");
-		deleteIcon.addStyleName("img-button");
 		deleteIcon.setWidth("24px");
 		deleteIcon.setTitle("Profil löschen");
 		deleteIcon.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				DeleteProfilePopup deleteProfilePopup = new DeleteProfilePopup();
-				deleteProfilePopup.center();
+				administrationService.
+						deleteProfile(new AsyncCallback<Void>()
+						{
+							public void onSuccess(Void result) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING,
+										"Profile deleted");
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING,
+										caught.getMessage());
+							}
+						});
 			}
 		});
 
@@ -109,9 +126,17 @@ public class ProfilePage extends ContentPage {
 		attrPanel.add(vPanel2);
 		attrPanel.add(deleteIcon);
 
-		for (Image img : images) {
-			attrPanel.add(img);
-		}
+		attrPanel.add(images[0]);
+		attrPanel.add(images[1]);
+		attrPanel.add(images[2]);
+		attrPanel.add(images[3]);
+		attrPanel.add(images[4]);
+		attrPanel.add(images[5]);
+		attrPanel.add(images[6]);
+		attrPanel.add(images[7]);
+		attrPanel.add(images[8]);
+		attrPanel.add(images[9]);
+		attrPanel.add(images[10]);
 
 		attrPanel.setWidgetLeftWidth(vPanel1, 279, Unit.PX, 150, Unit.PX);
 		attrPanel.setWidgetLeftWidth(vPanel2, 454, Unit.PX, 150, Unit.PX);
@@ -141,59 +166,5 @@ public class ProfilePage extends ContentPage {
 		lPanel.add(attrPanel);
 		lPanel.add(informationPanel);
 		lPanel.setWidgetTopHeight(informationPanel, 281, Unit.PX, 0, Unit.PX);
-	}
-
-	private class DeleteProfilePopup extends DialogBox {
-		private DeleteProfilePopup() {
-			setText("Profil löschen");
-			setAnimationEnabled(true);
-			setGlassEnabled(true);
-			setModal(false);
-
-			LayoutPanel lPanel = new LayoutPanel();
-			Label label = new Label("Sind Sie sicher, dass Sie Ihr Profil "
-					+ "permanent löschen möchten?");
-
-			Button cancelButton = new Button("Abbrechen");
-			cancelButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					DeleteProfilePopup.this.hide();
-				}
-			});
-
-			Button deleteButton = new Button("Löschen");
-			deleteButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					administrationService
-							.deleteProfile(new AsyncCallback<Void>() {
-								public void onSuccess(Void result) {
-									Window.Location.assign(loginInfo
-											.getLogoutUrl());
-								}
-
-								public void onFailure(Throwable caught) {
-									ClientsideSettings.getLogger().log(
-											Level.WARNING, caught.getMessage());
-								}
-							});
-
-					DeleteProfilePopup.this.hide();
-				}
-			});
-
-			lPanel.add(label);
-			lPanel.add(cancelButton);
-			lPanel.add(deleteButton);
-
-			lPanel.setWidgetTopHeight(label, 12, Unit.PX, 50, Unit.PX);
-			lPanel.setWidgetLeftRight(label, 8, Unit.PX, 8, Unit.PX);
-			lPanel.setWidgetBottomHeight(cancelButton, 8, Unit.PX, 32, Unit.PX);
-			lPanel.setWidgetRightWidth(cancelButton, 8, Unit.PX, 85, Unit.PX);
-			lPanel.setWidgetBottomHeight(deleteButton, 8, Unit.PX, 32, Unit.PX);
-			lPanel.setWidgetRightWidth(deleteButton, 101, Unit.PX, 72, Unit.PX);
-			lPanel.setSize("236px", "105px");
-
-			setWidget(lPanel);
-		}
 	}
 }
