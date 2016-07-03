@@ -498,6 +498,20 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
+	 * Check if the profile is blocked already.
+	 */
+	@Override
+	public boolean checkBlocked(int profileId) {
+		for (Block b : getBlocks()) {
+			if (b.getBlockedProfileId() == profileId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns the blocked profiles of the current user.
 	 */
 	@Override
@@ -739,9 +753,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Get the bookmark list ID of the current user.
-	 * 
-	 * @return
+	 * Get the bookmarks of the current user.
 	 */
 	private ArrayList<Bookmark> getBookmarks() {
 		// Get the bookmark list ID of the current user
@@ -750,6 +762,13 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		return BookmarkMapper.bookmarkMapper().findByBookmarkListId(
 				bookmarkListId);
+	}
+
+	/**
+	 * Get the blocks of the current user.
+	 */
+	private ArrayList<Block> getBlocks() {
+		return BlockMapper.blockMapper().findByBlockerProfileId(user.getId());
 	}
 
 	private void updateSimilarityDegrees() {

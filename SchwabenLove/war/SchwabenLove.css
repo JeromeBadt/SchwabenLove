@@ -57,7 +57,7 @@ body {
 	float: right;
 }
 
-.gwt-MenuItem:HOVER, .gwt-MenuItem-active, .footer:HOVER {
+.gwt-MenuItem:HOVER, .gwt-MenuItem-active, .footer:HOVER, .footer-active {
 	color: #b99d6b !important;
 	text-decoration: none;
 }

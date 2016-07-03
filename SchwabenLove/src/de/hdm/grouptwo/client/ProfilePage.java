@@ -14,7 +14,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -23,7 +22,6 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.grouptwo.shared.bo.Description;
@@ -33,6 +31,7 @@ import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.Property;
 import de.hdm.grouptwo.shared.bo.Selection;
 import de.hdm.grouptwo.shared.bo.SelectionItem;
+import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 
 public class ProfilePage extends ContentPage {
 	private LayoutPanel lPanel = new LayoutPanel();
@@ -41,7 +40,8 @@ public class ProfilePage extends ContentPage {
 
 	private LoginInfo loginInfo = null;
 	private Profile profile = null;
-	private ArrayList<Property> properties = null;
+
+	private boolean canEdit = false;
 
 	private Label nameLabel = null;
 	private Label ageLabel = null;
@@ -73,17 +73,19 @@ public class ProfilePage extends ContentPage {
 
 	private Image attrEditIcon[] = new Image[11];
 
-	public ProfilePage(LoginInfo loginInfo, ArrayList<Property> properties) {
-		super("Profil");
-		initWidget(lPanel);
+	private Label similarityDegreeLbl = new Label();
+	private Image bookmarkIcon = new Image();
+	Image blockIcon = new Image("images/icons/block.png");
+	private boolean bookmarkState = false;
+	private boolean blockState = false;
 
-		lPanel.setStyleName("profile-page");
+	public ProfilePage(LoginInfo loginInfo) {
+		super("Profil");
 
 		this.loginInfo = loginInfo;
-		this.properties = properties;
+		canEdit = true;
 
-		lPanel.add(attrPanel);
-		lPanel.add(infoPanel);
+		initWidget(lPanel);
 
 		administrationService.getProfile(new AsyncCallback<Profile>() {
 			public void onSuccess(Profile result) {
@@ -99,9 +101,19 @@ public class ProfilePage extends ContentPage {
 		});
 	}
 
-	public ProfilePage(int id) {
+	public ProfilePage(Profile profile) {
 		super("Profil");
+
+		this.profile = profile;
+		canEdit = false;
+
 		initWidget(lPanel);
+
+		Menu.clearMenuItemStyles();
+		MainView.getContentPanel().remove(this);
+
+		showProfile();
+		showExtra();
 	}
 
 	@Override
@@ -109,6 +121,10 @@ public class ProfilePage extends ContentPage {
 	}
 
 	public void showProfile() {
+		lPanel.setStyleName("profile-page");
+		lPanel.add(attrPanel);
+		lPanel.add(infoPanel);
+
 		Image profilePicture = new Image("images/default.png");
 		profilePicture.addStyleName("profile-picture");
 		profilePicture.setWidth("256px");
@@ -325,29 +341,9 @@ public class ProfilePage extends ContentPage {
 				});
 	}
 
-	private String formatName() {
-		return profile.getFirstName() + " "
-				+ profile.getLastName().substring(0, 1) + ".";
-	}
-
-	private String formateBirthdate() {
-		return DateTimeFormat.getFormat("dd.MM.yyyy").format(
-				profile.getBirthdate());
-	}
-
-	private String formatSmoker() {
-		return Boolean.parseBoolean(
-				profile.getSmoker()) ? "Raucher" : "Nichtraucher";
-	}
-
-	private String formatHeight() {
-		return new BigDecimal((float) profile.getHeight() / 100).setScale(2,
-				BigDecimal.ROUND_HALF_UP) + " m";
-	}
-
 	private void showInformation(ArrayList<Information> information) {
 		int offset = 0;
-		for (Property p : properties) {
+		for (Property p : ClientsideSettings.getProperties()) {
 			for (Information info : information) {
 				if (info.getPropertyId() == p.getId()) {
 					InformationWidget infoWidget = new InformationWidget(info,
@@ -424,7 +420,170 @@ public class ProfilePage extends ContentPage {
 				hairColorList, 10));
 
 		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
-		attrPanel.setWidgetRightWidth(deleteIcon, 10, Unit.PX, 24, Unit.PX);
+	}
+
+	private void showExtra() {
+		LayoutPanel rightPanel = new LayoutPanel();
+
+		ClientsideSettings.getAdministrationService()
+				.getSimilarityDegreeByProfileId(profile.getId(),
+						new AsyncCallback<SimilarityDegree>() {
+							public void onSuccess(SimilarityDegree result) {
+								showSimilarityDegree(result);
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING, caught.getMessage());
+							}
+						});
+
+		administrationService.checkBookmarked(profile.getId(),
+				new AsyncCallback<Boolean>() {
+					public void onSuccess(Boolean result) {
+						bookmarkState = result;
+						if (bookmarkState) {
+							bookmarkIcon
+									.setUrl("images/icons/bookmark2.png");
+						} else {
+							bookmarkIcon
+									.setUrl("images/icons/bookmark.png");
+						}
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
+
+		bookmarkIcon.addStyleName("img-button");
+		bookmarkIcon.setWidth("24px");
+		bookmarkIcon.setTitle("Profil merken");
+		bookmarkIcon.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				bookmarkChange();
+			}
+		});
+
+		administrationService.checkBlocked(profile.getId(),
+				new AsyncCallback<Boolean>() {
+					public void onSuccess(Boolean result) {
+						blockState = result;
+						// Window.alert(Boolean.toString(blockState));
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
+
+		blockIcon.addStyleName("img-button");
+		blockIcon.setWidth("24px");
+		blockIcon.setTitle("Profil blocken");
+		blockIcon.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				blockChange();
+			}
+		});
+
+		LayoutPanel heartPanel = new LayoutPanel();
+		Image heartIcon = new Image("images/icons/heart.png");
+		heartIcon.setWidth("72px");
+		similarityDegreeLbl.setStyleName("similarity-degree-label");
+
+		heartPanel.add(heartIcon);
+		heartPanel.add(similarityDegreeLbl);
+		rightPanel.add(heartPanel);
+		rightPanel.add(bookmarkIcon);
+		rightPanel.add(blockIcon);
+		attrPanel.add(rightPanel);
+
+		heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
+		rightPanel.setWidgetLeftWidth(bookmarkIcon, 20, Unit.PCT, 24,
+				Unit.PX);
+		rightPanel
+				.setWidgetRightWidth(blockIcon, 20, Unit.PCT, 24, Unit.PX);
+		rightPanel.setWidgetTopHeight(bookmarkIcon, 0, Unit.PCT, 24,
+				Unit.PX);
+		rightPanel.setWidgetTopHeight(blockIcon, 0, Unit.PCT, 24, Unit.PX);
+		rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
+		attrPanel.setWidgetRightWidth(rightPanel, 0, Unit.PX, 100, Unit.PX);
+
+	}
+
+	private void showSimilarityDegree(SimilarityDegree similarityDegree) {
+		similarityDegreeLbl.setText(Integer.toString(similarityDegree
+				.getScore()));
+	}
+
+	private void bookmarkChange() {
+		if (bookmarkState) {
+			administrationService.deleteBookmark(profile.getId(),
+					new AsyncCallback<Void>() {
+						public void onSuccess(Void result) {
+							bookmarkIcon
+									.setUrl("images/icons/bookmark.png");
+							bookmarkState = !bookmarkState;
+						}
+
+						public void onFailure(Throwable caught) {
+							ClientsideSettings.getLogger().log(
+									Level.WARNING, caught.getMessage());
+						}
+					});
+		} else {
+			administrationService.addBookmarkByProfileId(
+					profile.getId(), new AsyncCallback<Void>() {
+						public void onSuccess(Void result) {
+							bookmarkIcon
+									.setUrl("images/icons/bookmark2.png");
+							bookmarkState = !bookmarkState;
+						}
+
+						public void onFailure(Throwable caught) {
+							ClientsideSettings.getLogger().log(
+									Level.WARNING, caught.getMessage());
+						}
+					});
+		}
+	}
+
+	private void blockChange() {
+		if (!blockState) {
+			administrationService.addBlockByProfileId(
+					profile.getId(), new AsyncCallback<Void>() {
+						public void onSuccess(Void result) {
+							blockState = !blockState;
+						}
+
+						public void onFailure(Throwable caught) {
+							ClientsideSettings.getLogger().log(
+									Level.WARNING, caught.getMessage());
+						}
+					});
+		}
+	}
+
+	private String formatName() {
+		return profile.getFirstName() + " "
+				+ profile.getLastName().substring(0, 1) + ".";
+	}
+
+	private String formateBirthdate() {
+		return DateTimeFormat.getFormat("dd.MM.yyyy").format(
+				profile.getBirthdate());
+	}
+
+	private String formatSmoker() {
+		return Boolean.parseBoolean(
+				profile.getSmoker()) ? "Raucher" : "Nichtraucher";
+	}
+
+	private String formatHeight() {
+		return new BigDecimal((float) profile.getHeight() / 100).setScale(2,
+				BigDecimal.ROUND_HALF_UP) + " m";
 	}
 
 	private class InformationWidget extends ResizeComposite {
@@ -446,6 +605,10 @@ public class ProfilePage extends ContentPage {
 			Label explanationLabel = new Label(p.getExplanation());
 			label.setText(i.getInputText());
 
+			infoPanel.add(label);
+			infoPanel.setWidgetLeftRight(label, 6, Unit.PX, 6, Unit.PX);
+			infoPanel.setWidgetTopBottom(label, 6, Unit.PX, 6, Unit.PX);
+
 			LayoutPanel sPanel = new LayoutPanel();
 			sPanel.addStyleName("info-panel");
 			sPanel.add(infoPanel);
@@ -457,6 +620,10 @@ public class ProfilePage extends ContentPage {
 			lPanel.setWidgetLeftRight(explanationLabel, 0, Unit.PX, 30,
 					Unit.PX);
 			lPanel.setWidgetTopHeight(sPanel, 24, Unit.PX, 72, Unit.PX);
+
+			if (!canEdit) {
+				return;
+			}
 
 			if (p instanceof Description) {
 				input = new TextArea();
@@ -496,15 +663,7 @@ public class ProfilePage extends ContentPage {
 		private void loadClickHandler() {
 			input.setVisible(false);
 
-			icon.addStyleName("img-button");
-			icon.setWidth("16px");
-			icon.setTitle("Information editieren");
-
-			infoPanel.add(label);
 			infoPanel.add(input);
-
-			infoPanel.setWidgetLeftRight(label, 6, Unit.PX, 6, Unit.PX);
-			infoPanel.setWidgetTopBottom(label, 6, Unit.PX, 6, Unit.PX);
 
 			if (type == 0) {
 				infoPanel.setWidgetLeftRight(input, 1, Unit.PX, 1, Unit.PX);
@@ -513,6 +672,10 @@ public class ProfilePage extends ContentPage {
 				infoPanel.setWidgetLeftRight(input, 1, Unit.PX, 1, Unit.PX);
 				infoPanel.setWidgetTopHeight(input, 1, Unit.PX, 24, Unit.PX);
 			}
+
+			icon.addStyleName("img-button");
+			icon.setWidth("16px");
+			icon.setTitle("Information editieren");
 
 			lPanel.add(icon);
 			lPanel.setWidgetRightWidth(icon, 10, Unit.PX, 16, Unit.PX);
@@ -738,59 +901,6 @@ public class ProfilePage extends ContentPage {
 			input.setVisible(!state);
 
 			state = !state;
-		}
-	}
-
-	/**
-	 * <code>ErrorPopup</code> is an extension of <code>DialogBox</code> and
-	 * used to inform the user of invalid inputs. <br>
-	 * This class is used instead of <code>Window.alert()</code> because alert()
-	 * sometimes causes Firefox to hang.<br>
-	 * 
-	 * @see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1180005">
-	 *      https://bugzilla.mozilla.org/show_bug.cgi?id=1180005</a>
-	 */
-	private class ErrorPopup extends DialogBox {
-		private HTML errorHTML = new HTML();
-
-		private ErrorPopup() {
-			setText("Fehler");
-			setAnimationEnabled(true);
-			setGlassEnabled(true);
-			setModal(false);
-
-			VerticalPanel vPanel = new VerticalPanel();
-			LayoutPanel lPanel = new LayoutPanel();
-
-			Button okButton = new Button("OK");
-			okButton.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					ErrorPopup.this.hide();
-				}
-			});
-
-			lPanel.add(okButton);
-
-			lPanel.setWidgetBottomHeight(okButton, 8, Unit.PX, 32, Unit.PX);
-			lPanel.setWidgetRightWidth(okButton, 8, Unit.PX, 41, Unit.PX);
-
-			vPanel.add(errorHTML);
-			vPanel.add(lPanel);
-
-			lPanel.setSize("100%", "48px");
-
-			setWidget(vPanel);
-		}
-
-		/**
-		 * Set an error message and show the popup.
-		 * 
-		 * @param error
-		 *            The message to show
-		 */
-		public void showError(String error) {
-			errorHTML.setHTML(error);
-			center();
 		}
 	}
 

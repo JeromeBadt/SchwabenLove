@@ -128,6 +128,11 @@ public interface AdministrationServiceAsync {
 	public void checkBookmarked(int profileId, AsyncCallback<Boolean> callback);
 
 	/**
+	 * Check if the profile is blocked already.
+	 */
+	public void checkBlocked(int profileId, AsyncCallback<Boolean> callback);
+
+	/**
 	 * Returns the blocked profiles of the current user.
 	 */
 	public void getBlockedProfiles(AsyncCallback<ArrayList<Profile>> callback);
