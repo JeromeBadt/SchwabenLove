@@ -122,6 +122,11 @@ public interface AdministrationService extends RemoteService {
 	public boolean checkBookmarked(int profileId);
 
 	/**
+	 * Check if the profile is blocked already.
+	 */
+	public boolean checkBlocked(int profileId);
+
+	/**
 	 * Returns the blocked profiles of the current user.
 	 */
 	public ArrayList<Profile> getBlockedProfiles();
