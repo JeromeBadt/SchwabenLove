@@ -171,14 +171,14 @@ public class MatchesPage extends ContentPage {
 		inputPanel.add(educationTextBox);
 		inputPanel.add(religionTextBox);
 
-		Label infoObjectsLabel = new Label("Info Objekte");
-		infoObjectsLabel.addStyleName("search-profile-header");
-		infoObjectsLabel.addStyleName("info-object-label");
+		// Label infoObjectsLabel = new Label("Info Objekte");
+		// infoObjectsLabel.addStyleName("search-profile-header");
+		// infoObjectsLabel.addStyleName("info-object-label");
 
 		hPanel.add(labelPanel);
 		hPanel.add(inputPanel);
 		vPanel.add(hPanel);
-		vPanel.add(infoObjectsLabel);
+		// vPanel.add(infoObjectsLabel);
 
 		Button saveButton = new Button("Suchprofil speichern");
 		saveButton.setStyleName("search-profile-save-button");
@@ -201,8 +201,8 @@ public class MatchesPage extends ContentPage {
 		searchProfilePanel.setWidgetRightWidth(deleteIcon, 0, Unit.PX, 24,
 				Unit.PX);
 		searchProfilePanel
-				.setWidgetTopHeight(vPanel, 34, Unit.PX, 288, Unit.PX);
-		searchProfilePanel.setWidgetTopHeight(saveButton, 332, Unit.PX, 24,
+				.setWidgetTopHeight(vPanel, 34, Unit.PX, 263, Unit.PX);
+		searchProfilePanel.setWidgetTopHeight(saveButton, 307, Unit.PX, 24,
 				Unit.PX);
 		lPanel.setWidgetTopHeight(searchProfilePanel, 0, Unit.PX, 356, Unit.PX);
 
