@@ -20,8 +20,9 @@ import de.hdm.grouptwo.shared.bo.LoginInfo;
 public class MainView extends ResizeComposite {
 	private DockLayoutPanel mainView = new DockLayoutPanel(Unit.EM);
 	private Menu menu = null;
-	private DeckLayoutPanel contentPanel = new DeckLayoutPanel();
+	private static DeckLayoutPanel contentPanel = new DeckLayoutPanel();
 	private ImprintPage imprintPage = new ImprintPage();
+	private static Anchor imprint = new Anchor("Impressum");
 
 	public MainView(LoginInfo loginInfo) {
 		initWidget(mainView);
@@ -51,15 +52,24 @@ public class MainView extends ResizeComposite {
 	public void loadFull() {
 		menu.loadFullMenu();
 	}
-	
+
 	public void loadReport() {
 		menu.loadReportMenu();
 	}
 
+	public static DeckLayoutPanel getContentPanel() {
+		return contentPanel;
+	}
+
+	public static Anchor getImprintAnchor() {
+		return imprint;
+	}
+
 	private Anchor createFooterPanel() {
-		Anchor imprint = new Anchor("Impressum");
 		imprint.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				Menu.clearMenuItemStyles();
+				imprint.setStyleDependentName("active", true);
 				contentPanel.showWidget(imprintPage);
 			}
 		});

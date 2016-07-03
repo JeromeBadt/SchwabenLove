@@ -1,5 +1,6 @@
 package de.hdm.grouptwo.client;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -9,8 +10,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
+import de.hdm.grouptwo.shared.AdministrationServiceAsync;
+import de.hdm.grouptwo.shared.bo.Description;
 import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
+import de.hdm.grouptwo.shared.bo.Selection;
 
 /**
  * Main class <br>
@@ -19,8 +23,13 @@ import de.hdm.grouptwo.shared.bo.Profile;
  * @author JoshuaHill, JeromeBadt
  */
 public class SchwabenLove implements EntryPoint {
+	private AdministrationServiceAsync administrationService = ClientsideSettings
+			.getAdministrationService();
+
 	private LoginInfo loginInfo = null;
 	private MainView mainView = null;
+
+	private Profile user = null;
 
 	public void onModuleLoad() {
 		// Set logger settings here, since they seem to be ignored .gwt.xml and
@@ -53,14 +62,45 @@ public class SchwabenLove implements EntryPoint {
 	}
 
 	private void setProfile(String email) {
-		ClientsideSettings.getAdministrationService().setProfile(email,
-				new AsyncCallback<Profile>() {
-					public void onSuccess(Profile result) {
+		administrationService.setProfile(email, new AsyncCallback<Profile>() {
+			public void onSuccess(Profile result) {
+				user = result;
+				loadDescriptions();
+			}
+
+			public void onFailure(Throwable caught) {
+				ClientsideSettings.getLogger().log(Level.SEVERE,
+						caught.getMessage());
+			}
+		});
+	}
+
+	private void loadDescriptions() {
+		administrationService
+				.getAllDescriptions(new AsyncCallback<ArrayList<Description>>() {
+					public void onSuccess(ArrayList<Description> result) {
+						ClientsideSettings.setDescriptions(result);
+						loadSelections();
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.SEVERE,
+								caught.getMessage());
+					}
+				});
+	}
+
+	private void loadSelections() {
+		administrationService
+				.getAllSelections(new AsyncCallback<ArrayList<Selection>>() {
+					public void onSuccess(ArrayList<Selection> result) {
+						ClientsideSettings.setSelections(result);
+
 						mainView = new MainView(loginInfo);
 						RootLayoutPanel.get().add(mainView);
 
 						// Check if it's a new user
-						if (result == null) {
+						if (user == null) {
 							mainView.loadSetup();
 						} else {
 							mainView.loadFull();
@@ -69,7 +109,7 @@ public class SchwabenLove implements EntryPoint {
 
 					public void onFailure(Throwable caught) {
 						ClientsideSettings.getLogger().log(Level.SEVERE,
-								"Set profile failed: " + caught.getMessage());
+								caught.getMessage());
 					}
 				});
 	}
