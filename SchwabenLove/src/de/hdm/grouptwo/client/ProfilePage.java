@@ -114,6 +114,17 @@ public class ProfilePage extends ContentPage {
 
 		showProfile();
 		showExtra();
+
+		administrationService.addVisitByProfileId(profile.getId(),
+				new AsyncCallback<Void>() {
+					public void onSuccess(Void result) {
+					}
+
+					public void onFailure(Throwable caught) {
+						ClientsideSettings.getLogger().log(Level.WARNING,
+								caught.getMessage());
+					}
+				});
 	}
 
 	@Override

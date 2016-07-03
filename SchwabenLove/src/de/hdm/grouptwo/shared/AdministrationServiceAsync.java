@@ -59,15 +59,20 @@ public interface AdministrationServiceAsync {
 			AsyncCallback<Void> callback);
 
 	/**
-	 * Add a bookmark based on the profile id.
+	 * Adds a bookmark to another user based on the profile id.
 	 */
 	public void addBookmarkByProfileId(int profileId,
 			AsyncCallback<Void> callback);
 
 	/**
-	 * Add a block to a profile of another user, based on the profile id.
+	 * Adds a block the profile of another user based on the profile id.
 	 */
 	public void addBlockByProfileId(int profileId, AsyncCallback<Void> callback);
+
+	/**
+	 * Adds a visit to a profile of another user based on the profile id.
+	 */
+	public void addVisitByProfileId(int profileId, AsyncCallback<Void> callback);
 
 	/**
 	 * Return the profile id.

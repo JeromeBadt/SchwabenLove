@@ -60,14 +60,19 @@ public interface AdministrationService extends RemoteService {
 	public void updateInformation(Information information);
 
 	/**
-	 * Add a bookmark based on the profile id.
+	 * Adds a bookmark to another user based on the profile id.
 	 */
 	public void addBookmarkByProfileId(int profileId);
 
 	/**
-	 * Add a block to a profile of another user, based on the profile id.
+	 * Adds a block the profile of another user based on the profile id.
 	 */
 	public void addBlockByProfileId(int profileId);
+
+	/**
+	 * Adds a visit to a profile of another user based on the profile id.
+	 */
+	public void addVisitByProfileId(int profileId);
 
 	/**
 	 * Return the profile id.

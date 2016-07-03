@@ -207,7 +207,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Adds a bookmark based on the profile id.
+	 * Adds a bookmark to another user based on the profile id.
 	 */
 	@Override
 	public void addBookmarkByProfileId(int profileId) {
@@ -220,7 +220,7 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	/**
-	 * Adds a block to a profile of another user, based on the profile id.
+	 * Adds a block the profile of another user based on the profile id.
 	 */
 	@Override
 	public void addBlockByProfileId(int profileId) {
@@ -229,6 +229,25 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 		block.setBlockedProfileId(profileId);
 
 		BlockMapper.blockMapper().insert(block);
+	}
+
+	/**
+	 * Adds a visit to a profile of another user based on the profile id.
+	 */
+	@Override
+	public void addVisitByProfileId(int profileId) {
+		for (Visit v : VisitMapper.visitMapper().findByVisitorProfileId(
+				user.getId())) {
+			if (v.getVisitedProfileId() == profileId) {
+				return;
+			}
+		}
+
+		Visit visit = new Visit();
+		visit.setVisitorProfileId(user.getId());
+		visit.setVisitedProfileId(profileId);
+
+		VisitMapper.visitMapper().insert(visit);
 	}
 
 	/**

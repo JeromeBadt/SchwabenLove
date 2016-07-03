@@ -56,8 +56,8 @@ public class VisitMapper implements DataMapper<Visit> {
 		try {
 			Statement stmt = con.createStatement();
 			// Query DB for current max id
-			ResultSet rs = stmt.executeQuery("SELECT MAX(visit_id) AS maxId"
-					+ "FROM visit ");
+			ResultSet rs = stmt.executeQuery("SELECT MAX(visit_id) AS maxId "
+					+ "FROM visit");
 
 			if (rs.next()) {
 				// Set id to max + 1
@@ -203,8 +203,8 @@ public class VisitMapper implements DataMapper<Visit> {
 			while (rs.next()) {
 				Visit v = new Visit();
 				v.setId(rs.getInt("visit_id"));
-				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
-				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
 
 				result.add(v);
 			}
@@ -238,8 +238,8 @@ public class VisitMapper implements DataMapper<Visit> {
 			while (rs.next()) {
 				Visit v = new Visit();
 				v.setId(rs.getInt("visit_id"));
-				v.setVisitorProfileId(rs.getInt("fk_profile_visitor"));
-				v.setVisitedProfileId(rs.getInt("fk_profile_visited"));
+				v.setVisitorProfileId(rs.getInt("fk_visitor_profile_id"));
+				v.setVisitedProfileId(rs.getInt("fk_visited_profile_id"));
 
 				result.add(v);
 			}
