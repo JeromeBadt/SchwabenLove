@@ -3,15 +3,18 @@ package de.hdm.grouptwo.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 
 import de.hdm.grouptwo.shared.bo.LoginInfo;
+import de.hdm.grouptwo.shared.bo.Profile;
 
 public class Menu extends Composite {
 	private LoginInfo loginInfo = null;
@@ -94,8 +97,19 @@ public class Menu extends Composite {
 					clearMenuItemStyles();
 					item.setStyleDependentName("active", true);
 					page.updatePage();
-					contentPanel.showWidget(page);
 
+					ClientsideSettings.getAdministrationService().setProfile(
+							loginInfo.getEmailAddress(),
+							new AsyncCallback<Profile>() {
+								public void onSuccess(Profile result) {
+									contentPanel.showWidget(page);
+								}
+
+								public void onFailure(Throwable caught) {
+									ClientsideSettings.getLogger().log(
+											Level.WARNING, caught.getMessage());
+								}
+							});
 				}
 			});
 
