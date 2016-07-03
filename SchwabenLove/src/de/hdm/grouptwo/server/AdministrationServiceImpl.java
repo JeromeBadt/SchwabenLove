@@ -915,13 +915,15 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 
 		// Remove visited matches von ArrayList
 		for (Visit visit : allVisits) {
-			for (Profile match : allMatches) {
+			Iterator<Profile> it = allMatches.iterator();
+			while (it.hasNext()) {
+				Profile match = it.next();
 				if (visit.getVisitedProfileId() == match.getId()) {
-					int index = allMatches.indexOf(match);
-					allMatches.remove(index);
+					it.remove();
 				}
 			}
 		}
+
 		return allMatches;
 	}
 }
