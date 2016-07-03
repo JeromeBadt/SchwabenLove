@@ -121,10 +121,11 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Profile updateProfile(Profile profile) {
 		ProfileMapper.profileMapper().update(profile);
+		user = ProfileMapper.profileMapper().findById(profile.getId());
 
 		updateSimilarityDegrees();
 
-		return ProfileMapper.profileMapper().findById(profile.getId());
+		return user;
 	}
 
 	/**
@@ -772,42 +773,46 @@ public class AdministrationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	private void updateSimilarityDegrees() {
-		ArrayList<Profile> comparisonProfiles = getAllProfiles();
 		final int userId = user.getId();
 
-		// Update similarity degrees to and from everyone
-		SimilarityDegree sd = new SimilarityDegree();
-		for (Profile p : comparisonProfiles) {
-			if (!user.equals(p)) {
-				sd.setScore(calculateSimilarityDegreeScore(user, p));
+		ArrayList<SimilarityDegree> similarityDegrees = SimilarityDegreeMapper
+				.similarityDegreeMapper().findByReferenceProfileId(userId);
 
-				sd.setReferenceProfileId(userId);
-				sd.setComparisonProfileId(p.getId());
-				SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
+		// Update similarity degrees to everyone else
+		for (SimilarityDegree sd : similarityDegrees) {
+			sd.setScore(calculateSimilarityDegreeScore(user,
+					getProfileById(sd.getComparisonProfileId())));
 
-				sd.setReferenceProfileId(p.getId());
-				sd.setComparisonProfileId(userId);
-				SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
-			}
+			SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
+		}
+
+		similarityDegrees = SimilarityDegreeMapper
+				.similarityDegreeMapper().findByComparisonProfileId(userId);
+
+		// Update similarity degrees from everyone else
+		for (SimilarityDegree sd : similarityDegrees) {
+			sd.setScore(calculateSimilarityDegreeScore(
+					getProfileById(sd.getReferenceProfileId()), user));
+
+			SimilarityDegreeMapper.similarityDegreeMapper().update(sd);
 		}
 	}
 
 	private void createSimilarityDegrees(Profile profile) {
-		ArrayList<Profile> comparisonProfiles = getAllProfiles();
-		final int userId = profile.getId();
+		final int profileId = profile.getId();
 
 		// Create similarity degrees to and from everyone
 		SimilarityDegree sd = new SimilarityDegree();
-		for (Profile p : comparisonProfiles) {
+		for (Profile p : getAllProfiles()) {
 			if (!profile.equals(p)) {
 				sd.setScore(calculateSimilarityDegreeScore(profile, p));
 
-				sd.setReferenceProfileId(userId);
+				sd.setReferenceProfileId(profileId);
 				sd.setComparisonProfileId(p.getId());
 				SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
 
 				sd.setReferenceProfileId(p.getId());
-				sd.setComparisonProfileId(userId);
+				sd.setComparisonProfileId(profileId);
 				SimilarityDegreeMapper.similarityDegreeMapper().insert(sd);
 			}
 		}
