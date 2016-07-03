@@ -3,6 +3,8 @@ package de.hdm.grouptwo.client;
 import java.util.logging.Level;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -19,7 +21,7 @@ public class ProfileWidget extends ResizeComposite {
 
 	protected Profile profile = null;
 
-	Label similarityDegreeLbl = new Label();
+	private Label similarityDegreeLbl = new Label();
 
 	public ProfileWidget(Profile p) {
 		initWidget(lPanel);
@@ -27,10 +29,31 @@ public class ProfileWidget extends ResizeComposite {
 
 		profile = p;
 
+		ClientsideSettings.getAdministrationService()
+				.getSimilarityDegreeByProfileId(profile.getId(),
+						new AsyncCallback<SimilarityDegree>() {
+							public void onSuccess(SimilarityDegree result) {
+								showSimilarityDegree(result);
+							}
+
+							public void onFailure(Throwable caught) {
+								ClientsideSettings.getLogger().log(
+										Level.WARNING, caught.getMessage());
+							}
+						});
+
 		LayoutPanel innerPanel = new LayoutPanel();
 
 		Image profilePicture = new Image("images/default.png");
 		profilePicture.setWidth("96px");
+		profilePicture.setStyleName("img-button");
+		profilePicture.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				ProfilePage p = new ProfilePage(profile);
+				MainView.getContentPanel().add(p);
+				MainView.getContentPanel().showWidget(p);
+			}
+		});
 
 		VerticalPanel vPanel1 = new VerticalPanel();
 
@@ -68,19 +91,6 @@ public class ProfileWidget extends ResizeComposite {
 
 		rightPanel.setWidgetTopBottom(heartPanel, 22, Unit.PX, 0, Unit.PX);
 		heartPanel.setWidgetLeftRight(heartIcon, 14, Unit.PX, 14, Unit.PX);
-
-		ClientsideSettings.getAdministrationService()
-				.getSimilarityDegreeByProfileId(profile.getId(),
-						new AsyncCallback<SimilarityDegree>() {
-							public void onSuccess(SimilarityDegree result) {
-								showSimilarityDegree(result);
-							}
-
-							public void onFailure(Throwable caught) {
-								ClientsideSettings.getLogger().log(
-										Level.WARNING, caught.getMessage());
-							}
-						});
 	}
 
 	private void showSimilarityDegree(SimilarityDegree similarityDegree) {

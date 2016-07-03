@@ -1,5 +1,6 @@
 package de.hdm.grouptwo.client;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
@@ -11,6 +12,9 @@ import de.hdm.grouptwo.shared.LoginService;
 import de.hdm.grouptwo.shared.LoginServiceAsync;
 import de.hdm.grouptwo.shared.ReportService;
 import de.hdm.grouptwo.shared.ReportServiceAsync;
+import de.hdm.grouptwo.shared.bo.Description;
+import de.hdm.grouptwo.shared.bo.Property;
+import de.hdm.grouptwo.shared.bo.Selection;
 
 /**
  * Class for relevant client-side settings and services.
@@ -26,10 +30,32 @@ public class ClientsideSettings {
 	private static final Logger log = Logger
 			.getLogger("SchwabenLove Web Client");
 
+	private static ArrayList<Property> properties = null;
+	private static ArrayList<Description> descriptions = null;
+	private static ArrayList<Selection> selections = null;
+
 	/**
 	 * Private constructor to prevent initialization.
 	 */
 	private ClientsideSettings() {
+	}
+
+	public static void setDescriptions(ArrayList<Description> d) {
+		descriptions = d;
+	}
+
+	public static void setSelections(ArrayList<Selection> s) {
+		selections = s;
+	}
+
+	public static ArrayList<Property> getProperties() {
+		if (properties == null) {
+			properties = new ArrayList<Property>();
+			properties.addAll(descriptions);
+			properties.addAll(selections);
+		}
+
+		return properties;
 	}
 
 	/**
@@ -60,10 +86,9 @@ public class ClientsideSettings {
 		return administrationService;
 	}
 
-	
 	/**
-	 * Creates and returns ReprotService. Ensures that only a single
-	 * instance exists
+	 * Creates and returns ReprotService. Ensures that only a single instance
+	 * exists
 	 * 
 	 * @return ReportService
 	 */
@@ -71,23 +96,23 @@ public class ClientsideSettings {
 		if (reportService == null) {
 			reportService = GWT.create(ReportService.class);
 		}
-		
+
 		reportService.init(new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onSuccess(Void result) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
+
 		return reportService;
 	}
 
