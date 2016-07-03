@@ -5,16 +5,13 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.grouptwo.client.ClientsideSettings;
 import de.hdm.grouptwo.shared.AdministrationService;
 import de.hdm.grouptwo.shared.ReportService;
-import de.hdm.grouptwo.shared.bo.LoginInfo;
 import de.hdm.grouptwo.shared.bo.Profile;
 import de.hdm.grouptwo.shared.bo.SearchProfile;
+import de.hdm.grouptwo.shared.bo.SimilarityDegree;
 import de.hdm.grouptwo.shared.report.Column;
 import de.hdm.grouptwo.shared.report.CompositeParagraph;
 import de.hdm.grouptwo.shared.report.MatchesBySearchprofileReport;
@@ -79,6 +76,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		
 		// New Row for headline
 		Row row = new Row();
+		row.addColumn(new Column("Similarity Degree"));
 		row.addColumn(new Column("ID"));
 		row.addColumn(new Column("Email"));
 		row.addColumn(new Column("First Name"));
@@ -101,7 +99,12 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		ArrayList<Profile> matches = this.administrationService.getMatchesBySearchProfile(searchProfile);
 			
 		for (Profile match : matches) {
+			
+			SimilarityDegree simDeg = new SimilarityDegree();
+			simDeg = this.administrationService.getSimilarityDegreeByProfileId(match.getId());
+			
 			Row matchRow = new Row();
+			matchRow.addColumn(new Column(String.valueOf(simDeg.getScore())));
 			matchRow.addColumn(new Column(String.valueOf(match.getId())));
 			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
 			matchRow.addColumn(new Column(String.valueOf(match.getFirstName())));
@@ -121,10 +124,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 	
 		return report;
 	}
-	
-	public String testMethod() {
-		return "RPC worked";
-	}
+
 	
 	/**
 	 * Method to get a <code>Report</code> Object of all unviewed Matches
@@ -137,10 +137,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		// logger.log(Level.SEVERE, "USER EMAIL = " + user.getEmail());
 		logger.log(Level.SEVERE, "Profile EMAIL = " + p.getEmail());
 		
-		
 		UnviewedMatchesReport report = new UnviewedMatchesReport();
-		
-		
 		
 		// Set Title
 		report.setTitle("Unviewed Matches");
@@ -156,6 +153,7 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		
 		// New Row for headline
 		Row row = new Row();
+		row.addColumn(new Column("Similarity Degree"));
 		row.addColumn(new Column("ID"));
 		row.addColumn(new Column("Email"));
 		row.addColumn(new Column("First Name"));
@@ -180,7 +178,12 @@ public class ReportServiceImpl extends RemoteServiceServlet implements
 		logger.log(Level.SEVERE, "Methode läuft nach getUnvisited noch!");
 		
 		for (Profile match : matches) {
+			
+			SimilarityDegree simDeg = new SimilarityDegree();
+			simDeg = this.administrationService.getSimilarityDegreeByProfileId(match.getId());
+			
 			Row matchRow = new Row();
+			matchRow.addColumn(new Column(String.valueOf(simDeg.getScore())));
 			matchRow.addColumn(new Column(String.valueOf(match.getId())));
 			matchRow.addColumn(new Column(String.valueOf(match.getEmail())));
 			matchRow.addColumn(new Column(String.valueOf(match.getFirstName())));
